@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="in.mapbazar.mapbazar">
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <application
+        android:name=".AppController"
+        android:allowBackup="true"
+        android:icon="@drawable/add_icon"
+        tools:replace="android:icon"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/app_icon"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+<!--        <intent-filter android:label="@string/app_name">-->
+<!--            <action android:name="android.intent.action.VIEW" />-->
+<!--            <category android:name="android.intent.category.DEFAULT" />-->
+<!--            <category android:name="android.intent.category.BROWSABLE" />-->
+<!--            &lt;!&ndash; Accepts URIs that begin with "http://www.example.com/gizmos” &ndash;&gt;-->
+<!--&lt;!&ndash;            <data android:scheme="https"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:host="www.mapbazar.com"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:pathPrefix="/mapbazar" />&ndash;&gt;-->
+<!--            &lt;!&ndash; note that the leading "/" is required for pathPrefix&ndash;&gt;-->
+<!--        </intent-filter>-->
+        <activity android:name="in.mapbazar.mapbazar.VerficationActivity"></activity>
+        <activity android:name="in.mapbazar.mapbazar.ActivitySplash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="in.mapbazar.mapbazar.Intro_Viewpager_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.MainActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="in.mapbazar.mapbazar.ActivityLoginRegister"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.ActivitySubCategory"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.ActivityCategoryProduct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.ActivityProductDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.ActivityNewProductDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.ActivityMatchProductDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.ActivityRecentlyProductDetails"
+            android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="in.mapbazar.mapbazar.ActivityOrderDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.ProductImagepager"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.NewProductImagepager"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.MatchProductImagepager"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="in.mapbazar.mapbazar.RecentProductImagepager"
+            android:screenOrientation="portrait" />
+        <activity android:name="in.mapbazar.mapbazar.ProductFilter" />
+        <activity android:name="in.mapbazar.mapbazar.ActivityAddressList" />
+        <activity android:name="in.mapbazar.mapbazar.ActivityAddAddress" />
+        <activity android:name="in.mapbazar.mapbazar.ActivityPayment" />
+        <activity android:name="in.mapbazar.mapbazar.ActivityThank" />
+    </application>
+
+</manifest>

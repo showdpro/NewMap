@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:id="@+id/show_numbers">
+    <in.mapbazar.mapbazar.View.CustomTextView
+        android:id="@+id/txt_colorname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:text="Select pack size"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_17"
+        app:fontName="@string/ubuntu_m" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/size_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:scrollbars="vertical" />
+
+
+</LinearLayout>

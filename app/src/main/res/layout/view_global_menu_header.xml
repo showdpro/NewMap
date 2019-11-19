@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true">
+
+    <RelativeLayout
+        android:id="@+id/vGlobalMenuHeader"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/menu_height"
+        android:background="@color/colorPrimary"
+        android:gravity="center">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/dialog1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+
+<in.mapbazar.mapbazar.Utili.CircleImageView
+    android:id="@+id/user_image"
+                android:layout_width="@dimen/height_75"
+                android:layout_height="@dimen/height_75"
+                android:background="@drawable/logo" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:layout_marginLeft="20dp"
+                android:textSize="@dimen/txt_email_password_text_size"
+                />
+
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/image_close_drawer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back_icon"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:rotation="180"/>
+    </RelativeLayout>
+
+
+</FrameLayout>

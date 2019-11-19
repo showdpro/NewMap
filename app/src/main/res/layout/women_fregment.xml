@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nested_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgcolor">
+    <ImageView
+        android:id="@+id/image_txt"
+        android:layout_width="@dimen/height_100"
+        android:layout_height="@dimen/height_100"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/height_40"
+        android:src="@drawable/logo"/>
+    <TextView
+        android:layout_below="@+id/image_txt"
+        android:layout_width="match_parent"
+        android:text="mapbazar.com"
+        android:textSize="@dimen/font_20"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:layout_height="wrap_content"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sendotp"
+        android:layout_centerInParent="true">
+
+
+
+    <TextView
+        android:id="@+id/txt91"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dialog_margin_20"
+        android:textSize="@dimen/font_16"
+        android:layout_marginTop="40dp"
+        android:padding="@dimen/dialog_margin_10"
+        android:background="@drawable/edittext_backgrond"
+        android:text="+91 "/>
+
+    <EditText
+
+        android:layout_toRightOf="@id/txt91"
+        android:layout_width="match_parent"
+        android:id="@+id/edt_mobile"
+        android:layout_marginTop="40dp"
+        android:padding="@dimen/dialog_margin_10"
+        android:textSize="@dimen/font_16"
+        android:inputType="number"
+        android:maxLength="10"
+        android:layout_marginLeft="@dimen/dialog_margin_10"
+        android:layout_marginRight="@dimen/dialog_margin_20"
+        android:background="@drawable/edittext_backgrond"
+        android:hint="Enter Mobile Number"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_send_otp"
+        android:background="@color/colorPrimary"
+        android:layout_margin="@dimen/font_30"
+        android:layout_below="@id/txt91"
+        android:text="Send OTP"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rel_verify"
+
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+    <EditText
+
+
+        android:layout_width="match_parent"
+        android:id="@+id/edt_otp"
+        android:layout_marginTop="40dp"
+        android:padding="@dimen/dialog_margin_10"
+        android:textSize="@dimen/font_16"
+        android:inputType="number"
+        android:maxLength="6"
+        android:layout_marginLeft="@dimen/font_30"
+        android:layout_marginRight="@dimen/font_30"
+        android:background="@drawable/edittext_backgrond"
+        android:hint="Enter One Time Password"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_verify_otp"
+        android:background="@color/colorPrimary"
+        android:layout_margin="@dimen/font_30"
+        android:layout_below="@id/edt_otp"
+        android:text="Verify OTP"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+</RelativeLayout>
