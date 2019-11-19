@@ -27,13 +27,12 @@ public class Product_model {
     String rewards;
     String stock;
     String title;
-    String size;
-    String color;
+
     String mrp;
     String product_attribute;
 
 
-    public Product_model(String product_id, String product_name, String category_id, String product_description, String deal_price, String start_date, String start_time, String end_date, String end_time, String price, String product_image, String product_name_arb, String product_description_arb, String status, String in_stock, String unit_value, String unit, String increament, String rewards, String stock, String title, String size, String color, String mrp, String product_attribute) {
+    public Product_model(String product_id, String product_name, String category_id, String product_description, String deal_price, String start_date, String start_time, String end_date, String end_time, String price, String product_image, String product_name_arb, String product_description_arb, String status, String in_stock, String unit_value, String unit, String increament, String rewards, String stock, String title, String mrp, String product_attribute) {
         this.product_id = product_id;
         this.product_name = product_name;
         this.category_id = category_id;
@@ -55,8 +54,6 @@ public class Product_model {
         this.rewards = rewards;
         this.stock = stock;
         this.title = title;
-        this.size = size;
-        this.color = color;
         this.mrp = mrp;
         this.product_attribute = product_attribute;
     }
@@ -227,22 +224,6 @@ public class Product_model {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public String getMrp() {

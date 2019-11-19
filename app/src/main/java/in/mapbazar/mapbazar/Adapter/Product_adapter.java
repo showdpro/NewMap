@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 
 
+import in.mapbazar.mapbazar.ActivityCategoryProduct;
+import in.mapbazar.mapbazar.ActivityProductDetails;
 import in.mapbazar.mapbazar.MainActivity;
 import in.mapbazar.mapbazar.Model.ProductVariantModel;
 import in.mapbazar.mapbazar.Model.Product_model;
@@ -55,6 +57,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
 
     List<String> image_list;
    // Dialog dialog;
+   // RelativeLayout rel_out;
     ListView listView1;
     String atr_id="";
     String atr_product_id="";
@@ -64,6 +67,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
     ArrayList<ProductVariantModel> variantList;
     ArrayList<ProductVariantModel> attributeList;
     ProductVariantAdapter productVariantAdapter;
+    RelativeLayout rel_click;
 
     private List<Product_model> modelList;
     private Context context;
@@ -84,7 +88,6 @@ SharedPreferences preferences;
         public Double reward;
         DatabaseHandlerWishList db_wish;
 
-        RelativeLayout rel_click;
 
         public MyViewHolder(View view) {
             super(view);
@@ -101,6 +104,7 @@ SharedPreferences preferences;
             wish_before=view.findViewById( R.id.wish_before );
             iv_logo = (ImageView) view.findViewById(R.id.iv_subcat_img);
             rel_variant=(RelativeLayout)view.findViewById(R.id.rel_variant);
+         //   rel_out=(RelativeLayout)view.findViewById(R.id.rel_out);
             dialog_unit_type=(TextView)view.findViewById(R.id.unit_type);
             dialog_txtId=(TextView)view.findViewById(R.id.txtId);
             dialog_txtVar=(TextView)view.findViewById(R.id.txtVar);
@@ -127,33 +131,35 @@ SharedPreferences preferences;
         public void onClick(View view) {
             int id = view.getId();
             final int position = getAdapterPosition();
-
-                if(id==R.id.rel_click)
+             if(id == R.id.rel_click)
             {
-
-
-
-                AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                Bundle args = new Bundle();
+                //double stock=Double.parseDouble(modelList.get(position).getStock());
+    //Toast.makeText(context,"asd",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, ActivityProductDetails.class);
+                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                    HashMap<String, String> args = new HashMap<>();
 //
 //               //Intent intent=new Intent(context, Product_details.class);
-                args.putString("cat_id", modelList.get(position).getCategory_id());
-                args.putString("product_id",modelList.get(position).getProduct_id());
-                args.putString("product_images",modelList.get(position).getProduct_image());
+                    args.put("cat_id", modelList.get(position).getCategory_id());
+                    args.put("product_id", modelList.get(position).getProduct_id());
+                    args.put("product_images", modelList.get(position).getProduct_image());
+                    args.put("product_name", modelList.get(position).getProduct_name());
+                    args.put("product_description", modelList.get(position).getProduct_description());
+                    args.put("in_stock", modelList.get(position).getIn_stock());
+                    args.put("stock", modelList.get(position).getStock());
+                    args.put("status", modelList.get(position).getStatus());
+                    args.put("price", modelList.get(position).getPrice());
+                    args.put("mrp", modelList.get(position).getMrp());
+                    args.put("unit_value", modelList.get(position).getUnit_value());
+                    args.put("unit", modelList.get(position).getUnit());
+                    args.put("product_attribute", modelList.get(position).getProduct_attribute());
+                    args.put("rewards", modelList.get(position).getRewards());
+                    args.put("increment", modelList.get(position).getIncreament());
+                    args.put("title", modelList.get(position).getTitle());
 
-                args.putString("product_name",modelList.get(position).getProduct_name());
-                args.putString("product_description",modelList.get(position).getProduct_description());
-                args.putString("stock",modelList.get(position).getIn_stock());
-//                args.putString("product_size",modelList.get(position).getSize());
-//                args.putString("product_color",modelList.get( position).getColor());
-                args.putString("price",modelList.get(position).getPrice());
-                args.putString("mrp",modelList.get(position).getMrp());
-                args.putString("unit_value",modelList.get(position).getUnit_value());
-                args.putString("unit",modelList.get(position).getUnit());
-                args.putString("product_attribute",modelList.get(position).getProduct_attribute());
-                args.putString("rewards",modelList.get(position).getRewards());
-                args.putString("increment",modelList.get(position).getIncreament());
-                args.putString("title",modelList.get(position).getTitle());
+                    intent.putExtra("details", args);
+                   context.startActivity(intent);
+
 
             }
                 else if(id == R.id.btn_add)
@@ -416,11 +422,14 @@ SharedPreferences preferences;
             }
 
 
+
         }
+
     }
 
     public Product_adapter(List<Product_model> modelList, Context context) {
         this.modelList = modelList;
+        this.context=context;
         dbcart = new DatabaseHandler(context);
         db_cart=new DatabaseCartHandler(context);
     }
@@ -428,7 +437,7 @@ SharedPreferences preferences;
     @Override
     public Product_adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_product_rv, parent, false);
-        context = parent.getContext();
+
         return new Product_adapter.MyViewHolder(itemView);
     }
 
@@ -442,6 +451,10 @@ SharedPreferences preferences;
             holder.wish_before.setVisibility( View.GONE );
         }
 
+//        double stock=Double.parseDouble(modelList.get(position).getStock());
+//        if(stock<1) {
+//            rel_out.setVisibility(View.VISIBLE);
+//        }
         try
         {
             image_list.clear();
