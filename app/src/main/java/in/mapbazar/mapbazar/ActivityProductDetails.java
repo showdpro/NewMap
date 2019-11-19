@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import in.mapbazar.mapbazar.Model.ProductVariantModel;
 import in.mapbazar.mapbazar.Utili.Common;
 import in.mapbazar.mapbazar.View.CustomTextView;
 
@@ -33,6 +34,13 @@ import static in.mapbazar.mapbazar.Utili.Url.IMG_PRODUCT_URL;
 
 public class ActivityProductDetails extends AppCompatActivity implements View.OnClickListener {
 
+    String atr_id="";
+    String atr_product_id="";
+    String attribute_name="";
+    String attribute_value="";
+    String attribute_mrp="";
+    int status=0;
+    private TextView dialog_unit_type,dialog_txtId,dialog_txtVar;
     //Activity activity;
     SliderLayout img_slider;
     CustomTextView details_product_name,details_product_price,details_product_mrp,details_product_per,
@@ -42,7 +50,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
     Button btn_add, btn_Add_to_cart;
     RelativeLayout ly_back,layout_cart_cout,rel_variant;
     Dialog progressDialog;
-    String name,images,cat_id,p_id,desc,in_stock,stock,status,price,mrp,unit_value,unit,attr,rewards,increment,title;
+    String name,images,cat_id,p_id,desc,in_stock,stock,p_status,price,mrp,unit_value,unit,attr,rewards,increment,title;
 
     HashMap<String,String> p_map=new HashMap<>();
 
@@ -68,13 +76,13 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
             details_product_per.setText(""+getDiscount(price,mrp)+"% OFF");
 
             status=1;
-            txtPrice.setText("\u20B9"+details_product_price);
-            txtMrp.setText("\u20B9"+details_product_mrp);
+            details_product_price.setText(getResources().getString(R.string.currency)+price);
+            details_product_mrp.setText(getResources().getString(R.string.currency)+mrp);
 
-            txtrate.setVisibility(View.VISIBLE);
+            product_rate.setVisibility(View.VISIBLE);
             //  Toast.makeText(getActivity(),""+atr,Toast.LENGTH_LONG).show();
-            txtrate.setText(details_product_unit_value+details_product_unit);
-            txtTotal.setText("\u20B9"+String.valueOf(db_cart.getTotalAmount()));
+            product_rate.setText(unit_value+unit);
+            //txtTotal.setText("\u20B9"+String.valueOf(db_cart.getTotalAmount()));
         }
 
         else
@@ -85,12 +93,12 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
             JSONArray jsonArr = null;
             try {
 
-                jsonArr = new JSONArray(atr);
+                jsonArr = new JSONArray(attr);
 
                 ProductVariantModel model=new ProductVariantModel();
                 JSONObject jsonObj = jsonArr.getJSONObject(0);
                 atr_id=jsonObj.getString("id");
-                product_id=jsonObj.getString("product_id");
+                atr_product_id=jsonObj.getString("product_id");
                 attribute_name=jsonObj.getString("attribute_name");
                 attribute_value=jsonObj.getString("attribute_value");
                 attribute_mrp=jsonObj.getString("attribute_mrp");
@@ -105,13 +113,13 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                 String atr_price=String.valueOf(attribute_value);
                 String atr_mrp=String.valueOf(attribute_mrp);
                 int atr_dis=getDiscount(atr_price,atr_mrp);
-                txtPrice.setText("\u20B9"+attribute_value.toString());
-                txtMrp.setText("\u20B9"+attribute_mrp.toString());
+                details_product_price.setText(getResources().getString(R.string.currency)+attribute_value);
+                details_product_mrp.setText(getResources().getString(R.string.currency)+attribute_mrp);
                 dialog_txtId.setText(String.valueOf(atr_id.toString()+"@"+"0"));
                 dialog_txtVar.setText(attribute_value+"@"+attribute_name+"@"+attribute_mrp);
                 dialog_unit_type.setText("\u20B9"+attribute_value+"/"+attribute_name);
                 //  holder.txtTotal.setText("\u20B9"+String.valueOf(list_atr_value.get(0).toString()));
-                txtPer.setText(""+atr_dis+"% OFF");
+                details_product_per.setText(""+getDiscount(price,mrp)+"% OFF");
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -136,6 +144,9 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
         unit_type=findViewById(R.id.unit_type);
         txt_cart_cout=findViewById(R.id.txt_cart_cout);
 
+        dialog_unit_type=(TextView)findViewById(R.id.unit_type);
+        dialog_txtId=(TextView)findViewById(R.id.txtId);
+        dialog_txtVar=(TextView)findViewById(R.id.txtVar);
         btn_add=(Button) findViewById(R.id.btn_add);
         btn_Add_to_cart=(Button) findViewById(R.id.btn_Add_to_cart);
 
@@ -162,7 +173,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
              desc=p_map.get("product_description");
              in_stock=p_map.get("in_stock");
              stock=p_map.get("stock");
-             status=p_map.get("status");
+             p_status=p_map.get("status");
              price=p_map.get("price");
              mrp=p_map.get("mrp");
              unit_value=p_map.get("unit_value");
