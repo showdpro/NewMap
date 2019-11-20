@@ -236,14 +236,8 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
 
                             if (!issmall && !isbig) {
                                 if (sessionManagement.isLoggedIn()) {
-//                                    Bundle args = new Bundle();
-//                                    DeliveryFragment fm = new DeliveryFragment();
-//                                    fm.setArguments(args);
-//
-//
-//                                    FragmentManager fragmentManager = getFragmentManager();
-//                                    fragmentManager.beginTransaction().replace(R.id)
-//                                            .addToBackStack(null).commit();
+                                    Intent i = new Intent(ActivityNewProductDetails.this, ActivityMatchProductDetails.class);
+                                    startActivity(i);
                                 } else {
                                     //Toast.makeText(getActivity(), "Please login or regiter.\ncontinue", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(ActivityNewProductDetails.this, ActivityLoginRegister.class);

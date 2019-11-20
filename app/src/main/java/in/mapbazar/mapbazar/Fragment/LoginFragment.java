@@ -128,7 +128,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             }
         } else if (v.getId() == R.id.layoutFBLogin) {
 
-            ((ActivityLoginRegister) getActivity()).fbLogin();
+         //   ((ActivityLoginRegister) getActivity()).fbLogin();
         }
         else if (v.getId() == R.id.imgPassword) {
             if (isConfirmPasswordShow) {

@@ -3,7 +3,7 @@ package in.mapbazar.mapbazar.Utili;
 
 
 public class Url {
-    static final String APP_NAME = "Mapbazar";
+    public static final String APP_NAME = "Mapbazar";
     public static final String PREFS_NAME = "GroceryLoginPrefs";
     public static final String PREFS_NAME2 = "GroceryLoginPrefs2";
     public static final String IS_LOGIN = "isLogin";

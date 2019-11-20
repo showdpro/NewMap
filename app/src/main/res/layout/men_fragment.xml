@@ -1,181 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nested_view"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgcolor">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <!-- xmlns:app="http://schemas.android.com/tools"-->
 
-
-    <LinearLayout
-        android:id="@+id/layout_main"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical">
+        android:layout_above="@+id/linearLayout2"
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="270dp">
-
-            <RelativeLayout
-                android:id="@+id/layout_pager"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/pager_height"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true">
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/pager_height"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:background="@color/grey_20" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="@dimen/margin_10">
-
-                    <com.viewpagerindicator.CirclePageIndicator
-                        android:id="@+id/indicator"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|bottom"
-                        android:background="@color/transparent"
-                        android:padding="2dip"
-                        app:fillColor="@color/white"
-                        app:radius="4dp"
-                        app:strokeColor="@color/white"
-                        app:strokeWidth="1dp" />
-
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_below="@+id/layout_pager"
-                android:background="@color/bgcolor1"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <View
-                        android:layout_width="@dimen/margin_80"
-                        android:layout_height="@dimen/margin_2"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin_15"
-                        android:background="@color/gray" />
-
-                    <in.mapbazar.mapbazar.View.CustomTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="@dimen/margin_10"
-                        android:text="OUR POPULAR PRODUCTS"
-                        android:textColor="@color/gray_107"
-                        android:textSize="@dimen/title_home"
-                        app:fontName="@string/ubuntu_b" />
-
-                    <View
-                        android:layout_width="@dimen/margin_80"
-                        android:layout_height="@dimen/margin_2"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="@dimen/margin_20"
-                        android:background="@color/gray" />
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:gravity="bottom">
-
-                <RelativeLayout
-                    android:id="@+id/layout_cart"
-                    android:layout_width="@dimen/wallet_circle_width"
-                    android:layout_height="@dimen/wallet_circle_width"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="50dp"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/img_filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/cart_button" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/layout_cart_cout"
-                    android:layout_width="@dimen/height_25"
-                    android:layout_height="@dimen/height_25"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="50dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/circle_white"
-                    android:gravity="center"
-                    android:visibility="gone">
-
-                    <in.mapbazar.mapbazar.View.CustomTextView
-                        android:id="@+id/txt_cart_cout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text=""
-                        android:textColor="@color/gray_107"
-                        android:textSize="@dimen/font_12"
-                        app:fontName="@string/ubuntu_l"/>
-
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/home_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/margin_10"
-            android:scrollbars="vertical" />
+        android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/lay_arcloader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:visibility="gone">
+            android:orientation="vertical">
 
-            <in.mapbazar.mapbazar.customanimation.SimpleArcLoader
-                android:id="@+id/arc_loader"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                app:arc_speed="fast"
-                app:arc_style="simple_arc"
-                app:arc_thickness="2dp" />
+            <LinearLayout
+                android:id="@+id/radioLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/xml_box_shadow_bottom"
+                android:orientation="vertical"
+                android:padding="@dimen/space_10"
+                android:visibility="gone">
+
+                <in.mapbazar.mapbazar.View.CustomTextView
+                    android:id="@+id/tv_deli_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_5"
+                    android:background="@drawable/bg_rounded_button"
+                    app:fontName="@string/ubuntu_l"
+                    android:gravity="center_vertical"
+                    android:text="Delete"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/space_5"
+                    android:visibility="gone"
+                    />
+
+                <in.mapbazar.mapbazar.View.CustomTextView
+                    android:id="@+id/tv_deli_fromtime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_5"
+                    android:background="@drawable/bg_rounded_button"
+                    app:fontName="@string/ubuntu_l"
+                    android:gravity="center_vertical"
+                    android:text="Select Time"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/space_5"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/space_10"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_5"
+                    android:padding="@dimen/space_8"
+                    android:background="@drawable/shape"
+                    android:orientation="horizontal">
+
+
+
+                    <RelativeLayout
+                        android:id="@+id/tv_deli_add_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+
+                        android:background="@drawable/bg_rounded_button"
+                        android:padding="12dp">
+
+                        <in.mapbazar.mapbazar.View.CustomTextView
+                            app:fontName="@string/ubuntu_l"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="@string/tv_pro_add"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="#fff"
+                            android:textSize="@dimen/text_size_small"/>
+
+
+
+
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+                <in.mapbazar.mapbazar.View.CustomTextView
+                    android:id="@+id/txtdelivery"
+                    app:fontName="@string/ubuntu_l"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_rounded_button"
+                    android:textColor="#fff"
+                    android:gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/space_10"
+                    android:layout_marginRight="@dimen/space_10"
+                    android:text="@string/tv_del_title"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="bold"
+                    />
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rv_deli_address" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/space_10">
+
+                <in.mapbazar.mapbazar.View.CustomTextView
+                    android:id="@+id/textView10"
+                    android:textColor="#000"
+                    app:fontName="@string/ubuntu_l"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_cart_item" />
+
+                <in.mapbazar.mapbazar.View.CustomTextView
+                    android:textColor="#000"
+                    app:fontName="@string/ubuntu_l"
+                    android:id="@+id/tv_deli_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="end"
+                android:padding="@dimen/space_10">
+
+                <in.mapbazar.mapbazar.View.CustomTextView
+                    android:textColor="#000"
+                    android:id="@+id/textView12"
+                    app:fontName="@string/ubuntu_l"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total" />
+
+                <in.mapbazar.mapbazar.View.CustomTextView
+                    android:textColor="#000"
+                    app:fontName="@string/ubuntu_l"
+                    android:id="@+id/tv_deli_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="50" />
+
+                <!--<Fonts.LatoBLack
+                    android:textColor="#000"
+                    android:id="@+id/textView13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_2"
+                    android:text="@string/currency" />-->
+
+            </LinearLayout>
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/btn_deli_checkout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/bg_rounded_button"
+            android:padding="12dp">
+
+            <in.mapbazar.mapbazar.View.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Continue"
+                android:textColor="#fff"
+                app:fontName="@string/ubuntu_l"
+                android:textSize="@dimen/text_size_small"/>
+
+
+
+
+
+        </RelativeLayout>
     </LinearLayout>
 
-
-</android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

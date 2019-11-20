@@ -83,4 +83,24 @@
         <attr name="civ_scale_type" format="color" />
     </declare-styleable>
 
+    <style name="datepicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="NavDrawerTextStyle" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">#fff</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginTop">18dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:textSize">@dimen/nav_view_textview_size</item>
+    </style>
+
+    <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">@dimen/text_size_X_small</item>
+    </style>
+
+
+
 </resources>
