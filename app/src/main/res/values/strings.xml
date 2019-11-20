@@ -243,7 +243,12 @@
     <string name="place_order_successful">Your order has been placed successfully.</string>
 
     <!--thank you-->
-
+    <string name="sure_del" translatable="false">Are you sure!
+    you want to delete all cart product</string>
+    <string name="cancle" translatable="false">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="rewards_points" translatable="false">Rewards Points</string>
     <string name="thank">Thank you for your order!</string>
     <string name="thank_order_id">Your order has been placed and order ID is</string>
     <string name="thank_phone">Soon you will receive an automated sms from mapbazar.com. Your order will be delivered as per your selected schedule. </string>
@@ -257,5 +262,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="tv_cart_clear" translatable="false">Clear All Product</string>
+    <string name="tv_cart_checkout" translatable="false">Continue Checkout</string>
+    <string name="tv_cart_total" translatable="false">Total:\u0020</string>
+    <string name="tv_cart_item" translatable="false">Items:\u0020</string>
 
 </resources>

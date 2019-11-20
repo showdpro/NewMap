@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
+import in.mapbazar.mapbazar.ActivityProductDetails;
 import in.mapbazar.mapbazar.MainActivity;
 import in.mapbazar.mapbazar.Model.Deal_Of_Day_model;
 import in.mapbazar.mapbazar.Model.ProductVariantModel;
@@ -419,39 +420,30 @@ public class Deal_OfDay_Adapter extends RecyclerView.Adapter<Deal_OfDay_Adapter.
         holder.relativeLayout.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                final Deal_Of_Day_model mList = modelList.get(position);
-//                Bundle args = new Bundle();
-////
+                Intent intent = new Intent(context, ActivityProductDetails.class);
+
+                HashMap<String, String> args = new HashMap<>();
 //
-//                //args.putString("product_id",mList.getProduct_id());
-//                args.putString("cat_id", modelList.get(position).getCategory_id());
-//                args.putString("product_id",modelList.get(position).getProduct_id());
-//                args.putString("product_images",modelList.get(position).getProduct_image());
-//
-//                args.putString("product_name",modelList.get(position).getProduct_name());
-//                args.putString("product_description",modelList.get(position).getProduct_description());
-//                args.putString("stock",modelList.get(position).getIn_stock());
-////                args.putString("product_size",modelList.get(position).getSize());
-////                args.putString("product_color",modelList.get( position).getColor());
-//                args.putString("price",modelList.get(position).getPrice());
-//                args.putString("mrp",modelList.get(position).getMrp());
-//                args.putString("unit_value",modelList.get(position).getUnit_value());
-//                args.putString("unit",modelList.get(position).getUnit());
-//                args.putString("product_attribute",modelList.get(position).getProduct_attribute());
-//                args.putString("rewards",modelList.get(position).getRewards());
-//                args.putString("increment",modelList.get(position).getIncreament());
-//                args.putString("title",modelList.get(position).getTitle());
-//                // Toast.makeText(getActivity(),""+getid,Toast.LENGTH_LONG).show();
-//                Details_Fragment fm = new Details_Fragment();
-//                fm.setArguments(args);
-////                FragmentManager fragmentManager = .beginTransaction().replace(R.id.contentPanel, fm)
-////                        .addToBackStack(null).commit();
-//
-//                AppCompatActivity activity=(AppCompatActivity) view.getContext();
-//                activity.getFragmentManager().beginTransaction().replace(R.id.contentPanel,fm)
-//                        .addToBackStack(null)
-//                        .commit();
-//
+//               //Intent intent=new Intent(context, Product_details.class);
+                args.put("cat_id", modelList.get(position).getCategory_id());
+                args.put("product_id", modelList.get(position).getProduct_id());
+                args.put("product_images", modelList.get(position).getProduct_image());
+                args.put("product_name", modelList.get(position).getProduct_name());
+                args.put("product_description", modelList.get(position).getProduct_description());
+                args.put("in_stock", modelList.get(position).getIn_stock());
+                args.put("stock", modelList.get(position).getStock());
+                args.put("status", modelList.get(position).getStatus());
+                args.put("price", modelList.get(position).getPrice());
+                args.put("mrp", modelList.get(position).getMrp());
+                args.put("unit_value", modelList.get(position).getUnit_value());
+                args.put("unit", modelList.get(position).getUnit());
+                args.put("product_attribute", modelList.get(position).getProduct_attribute());
+                args.put("rewards", modelList.get(position).getRewards());
+                args.put("increment", modelList.get(position).getIncreament());
+                args.put("title", modelList.get(position).getTitle());
+
+                intent.putExtra("details", args);
+                context.startActivity(intent);
 
             }
         } );

@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
+import in.mapbazar.mapbazar.ActivityProductDetails;
 import in.mapbazar.mapbazar.Model.ProductVariantModel;
 import in.mapbazar.mapbazar.Model.Top_Selling_model;
 import in.mapbazar.mapbazar.R;
@@ -398,69 +399,37 @@ public class Top_Selling_Adapter extends RecyclerView.Adapter<Top_Selling_Adapte
 
 
 
-//        holder.relativeLayout.setOnClickListener( new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                final Top_Selling_model mList = modelList.get(position);
-//                Bundle args = new Bundle();
-////                String cl=String.valueOf( mList.getColor());
-////                String sz=String.valueOf(mList.getSize());
-////                String c="";
-////                String s="";
-////
-////                if(cl.isEmpty())
-////                {
-////
-////                    c="col";
-////
-////                }
-////                else if(cl.equals( "null" ))
-////                {
-////                    c="col";
-////                }
-////                else if(sz.isEmpty())
-////                {
-////                    s="size";
-////                }
-////                else if(sz.equals( "null" ))
-////                {
-////                    s="size";
-////                }
-////
+        holder.relativeLayout.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ActivityProductDetails.class);
+
+                HashMap<String, String> args = new HashMap<>();
 //
-//
-//                //args.putString("product_id",mList.getProduct_id());
-//                //args.putString("product_id",mList.getProduct_id());
-//                args.putString("cat_id", modelList.get(position).getCategory_id());
-//                args.putString("product_id",modelList.get(position).getProduct_id());
-//                args.putString("product_images",modelList.get(position).getProduct_image());
-//
-//                args.putString("product_name",modelList.get(position).getProduct_name());
-//                args.putString("product_description",modelList.get(position).getProduct_description());
-//                args.putString("stock",modelList.get(position).getIn_stock());
-////                args.putString("product_size",modelList.get(position).getSize());
-////                args.putString("product_color",modelList.get( position).getColor());
-//                args.putString("price",modelList.get(position).getPrice());
-//                args.putString("mrp",modelList.get(position).getMrp());
-//                args.putString("unit_value",modelList.get(position).getUnit_value());
-//                args.putString("unit",modelList.get(position).getUnit());
-//                args.putString("product_attribute",modelList.get(position).getProduct_attribute());
-//                args.putString("rewards",modelList.get(position).getRewards());
-//                args.putString("increment",modelList.get(position).getIncreament());
-//                args.putString("title",modelList.get(position).getTitle());            // Toast.makeText(getActivity(),""+getid,Toast.LENGTH_LONG).show();
-//                Details_Fragment fm = new Details_Fragment();
-//                fm.setArguments(args);
-////                FragmentManager fragmentManager = .beginTransaction().replace(R.id.contentPanel, fm)
-////                        .addToBackStack(null).commit();
-//
-//                AppCompatActivity activity=(AppCompatActivity) view.getContext();
-//               activity.getFragmentManager().beginTransaction().replace(R.id.contentPanel,fm)
-//                       .addToBackStack(null)
-//                       .commit();
-//
-//
-//            }
-//        } );
+//               //Intent intent=new Intent(context, Product_details.class);
+                args.put("cat_id", modelList.get(position).getCategory_id());
+                args.put("product_id", modelList.get(position).getProduct_id());
+                args.put("product_images", modelList.get(position).getProduct_image());
+                args.put("product_name", modelList.get(position).getProduct_name());
+                args.put("product_description", modelList.get(position).getProduct_description());
+                args.put("in_stock", modelList.get(position).getIn_stock());
+                args.put("stock", modelList.get(position).getStock());
+                args.put("status", modelList.get(position).getStatus());
+                args.put("price", modelList.get(position).getPrice());
+                args.put("mrp", modelList.get(position).getMrp());
+                args.put("unit_value", modelList.get(position).getUnit_value());
+                args.put("unit", modelList.get(position).getUnit());
+                args.put("product_attribute", modelList.get(position).getProduct_attribute());
+                args.put("rewards", modelList.get(position).getRewards());
+                args.put("increment", modelList.get(position).getIncreament());
+                args.put("title", modelList.get(position).getTitle());
+
+                intent.putExtra("details", args);
+                context.startActivity(intent);
+
+
+            }
+        } );
         holder.wish_before.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -526,109 +495,109 @@ public class Top_Selling_Adapter extends RecyclerView.Adapter<Top_Selling_Adapte
                 }
             } );
 
-//        holder.add_Button.setOnClickListener( new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                holder.add_Button.setVisibility( View.INVISIBLE );
-//                Top_Selling_model mList=modelList.get(position);
-//                String atr=String.valueOf(modelList.get(position).getProduct_attribute());
-//                if(atr.equals("[]"))
-//                {
-//                    HashMap<String, String> mapProduct = new HashMap<String, String>();
-//                    String unt=String.valueOf( mList.getUnit_value()+" "+mList.getUnit());
-//                    mapProduct.put("cart_id", mList.getProduct_id());
-//                    mapProduct.put("product_id", mList.getProduct_id());
-//                    mapProduct.put("product_image",mList.getProduct_image());
-//                    mapProduct.put("cat_id",mList.getCategory_id());
-//                    mapProduct.put("product_name",mList.getProduct_name());
-//                    mapProduct.put("price", mList.getPrice());
-//                    mapProduct.put("unit_price",mList.getPrice());
-//                    mapProduct.put("unit",unt);
-//                    mapProduct.put("mrp",mList.getMrp());
-//                    mapProduct.put("type","p");
-//                    try {
-//
-//                        boolean tr = db_cart.setCart(mapProduct, (float) 1 );
-//                        if (tr == true) {
+        holder.add_Button.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                holder.add_Button.setVisibility( View.INVISIBLE );
+                Top_Selling_model mList=modelList.get(position);
+                String atr=String.valueOf(modelList.get(position).getProduct_attribute());
+                if(atr.equals("[]"))
+                {
+                    HashMap<String, String> mapProduct = new HashMap<String, String>();
+                    String unt=String.valueOf( mList.getUnit_value()+" "+mList.getUnit());
+                    mapProduct.put("cart_id", mList.getProduct_id());
+                    mapProduct.put("product_id", mList.getProduct_id());
+                    mapProduct.put("product_image",mList.getProduct_image());
+                    mapProduct.put("cat_id",mList.getCategory_id());
+                    mapProduct.put("product_name",mList.getProduct_name());
+                    mapProduct.put("price", mList.getPrice());
+                    mapProduct.put("unit_price",mList.getPrice());
+                    mapProduct.put("unit",unt);
+                    mapProduct.put("mrp",mList.getMrp());
+                    mapProduct.put("type","p");
+                    try {
+
+                        boolean tr = db_cart.setCart(mapProduct, (float) 1 );
+                        if (tr == true) {
 //                            MainActivity mainActivity = new MainActivity();
 //                            mainActivity.setCartCounter("" + db_cart.getCartCount());
-//
-//                            //   context.setCartCounter("" + holder.db_cart.getCartCount());
-//                            Toast.makeText(context, "Added to Cart", Toast.LENGTH_LONG).show();
-//                            int n= db_cart.getCartCount();
-//                            updateintent();
-//
-//
-//                        }
-//                        else if(tr==false)
-//                        {
-//                            Toast.makeText(context,"cart updated",Toast.LENGTH_LONG).show();
-//                        }
-//
-//                    } catch (Exception ex) {
-//                        Toast.makeText(context, "" + ex.getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//
-//                    //Toast.makeText(context,"1\n"+status+"\n"+modelList.get(position).getProduct_attribute(),Toast.LENGTH_LONG).show();
-//                }
-//                else
-//                {
-//                    //ProductVariantModel model=variantList.get(position);
-//
-//                    String str_id=holder.dialog_txtId.getText().toString();
-//                    String s=holder.dialog_txtVar.getText().toString();
-//                    String[] st=s.split("@");
-//                    String st0=String.valueOf(st[0]);
-//                    String st1=String.valueOf(st[1]);
-//                    String st2=String.valueOf(st[2]);
-//                    String[] str=str_id.split("@");
-//                    String at_id=String.valueOf(str[0]);
-//                    int j=Integer.parseInt(String.valueOf(str[1]));
-//                    //       Toast.makeText(context,""+str[0].toString()+"\n"+str[1].toString(),Toast.LENGTH_LONG).show();
-//                    HashMap<String, String> mapProduct = new HashMap<String, String>();
-//                    mapProduct.put("cart_id",at_id);
-//                    mapProduct.put("product_id", mList.getProduct_id());
-//                    mapProduct.put("product_image",mList.getProduct_image());
-//                    mapProduct.put("cat_id",mList.getCategory_id());
-//                    mapProduct.put("product_name",mList.getProduct_name());
-//                    mapProduct.put("price", st0);
-//                    mapProduct.put("unit_price",st0);
-//                    mapProduct.put("unit",st1);
-//                    mapProduct.put("mrp",st2);
-//                    mapProduct.put("type","a");
-//                    //  Toast.makeText(context,""+attributeList.get(j).getId()+"\n"+mapProduct,Toast.LENGTH_LONG).show();
-//                    try {
-//
-//                        boolean tr = db_cart.setCart(mapProduct, (float) 1 );
-//                        if (tr == true) {
+
+                            //   context.setCartCounter("" + holder.db_cart.getCartCount());
+                            Toast.makeText(context, "Added to Cart", Toast.LENGTH_LONG).show();
+                            int n= db_cart.getCartCount();
+                            updateintent();
+
+
+                        }
+                        else if(tr==false)
+                        {
+                            Toast.makeText(context,"cart updated",Toast.LENGTH_LONG).show();
+                        }
+
+                    } catch (Exception ex) {
+                        Toast.makeText(context, "" + ex.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                    //Toast.makeText(context,"1\n"+status+"\n"+modelList.get(position).getProduct_attribute(),Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    //ProductVariantModel model=variantList.get(position);
+
+                    String str_id=holder.dialog_txtId.getText().toString();
+                    String s=holder.dialog_txtVar.getText().toString();
+                    String[] st=s.split("@");
+                    String st0=String.valueOf(st[0]);
+                    String st1=String.valueOf(st[1]);
+                    String st2=String.valueOf(st[2]);
+                    String[] str=str_id.split("@");
+                    String at_id=String.valueOf(str[0]);
+                    int j=Integer.parseInt(String.valueOf(str[1]));
+                    //       Toast.makeText(context,""+str[0].toString()+"\n"+str[1].toString(),Toast.LENGTH_LONG).show();
+                    HashMap<String, String> mapProduct = new HashMap<String, String>();
+                    mapProduct.put("cart_id",at_id);
+                    mapProduct.put("product_id", mList.getProduct_id());
+                    mapProduct.put("product_image",mList.getProduct_image());
+                    mapProduct.put("cat_id",mList.getCategory_id());
+                    mapProduct.put("product_name",mList.getProduct_name());
+                    mapProduct.put("price", st0);
+                    mapProduct.put("unit_price",st0);
+                    mapProduct.put("unit",st1);
+                    mapProduct.put("mrp",st2);
+                    mapProduct.put("type","a");
+                    //  Toast.makeText(context,""+attributeList.get(j).getId()+"\n"+mapProduct,Toast.LENGTH_LONG).show();
+                    try {
+
+                        boolean tr = db_cart.setCart(mapProduct, (float) 1 );
+                        if (tr == true) {
 //                            MainActivity mainActivity = new MainActivity();
 //                            mainActivity.setCartCounter("" + db_cart.getCartCount());
-//
-//                            //   context.setCartCounter("" + holder.db_cart.getCartCount());
-//                            Toast.makeText(context, "Added to Cart", Toast.LENGTH_LONG).show();
-//                            int n= db_cart.getCartCount();
-//                            updateintent();
-//
-//
-//                        }
-//                        else if(tr==false)
-//                        {
-//                            Toast.makeText(context,"cart updated",Toast.LENGTH_LONG).show();
-//                        }
-//
-//                    } catch (Exception ex) {
-//                        Toast.makeText(context, "" + ex.getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//
-//                }
-//          updateintent();
-//                holder.add_Button.setVisibility(View.GONE);
-//                holder.elegantNumberButton.setVisibility(View.VISIBLE);
-//                holder.elegantNumberButton.setNumber("1");
-//
-//            }
-//        } );
+
+                            //   context.setCartCounter("" + holder.db_cart.getCartCount());
+                            Toast.makeText(context, "Added to Cart", Toast.LENGTH_LONG).show();
+                            int n= db_cart.getCartCount();
+                            updateintent();
+
+
+                        }
+                        else if(tr==false)
+                        {
+                            Toast.makeText(context,"cart updated",Toast.LENGTH_LONG).show();
+                        }
+
+                    } catch (Exception ex) {
+                        Toast.makeText(context, "" + ex.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+          updateintent();
+                holder.add_Button.setVisibility(View.GONE);
+                holder.elegantNumberButton.setVisibility(View.VISIBLE);
+                holder.elegantNumberButton.setNumber("1");
+
+            }
+        } );
         holder.card_view_top.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {

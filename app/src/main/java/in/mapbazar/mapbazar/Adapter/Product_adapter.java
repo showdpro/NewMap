@@ -136,7 +136,7 @@ SharedPreferences preferences;
                 //double stock=Double.parseDouble(modelList.get(position).getStock());
     //Toast.makeText(context,"asd",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(context, ActivityProductDetails.class);
-                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
+
                     HashMap<String, String> args = new HashMap<>();
 //
 //               //Intent intent=new Intent(context, Product_details.class);
@@ -550,6 +550,7 @@ SharedPreferences preferences;
             status=2;
         attributeList.clear();
             holder.rel_variant.setVisibility(View.VISIBLE);
+            holder.txtrate.setVisibility(View.GONE);
 //            String atr=String.valueOf(mList.getProduct_attribute());
             JSONArray jsonArr = null;
             try {
