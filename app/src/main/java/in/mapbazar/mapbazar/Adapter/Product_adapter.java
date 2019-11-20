@@ -379,6 +379,8 @@ SharedPreferences preferences;
                     mapProduct.put("title",mList.getTitle());
                     mapProduct.put("mrp",mList.getMrp());
                     mapProduct.put("product_attribute",mList.getProduct_attribute());
+                    mapProduct.put("in_stock",mList.getIn_stock());
+                    mapProduct.put("status",mList.getStatus());
 
                        // Toast.makeText(context,""+mapProduct,Toast.LENGTH_LONG).show();
 
@@ -390,9 +392,6 @@ SharedPreferences preferences;
 
                             //   context.setCartCounter("" + holder.db_cart.getCartCount());
                             Toast.makeText(context, "Added to Wishlist" , Toast.LENGTH_LONG).show();
-
-
-
                         }
                         else
                         {
@@ -449,6 +448,11 @@ SharedPreferences preferences;
         {
             holder.wish_after.setVisibility( View.VISIBLE );
             holder.wish_before.setVisibility( View.GONE );
+        }
+        else
+        {
+            holder.wish_after.setVisibility( View.GONE );
+            holder.wish_before.setVisibility( View.VISIBLE );
         }
 
 //        double stock=Double.parseDouble(modelList.get(position).getStock());

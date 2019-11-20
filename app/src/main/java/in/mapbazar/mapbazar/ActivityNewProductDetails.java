@@ -91,7 +91,7 @@ import in.mapbazar.mapbazar.util.Session_management;
 public class ActivityNewProductDetails extends AppCompatActivity implements View.OnClickListener{
     private RecyclerView rv_cart;
     public static CustomTextView tv_clear, tv_total, tv_item;
-    private RelativeLayout btn_checkout;
+    private RelativeLayout btn_checkout ,back;
 
     //  private DatabaseHandler db;
     private DatabaseCartHandler db_cart;
@@ -104,7 +104,7 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
         sessionManagement = new Session_management(this);
         sessionManagement.cleardatetime();
 
-
+        back = findViewById( R.id.ly_back );
         tv_clear = (CustomTextView) findViewById(R.id.tv_cart_clear);
         tv_total = (CustomTextView) findViewById(R.id.tv_cart_total);
         tv_item = (CustomTextView) findViewById(R.id.tv_cart_item);
@@ -128,6 +128,7 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
 
         tv_clear.setOnClickListener(ActivityNewProductDetails.this);
         btn_checkout.setOnClickListener(ActivityNewProductDetails.this);
+        back.setOnClickListener( ActivityNewProductDetails.this );
 
 
     }
@@ -140,7 +141,12 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
             // showdialog
             // Toast.makeText(getActivity(),""+db_cart.getCartCount(),Toast.LENGTH_LONG).show();
             showClearDialog();
-        } else if (id == R.id.btn_cart_checkout) {
+        }
+        else if (id == R.id.ly_back)
+        {
+            finish();
+        }
+        else if (id == R.id.btn_cart_checkout) {
 
             if (ConnectivityReceiver.isConnected()) {
                 makeGetLimiteRequest();

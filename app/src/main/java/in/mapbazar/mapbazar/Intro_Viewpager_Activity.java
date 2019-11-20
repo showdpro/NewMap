@@ -20,9 +20,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
+import com.viewpagerindicator.CirclePageIndicator;
+
+import in.mapbazar.mapbazar.Adapter.SplashImageAdapter;
 import in.mapbazar.mapbazar.R;
 
 import in.mapbazar.mapbazar.Utili.Common;
@@ -46,8 +50,10 @@ public class Intro_Viewpager_Activity extends AppCompatActivity {
     Dialog ProgressDialog;
     ProgressBar progressBar;
     SharedPreferences userPref;
-
-    private static final int NUM_PAGES = 2;
+    CirclePageIndicator indicator ;
+    RelativeLayout rel_next , rel_pager ;
+    Button btn_nxt ;
+    private static final int NUM_PAGES = 4;
 
     public static ViewPager mPager;
     private LinearLayout mIndicatorLayout;
@@ -55,7 +61,7 @@ public class Intro_Viewpager_Activity extends AppCompatActivity {
     private Drawable mPagerBackground;
     private static AnimatorSet mAnimatorSet;
 
-    private int mSelectedPosition = -1;
+    private int mSelectedPosition = 1;
 
     //Second screen
     private float mPreviousPositionOffset;
@@ -70,6 +76,7 @@ public class Intro_Viewpager_Activity extends AppCompatActivity {
     private boolean mThirdPageSelected;
     private static Button mLetsGoButton;
 
+    SplashImageAdapter imageAdapter ;
     CustomTextView txt_continue_guest;
 
 
@@ -89,14 +96,19 @@ public class Intro_Viewpager_Activity extends AppCompatActivity {
         ProgressDialog.setContentView(R.layout.progressbar);
         ProgressDialog.setCancelable(false);
         progressBar = (ProgressBar) ProgressDialog.findViewById(R.id.progress_circular);
-
+        indicator= findViewById( R.id.indicator );
+        rel_next = findViewById( R.id.rel_next);
+        btn_nxt = findViewById( R.id.btn_next );
+       // rel_pager = findViewById( R.id.rel_pager );
 
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerBackground = mPager.getBackground();
         mIndicatorLayout = (LinearLayout) findViewById(R.id.indicator_layout);
 
-        mPager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
+        imageAdapter = new SplashImageAdapter( this );
+        mPager.setAdapter(imageAdapter);
         setIndicatorLayout();
+        indicator.setViewPager( mPager );
         setPageChangeListener(mPager);
         mPager.bringToFront();
 
@@ -112,6 +124,13 @@ public class Intro_Viewpager_Activity extends AppCompatActivity {
                 }
             }
         });
+        btn_nxt.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent( Intro_Viewpager_Activity.this ,MainActivity.class );
+                startActivity( intent );
+            }
+        } );
     }
 
     private void GetGuestLogin() {
@@ -155,7 +174,7 @@ public class Intro_Viewpager_Activity extends AppCompatActivity {
         mIndicatorView[0].setGravity(Gravity.CENTER);
     }
 
-    private void setPageChangeListener(ViewPager viewPager) {
+    private void setPageChangeListener(final ViewPager viewPager) {
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -170,7 +189,11 @@ public class Intro_Viewpager_Activity extends AppCompatActivity {
                 } else if (positionOffset < mPreviousPositionOffset) {
 
                     mViewPagerScrollingLeft = false;
+                    rel_next.setVisibility( View.VISIBLE );
+                    viewPager.setVisibility( View.GONE );
+
                 }
+
                 mPreviousPositionOffset = positionOffset;
                 mPreviousPosition = position;
 
@@ -203,7 +226,7 @@ public class Intro_Viewpager_Activity extends AppCompatActivity {
 
                 }
 
-                for (int i = 0; i < mIndicatorView.length; i++) {
+                for (int i = 0; i < mIndicatorView.length-1; i++) {
                     mIndicatorView[i].setBackgroundResource(R.drawable.rounded_cell_gray);
                 }
                 mIndicatorView[position].setBackgroundResource(R.drawable.rounded_cell_red);

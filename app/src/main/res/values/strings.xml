@@ -265,6 +265,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+   
 
     <string name="tv_cart_clear" translatable="false">Clear All Product</string>
     <string name="tv_cart_checkout" translatable="false">Continue Checkout</string>

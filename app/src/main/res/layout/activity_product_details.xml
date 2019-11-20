@@ -491,14 +491,25 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/card_view4"
                             >
+                            <TextView
+                                android:id="@+id/related_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="You may also like :"
+                                android:textSize="@dimen/font_16"
+                                android:padding="@dimen/space_5"
+                                android:layout_marginLeft="@dimen/space_5"
+                                android:textStyle="bold"/>
+
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/related_recycler"
+                                android:layout_below="@+id/related_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:layout_marginLeft="8dp"
 
-                                android:layout_marginRight="8dp"
+
+
                                 android:background="@color/all"
                                 android:scrollbars="none"
                                 android:layout_marginBottom="80dp"

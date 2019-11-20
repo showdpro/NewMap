@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/grey_12"
     android:orientation="vertical"
-    tools:context="com.techintegrity.trolleypress.in.techintegrity.trolleypress.ActivitySubCategory">
+   >
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">

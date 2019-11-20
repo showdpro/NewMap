@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class DatabaseHandlerWishList extends SQLiteOpenHelper {
 
-    private static String DB_NAME = "dbwish";
+    private static String DB_NAME = "mapdb";
     private static int DB_VERSION = 3;
     private SQLiteDatabase db;
 
@@ -30,9 +30,11 @@ public class DatabaseHandlerWishList extends SQLiteOpenHelper {
     public static final String COLUMN_UNIT = "unit";
     public static final String COLUMN_INCREAMENT = "increment";
     public static final String COLUMN_STOCK = "stock";
+    public static final String COLUMN_INSTOCK= "in_stock";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_DESC = "product_description";
     public static final String COLUMN_ATTRIBUTE = "product_attribute";
+    public static final String COLUMN_STATUS = "status";
 
 
 
@@ -58,7 +60,9 @@ public class DatabaseHandlerWishList extends SQLiteOpenHelper {
                 + COLUMN_ATTRIBUTE + " TEXT NOT NULL, "
                 + COLUMN_INCREAMENT + " DOUBLE NOT NULL, "
                 + COLUMN_STOCK + " DOUBLE NOT NULL, "
-                + COLUMN_TITLE + " TEXT NOT NULL "
+                + COLUMN_INSTOCK +" TEXT ,"
+                + COLUMN_TITLE + " TEXT NOT NULL, "
+                + COLUMN_STATUS + " TEXT "
 
                 + ")";
         db.execSQL(exe);
@@ -86,6 +90,8 @@ public class DatabaseHandlerWishList extends SQLiteOpenHelper {
             values.put(COLUMN_TITLE, map.get(COLUMN_TITLE));
             values.put(COLUMN_UNIT, map.get(COLUMN_UNIT));
             values.put(COLUMN_UNIT_VALUE, map.get(COLUMN_UNIT_VALUE));
+            values.put( COLUMN_INSTOCK,map.get( COLUMN_INSTOCK) );
+            values.put(COLUMN_STATUS,map.get( COLUMN_STATUS ));
             db.insert(WISHTABLE_TABLE, null, values);
             return true;
         }
