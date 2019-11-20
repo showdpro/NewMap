@@ -2,6 +2,7 @@ package in.mapbazar.mapbazar.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -313,8 +314,9 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
                     Boolean status = response.getBoolean("responce");
                     if (status) {
 
-                        ((MainActivity) getActivity()).onBackPressed();
-
+                        DeliveryFragment deliveryFragment=new DeliveryFragment();
+                        FragmentManager fragmentManager=getFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.container_delivery, deliveryFragment).commit();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -369,7 +371,9 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
                         String msg = response.getString("data");
                        // Toast.makeText(getActivity(), "ms1" + msg, Toast.LENGTH_SHORT).show();
 
-                        ((MainActivity) getActivity()).onBackPressed();
+                        DeliveryFragment deliveryFragment=new DeliveryFragment();
+                        FragmentManager fragmentManager=getFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.container_delivery, deliveryFragment).commit();
 
                     }
                 } catch (JSONException e) {

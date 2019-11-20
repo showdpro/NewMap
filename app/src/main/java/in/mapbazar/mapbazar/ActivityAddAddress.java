@@ -184,7 +184,7 @@ public class ActivityAddAddress extends AppCompatActivity implements View.OnClic
 
             case R.id.txt_add_address:
 
-                /*Intent i = new Intent(ActivityAddAddress.this,ActivityAddressList.class);
+                /*Intent i = new Intent(ActivityAddAddress.this,RegisterActivity.class);
                 SharedPreferences.Editor sh = sPref.edit();
                 sh.putBoolean("Add",true);
                 sh.commit();

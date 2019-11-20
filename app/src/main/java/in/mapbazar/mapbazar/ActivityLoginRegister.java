@@ -59,7 +59,7 @@ public class ActivityLoginRegister extends AppCompatActivity implements View.OnC
         txtLogin.setOnClickListener(this);
         txtRegister.setOnClickListener(this);
         txtGuest.setOnClickListener(this);
-
+        imgPassword.setOnClickListener(this);
 
     }
 
@@ -74,7 +74,8 @@ public class ActivityLoginRegister extends AppCompatActivity implements View.OnC
         }
         else if(id == R.id.txtRegister)
         {
-
+            Intent intent=new Intent(ActivityLoginRegister.this,RegisterActivity.class);
+            startActivity(intent);
         }
         else if(id == R.id.txtGuest)
         {
@@ -129,6 +130,7 @@ public class ActivityLoginRegister extends AppCompatActivity implements View.OnC
        else
         {
             String pass=edtPassword_login.getText().toString();
+            Toast.makeText(ActivityLoginRegister.this,"mob_no :"+mob_no+"\n pass:-- "+pass,Toast.LENGTH_LONG).show();
             getLogin(mob_no,pass);
         }
 

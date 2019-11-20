@@ -1,11 +1,12 @@
 package in.mapbazar.mapbazar.Adapter;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import in.mapbazar.mapbazar.Model.Delivery_address_model;
 import in.mapbazar.mapbazar.Modules.Module;
 import in.mapbazar.mapbazar.R;
 import in.mapbazar.mapbazar.Utili.Url;
+import in.mapbazar.mapbazar.View.CustomTextView;
 import in.mapbazar.mapbazar.util.ConnectivityReceiver;
 import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
 import in.mapbazar.mapbazar.util.Session_management;
@@ -57,7 +59,7 @@ public class Delivery_get_address_adapter extends RecyclerView.Adapter<Delivery_
     private String getsocity, gethouse, getphone, getpin, getname, getcharge;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tv_address, tv_name, tv_phone, tv_charges,txtEdit,txtDelete;
+        public CustomTextView tv_address, tv_name, tv_phone, tv_charges,txtEdit,txtDelete;
         public RadioButton rb_select;
 
 //        SwipeLayout swipeLayout;
@@ -70,12 +72,12 @@ public class Delivery_get_address_adapter extends RecyclerView.Adapter<Delivery_
 //            buttonDelete = (Button) itemView.findViewById(R.id.delete);
 //            btn_edit = (Button) itemView.findViewById(R.id.edit);
 
-            tv_address = (TextView) view.findViewById(R.id.tv_adres_address);
-            tv_name = (TextView) view.findViewById(R.id.tv_adres_pincode);
-            tv_phone = (TextView) view.findViewById(R.id.tv_adres_phone);
-            tv_charges = (TextView) view.findViewById(R.id.tv_adres_charge);
-            txtEdit = (TextView) view.findViewById(R.id.txtEdit);
-            txtDelete = (TextView) view.findViewById(R.id.txtDelete);
+            tv_address = (CustomTextView) view.findViewById(R.id.tv_adres_address);
+            tv_name = (CustomTextView) view.findViewById(R.id.tv_adres_pincode);
+            tv_phone = (CustomTextView) view.findViewById(R.id.tv_adres_phone);
+            tv_charges = (CustomTextView) view.findViewById(R.id.tv_adres_charge);
+            txtEdit = (CustomTextView) view.findViewById(R.id.txtEdit);
+            txtDelete = (CustomTextView) view.findViewById(R.id.txtDelete);
             rb_select = (RadioButton) view.findViewById(R.id.rb_adres);
 
             rb_select.setOnClickListener(new View.OnClickListener() {
@@ -230,23 +232,25 @@ public class Delivery_get_address_adapter extends RecyclerView.Adapter<Delivery_
             @Override
             public void onClick(View view) {
 
-//                Session_management sessionManagement = new Session_management(context);
-//                sessionManagement.updateSocity("","");
+                Session_management sessionManagement = new Session_management(context);
+                sessionManagement.updateSocity("","");
+
+                Bundle args = new Bundle();
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+
+                Fragment fm = new Add_delivery_address_fragment();
+                args.putString("location_id",mList.getLocation_id());
+                args.putString("name", mList.getReceiver_name());
+                args.putString("mobile", mList.getReceiver_mobile());
+                args.putString("pincode", mList.getPincode());
+                args.putString("socity_id", mList.getSocity_id());
+                args.putString("socity_name", mList.getSocity_name());
+                args.putString("house", mList.getHouse_no());
+                fm.setArguments(args);
+                FragmentManager fragmentManager =activity.getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.container_delivery, fm)
+                        .addToBackStack(null).commit();
 //
-//                Bundle args = new Bundle();
-//                Add_delivery_address_fragment fm = new Add_delivery_address_fragment();
-//                args.putString("location_id",mList.getLocation_id());
-//                args.putString("name", mList.getReceiver_name());
-//                args.putString("mobile", mList.getReceiver_mobile());
-//                args.putString("pincode", mList.getPincode());
-//                args.putString("socity_id", mList.getSocity_id());
-//                args.putString("socity_name", mList.getSocity_name());
-//                args.putString("house", mList.getHouse_no());
-//                fm.setArguments(args);
-//                FragmentManager fragmentManager = ((Activity) context).getFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.container_delivery, fm)
-//                        .addToBackStack(null).commit();
-////
             }
         });
 //        holder.btn_edit.setOnClickListener(new View.OnClickListener() {

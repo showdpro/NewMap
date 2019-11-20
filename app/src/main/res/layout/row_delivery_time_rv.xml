@@ -34,17 +34,19 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <Fonts.LatoBLack
+                    <in.mapbazar.mapbazar.View.CustomTextView
                         android:textColor="#000"
                         android:id="@+id/textView14"
                         android:layout_width="wrap_content"
+                        app:fontName="@string/ubuntu_r"
                         android:layout_height="wrap_content"
                         android:text="Name:" />
 
-                    <Fonts.LatoBLack
+                    <in.mapbazar.mapbazar.View.CustomTextView
                         android:textColor="#000"
                         android:id="@+id/tv_adres_address"
                         android:layout_width="match_parent"
+                        app:fontName="@string/ubuntu_r"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/space_2"
                         android:layout_marginStart="@dimen/space_2"
@@ -59,19 +61,21 @@
                     android:layout_marginTop="@dimen/space_5"
                     android:orientation="horizontal">
 
-                    <Fonts.LatoBLack
+                    <in.mapbazar.mapbazar.View.CustomTextView
                         android:textColor="#000"
                         android:id="@+id/textView17"
                         android:layout_width="wrap_content"
+                        app:fontName="@string/ubuntu_r"
                         android:layout_height="wrap_content"
                         android:text="@string/tv_deli_mobile" />
 
-                    <Fonts.LatoBLack
+                    <in.mapbazar.mapbazar.View.CustomTextView
                         android:textColor="#000"
                         android:id="@+id/tv_adres_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/space_2"
+                        app:fontName="@string/ubuntu_r"
                         android:layout_marginStart="@dimen/space_2"
                         android:text="TextView" />
                 </LinearLayout>
@@ -83,19 +87,21 @@
                     android:visibility="gone"
                     android:orientation="horizontal">
 
-                    <Fonts.LatoBLack
+                    <in.mapbazar.mapbazar.View.CustomTextView
                         android:textColor="#000"
                         android:id="@+id/textView16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:fontName="@string/ubuntu_r"
                         android:text="@string/delivery_charge" />
 
-                    <Fonts.LatoBLack
+                    <in.mapbazar.mapbazar.View.CustomTextView
                         android:textColor="#000"
                         android:id="@+id/tv_adres_charge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/space_2"
+                        app:fontName="@string/ubuntu_r"
                         android:layout_marginStart="@dimen/space_2"
                         android:text="TextView" />
                 </LinearLayout>
@@ -106,19 +112,21 @@
                     android:orientation="horizontal">
 
 
-                    <Fonts.LatoBLack
+                    <in.mapbazar.mapbazar.View.CustomTextView
                         android:textColor="#000"
                         android:id="@+id/textView15"
+                        app:fontName="@string/ubuntu_r"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Address:" />
 
-                    <Fonts.LatoBLack
+                    <in.mapbazar.mapbazar.View.CustomTextView
                         android:textColor="#000"
                         android:id="@+id/tv_adres_pincode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/space_2"
+                        app:fontName="@string/ubuntu_r"
                         android:layout_marginStart="@dimen/space_2"
                         android:text="TextView" />
 
@@ -135,20 +143,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/space_2"/>
 
-            <TextView
+            <in.mapbazar.mapbazar.View.CustomTextView
                 android:id="@+id/txtEdit"
                 android:layout_below="@id/line"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryDark"
                 android:padding="@dimen/space_5"
+                app:fontName="@string/ubuntu_r"
                 android:text="Edit"/>
-            <TextView
+            <in.mapbazar.mapbazar.View.CustomTextView
                android:id="@+id/txtDelete"
                 android:layout_below="@id/line"
                 android:layout_marginRight="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
+                app:fontName="@string/ubuntu_r"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryDark"
                 android:padding="@dimen/space_5"
@@ -161,6 +171,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+
                 android:layout_marginLeft="@dimen/space_8" />
 
         </RelativeLayout>

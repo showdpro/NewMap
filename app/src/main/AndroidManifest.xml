@@ -92,7 +92,7 @@
             android:name="in.mapbazar.mapbazar.RecentProductImagepager"
             android:screenOrientation="portrait" />
         <activity android:name="in.mapbazar.mapbazar.ProductFilter" />
-        <activity android:name="in.mapbazar.mapbazar.ActivityAddressList" />
+        <activity android:name="in.mapbazar.mapbazar.RegisterActivity" />
         <activity android:name="in.mapbazar.mapbazar.ActivityAddAddress" />
         <activity android:name="in.mapbazar.mapbazar.ActivityPayment" />
         <activity android:name="in.mapbazar.mapbazar.ActivityThank" />

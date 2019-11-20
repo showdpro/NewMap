@@ -20,7 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
-import in.mapbazar.mapbazar.ActivityAddressList;
+import in.mapbazar.mapbazar.RegisterActivity;
 import in.mapbazar.mapbazar.ActivityLoginRegister;
 import in.mapbazar.mapbazar.Adapter.ShoppingCartAdapter;
 import in.mapbazar.mapbazar.Model.ProductListModel.ColorItem;
@@ -176,7 +176,7 @@ public class ShopingCartFragment extends Fragment {
             public void onClick(View v) {
                 if (!sPref.getString("guest", "").equalsIgnoreCase("guest")) {
 
-                    Intent checkout = new Intent(getActivity(), ActivityAddressList.class);
+                    Intent checkout = new Intent(getActivity(), RegisterActivity.class);
                     SharedPreferences.Editor sh = sPref.edit();
                     sh.putBoolean("Add", false);
                     sh.putString("tax_value", "" + tax_value);
