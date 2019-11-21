@@ -22,7 +22,7 @@ public class Module {
 
 
 
-    public String VolleyErrorMessage(VolleyError error)
+    public static String VolleyErrorMessage(VolleyError error)
     {
         String str_error ="";
         if (error instanceof TimeoutError) {

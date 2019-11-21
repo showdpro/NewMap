@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
-import in.mapbazar.mapbazar.ActivityNewProductDetails;
+import in.mapbazar.mapbazar.ActivityCart;
 import in.mapbazar.mapbazar.Fragment.HomeFragment;
 import in.mapbazar.mapbazar.Model.HomeData.NewProductItem;
 import in.mapbazar.mapbazar.R;
@@ -122,7 +122,7 @@ public class Home_NewproductAdapter extends RecyclerView.Adapter<Home_Newproduct
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(activity, ActivityNewProductDetails.class);
+                Intent intent = new Intent(activity, ActivityCart.class);
                 intent.putExtra("NewProductItem", newProductItem);
                // Toast.makeText(activity,""+newProductItem.getProductImage()+"\n "+newProductItem.getProductPrimaryImage(),Toast.LENGTH_LONG).show();
                 activity.startActivity(intent);

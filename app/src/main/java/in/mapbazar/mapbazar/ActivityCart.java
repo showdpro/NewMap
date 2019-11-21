@@ -35,7 +35,7 @@ import in.mapbazar.mapbazar.util.Session_management;
 
 
 
-public class ActivityNewProductDetails extends AppCompatActivity implements View.OnClickListener{
+public class ActivityCart extends AppCompatActivity implements View.OnClickListener{
     private RecyclerView rv_cart;
     public static CustomTextView tv_clear, tv_total, tv_item;
     private RelativeLayout btn_checkout ,back;
@@ -57,7 +57,7 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
         tv_item = (CustomTextView) findViewById(R.id.tv_cart_item);
         btn_checkout = (RelativeLayout) findViewById(R.id.btn_cart_checkout);
         rv_cart = (RecyclerView) findViewById(R.id.rv_cart);
-        rv_cart.setLayoutManager(new LinearLayoutManager(ActivityNewProductDetails.this));
+        rv_cart.setLayoutManager(new LinearLayoutManager( ActivityCart.this));
 
         //db = new DatabaseHandler(getActivity());
         db_cart=new DatabaseCartHandler(this);
@@ -68,15 +68,15 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
 //        final HashMap<String, String> map1 = map.get(0);
 //       Log.d("cart all ",""+map1);
 
-        Cart_Adapter adapter = new Cart_Adapter(ActivityNewProductDetails.this, map);
+        Cart_Adapter adapter = new Cart_Adapter( ActivityCart.this, map);
         rv_cart.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
        // updateData();
 
-        tv_clear.setOnClickListener(ActivityNewProductDetails.this);
-        btn_checkout.setOnClickListener(ActivityNewProductDetails.this);
-        back.setOnClickListener( ActivityNewProductDetails.this );
+        tv_clear.setOnClickListener( ActivityCart.this);
+        btn_checkout.setOnClickListener( ActivityCart.this);
+        back.setOnClickListener( ActivityCart.this );
 
 
     }
@@ -127,7 +127,7 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
                 // clear cart data
                 db_cart.clearCart();
                 ArrayList<HashMap<String, String>> map = db_cart.getCartAll();
-                Cart_Adapter adapter = new Cart_Adapter(ActivityNewProductDetails.this, map);
+                Cart_Adapter adapter = new Cart_Adapter( ActivityCart.this, map);
                 rv_cart.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 
@@ -175,14 +175,14 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
 
                                     if (total_amount < value) {
                                         issmall = true;
-                                        Toast.makeText(ActivityNewProductDetails.this, "" + jsonObject.getString("title") + " : " + value, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText( ActivityCart.this, "" + jsonObject.getString("title") + " : " + value, Toast.LENGTH_SHORT).show();
                                     }
                                 } else if (jsonObject.getString("id").equals("2")) {
                                     value = Integer.parseInt(jsonObject.getString("value"));
 
                                     if (total_amount > value) {
                                         isbig = true;
-                                        Toast.makeText(ActivityNewProductDetails.this, "" + jsonObject.getString("title") + " : " + value, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText( ActivityCart.this, "" + jsonObject.getString("title") + " : " + value, Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -190,18 +190,18 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
 
                             if (!issmall && !isbig) {
                                 if (sessionManagement.isLoggedIn()) {
-                                    Intent i = new Intent(ActivityNewProductDetails.this, ActivityMatchProductDetails.class);
+                                    Intent i = new Intent( ActivityCart.this, ActivityMatchProductDetails.class);
                                     startActivity(i);
                                 } else {
                                     //Toast.makeText(getActivity(), "Please login or regiter.\ncontinue", Toast.LENGTH_SHORT).show();
-                                    Intent i = new Intent(ActivityNewProductDetails.this, ActivityLoginRegister.class);
+                                    Intent i = new Intent( ActivityCart.this, ActivityLoginRegister.class);
                                     startActivity(i);
                                 }
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ActivityNewProductDetails.this,
+                            Toast.makeText( ActivityCart.this,
                                     "Error: " + e.getMessage(),
                                     Toast.LENGTH_LONG).show();
                         }
@@ -209,9 +209,9 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Module module=new Module(ActivityNewProductDetails.this);
+                Module module=new Module( ActivityCart.this);
                 String msg=module.VolleyErrorMessage(error);
-                Toast.makeText(ActivityNewProductDetails.this, ""+msg, Toast.LENGTH_SHORT).show();
+                Toast.makeText( ActivityCart.this, ""+msg, Toast.LENGTH_SHORT).show();
 //                VolleyLog.d(TAG, "Error: " + error.getMessage());
 //                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
 //                    Toast.makeText(getActivity(), "Connection Time out", Toast.LENGTH_SHORT).show();

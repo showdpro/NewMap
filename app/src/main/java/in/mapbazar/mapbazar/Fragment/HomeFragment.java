@@ -282,8 +282,9 @@ public class HomeFragment extends Fragment {
 
         //DealOf the Day
         new_products_recycler = (RecyclerView) view.findViewById(R.id.recentproduct_recycler);
-        //  GridLayoutManager gridLayoutManager1 = new GridLayoutManager(getActivity(), 2);
-        new_products_recycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        GridLayoutManager gridLayoutManager1 = new GridLayoutManager(getActivity(), 2);
+        new_products_recycler.setLayoutManager( gridLayoutManager1 );
+      //  new_products_recycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         new_products_recycler.setItemAnimator(new DefaultItemAnimator());
         new_products_recycler.setNestedScrollingEnabled(false);
        // new_products_recycler.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
@@ -291,8 +292,9 @@ public class HomeFragment extends Fragment {
 
         //Top Selling Products
         rv_top_selling = (RecyclerView) view.findViewById(R.id.new_product_recycler);
-//        GridLayoutManager gridLayoutManager2 = new GridLayoutManager(getActivity(), 2);
-        rv_top_selling.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+       GridLayoutManager gridLayoutManager2 = new GridLayoutManager(getActivity(), 2);
+       rv_top_selling.setLayoutManager( gridLayoutManager2 );
+      //  rv_top_selling.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         rv_top_selling.setItemAnimator(new DefaultItemAnimator());
         rv_top_selling.setNestedScrollingEnabled(false);
         //rv_top_selling.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
@@ -520,7 +522,7 @@ public class HomeFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 Log.d(TAG, response.toString());
                 try {
-                    ProgressDialog.dismiss();
+
                     if (response != null && response.length() > 0) {
                         Boolean status = response.getBoolean("responce");
                         if (status) {
@@ -539,6 +541,7 @@ public class HomeFragment extends Fragment {
                     ProgressDialog.dismiss();
                     e.printStackTrace();
                 }
+                ProgressDialog.dismiss();
             }
         }, new Response.ErrorListener() {
 

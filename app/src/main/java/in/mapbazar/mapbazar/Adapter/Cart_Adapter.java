@@ -1,30 +1,22 @@
 package in.mapbazar.mapbazar.Adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import in.mapbazar.mapbazar.ActivityNewProductDetails;
-import in.mapbazar.mapbazar.Model.Menu3.Menu3SliderItem;
-import in.mapbazar.mapbazar.Utili.Utils;
+import in.mapbazar.mapbazar.ActivityCart;
 import in.mapbazar.mapbazar.R;
 import in.mapbazar.mapbazar.Utili.Url;
 import in.mapbazar.mapbazar.View.CustomTextView;
@@ -32,7 +24,6 @@ import in.mapbazar.mapbazar.util.DatabaseCartHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -209,7 +200,7 @@ public void onClick(View view) {
         else
         {
         Toast.makeText(activity,"Qty Updated",Toast.LENGTH_LONG).show();
-        ActivityNewProductDetails.tv_total.setText(activity.getResources().getString(R.string.currency)+" "+db_cart.getTotalAmount());
+        ActivityCart.tv_total.setText(activity.getResources().getString(R.string.currency)+" "+db_cart.getTotalAmount());
         }
 
         }
@@ -284,7 +275,7 @@ public void onClick(View view) {
         else
         {
         Toast.makeText(activity,"Qty Updated",Toast.LENGTH_LONG).show();
-        ActivityNewProductDetails.tv_total.setText(activity.getResources().getString(R.string.currency)+" "+db_cart.getTotalAmount());
+        ActivityCart.tv_total.setText(activity.getResources().getString(R.string.currency)+" "+db_cart.getTotalAmount());
         }
         //  holder.tv_total.setText(""+db_cart.getTotalAmount());
         }

@@ -324,7 +324,7 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
             args.putString("store_id", store_id);
             fm.setArguments(args);
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+            fragmentManager.beginTransaction().replace(R.id.container_delivery, fm)
                     .addToBackStack(null).commit();
 
         }

@@ -39,7 +39,6 @@ import in.mapbazar.mapbazar.Fragment.*;
 import in.mapbazar.mapbazar.Fragment.CancelAndReturnFragment;
 import in.mapbazar.mapbazar.Fragment.DeliveryFragment;
 import in.mapbazar.mapbazar.Fragment.FaqFragment;
-import in.mapbazar.mapbazar.Fragment.AllProductFragment;
 import in.mapbazar.mapbazar.Fragment.HomeFragment;
 import in.mapbazar.mapbazar.Fragment.MyAccountFragment;
 import in.mapbazar.mapbazar.Fragment.OrderHistoryFragment;
@@ -114,6 +113,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @BindView(R.id.txt_menu_wishlist)
     CustomTextView txt_menu_wishlist;
+
+    @BindView(R.id.layout_menu_wallet)
+    LinearLayout layout_menu_wallet;
+
+    @BindView(R.id.img_wallet)
+    ImageView img_wallet;
+
+    @BindView(R.id.txt_menu_wallet)
+    CustomTextView txt_menu_wallet;
+
+    @BindView(R.id.layout_menu_rewards)
+    LinearLayout layout_menu_rewards;
+
+    @BindView(R.id.img_rewards)
+    ImageView img_rewards;
+
+    @BindView(R.id.txt_menu_rewards)
+    CustomTextView txt_menu_rewards;
+
+
 
     @BindView(R.id.layout_menu_orderhistory)
     LinearLayout layout_menu_orderhistory;
@@ -488,6 +507,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layout_menu_home.setOnClickListener(this);
         layout_menu_sbc.setOnClickListener(this);
         layout_menu_shopingcart.setOnClickListener(this);
+        layout_menu_wallet.setOnClickListener( this );
+        layout_menu_rewards.setOnClickListener( this );
         layout_menu_wishlist.setOnClickListener(this);
         layout_menu_orderhistory.setOnClickListener(this);
         layout_menu_testimonials.setOnClickListener(this);
@@ -602,7 +623,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 actionBar.setTitle(R.string.product);
                 layout_item.setVisibility(View.VISIBLE);
 
-                AllProductFragment productFragment = new AllProductFragment();
+                Shop_Now_fragment productFragment = new Shop_Now_fragment();
                 FragmentManager productfragmentManager = getSupportFragmentManager();
                 productfragmentManager.beginTransaction()
                         .replace(R.id.layout_item, productFragment)
@@ -619,11 +640,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 actionBar.setTitle(R.string.ShopingCart);
                 findViewById(R.id.layout_item).setVisibility(View.VISIBLE);
-                deliveryShippingFragment = new DeliveryShippingFragment();
-                cartfragmentManager.beginTransaction()
-                        .add(R.id.layout_item, deliveryShippingFragment).addToBackStack("deliveryShippingFragment")
-                        .addToBackStack(null)
-                        .commit();
+
+                Intent intent = new Intent( MainActivity.this, ActivityCart.class );
+                startActivity( intent );
 
                 break;
 
@@ -640,6 +659,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 FragmentManager wishListfragmentManager = MainActivity.this.getSupportFragmentManager();
                 wishListfragmentManager.beginTransaction()
                         .replace(R.id.layout_item, wishListFragment)
+                        .commit();
+                break;
+            case R.id.layout_menu_wallet:
+                selectedItem();
+                img_wallet.setImageResource(R.drawable.icons8_wallet_50px_1);
+                txt_menu_wallet.setTextColor(getResources().getColor(R.color.colorPrimary));
+                drawer_layout.closeDrawer(GravityCompat.START);
+
+                actionBar.setTitle("Wallet");
+                layout_item.setVisibility(View.VISIBLE);
+
+                FragmentWallet wallet = new FragmentWallet();
+                FragmentManager walletfragmentManager = MainActivity.this.getSupportFragmentManager();
+                walletfragmentManager.beginTransaction()
+                        .replace(R.id.layout_item, wallet)
+                        .commit();
+                break;
+            case R.id.layout_menu_rewards:
+                selectedItem();
+                img_rewards.setImageResource(R.drawable.icons8_prize_32px);
+                txt_menu_rewards.setTextColor(getResources().getColor(R.color.colorPrimary));
+                drawer_layout.closeDrawer(GravityCompat.START);
+
+                actionBar.setTitle(R.string.WishList);
+                layout_item.setVisibility(View.VISIBLE);
+
+                Reward_fragment rFragment = new Reward_fragment();
+                FragmentManager rfragmentManager = MainActivity.this.getSupportFragmentManager();
+              rfragmentManager.beginTransaction()
+                        .replace(R.id.layout_item, rFragment)
                         .commit();
                 break;
 
@@ -965,10 +1014,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.layout_cart :
                 if (deliveryShippingFragment == null) {
                     findViewById(R.id.layout_item).setVisibility(View.VISIBLE);
-                    deliveryShippingFragment = new DeliveryShippingFragment();
-                    cartfragmentManager.beginTransaction()
-                            .add(R.id.layout_item, deliveryShippingFragment).addToBackStack("deliveryShippingFragment")
-                            .commit();
+                    Intent intent1 = new Intent( MainActivity.this, ActivityCart.class );
+                   startActivity( intent1);
                 }
                  break;
             default:

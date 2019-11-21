@@ -2,18 +2,18 @@
     xmlns:card_view="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view_top"
-    android:layout_width="180dp"
-
+    android:layout_width="match_parent"
     android:layout_height="260dp"
     card_view:cardCornerRadius="15dp"
     card_view:cardPreventCornerOverlap="false"
     android:elevation="@dimen/space_4"
-    android:layout_marginLeft="@dimen/space_5"
+    android:layout_margin="@dimen/space_2"
     android:background="@color/white"
     card_view:cardUseCompatPadding="true">
     <RelativeLayout
         android:id="@+id/relative_top"
         android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/wish_before"
@@ -46,6 +46,7 @@
         android:layout_width="match_parent"
         android:layout_margin="@dimen/space_5"
         android:layout_height="250dp"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <LinearLayout

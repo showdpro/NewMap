@@ -161,8 +161,8 @@
             android:layout_marginTop="@dimen/space_10"
             android:layout_marginBottom="@dimen/space_10"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            app:cardCornerRadius="@dimen/space_10"
+            android:layout_height="@dimen/height_200"
+
 
             >
             <ImageView
@@ -180,17 +180,16 @@
             android:layout_marginBottom="@dimen/margin_10"
             android:layout_marginLeft="@dimen/margin_10"
             android:layout_marginTop="@dimen/margin_10"
-            android:text="@string/recentlyview"
+            android:text="@string/New_Products"
             android:textColor="@color/black"
             android:textSize="@dimen/font_18"
             app:fontName="@string/ubuntu_r" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recentproduct_recycler"
+                android:id="@+id/new_product_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_10"
@@ -198,11 +197,13 @@
 
         </RelativeLayout>
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="@dimen/height_200"
             android:background="@color/white"
-            android:layout_marginTop="-30dp">
+           >
 
             <com.daimajia.slider.library.SliderLayout
                 android:id="@+id/relative_banner"
@@ -224,7 +225,7 @@
             android:layout_marginBottom="@dimen/margin_10"
             android:layout_marginLeft="@dimen/margin_10"
             android:layout_marginTop="@dimen/margin_10"
-            android:text="@string/New_Products"
+            android:text="Top Selling Products"
             android:textColor="@color/black"
             android:textSize="@dimen/font_18"
             app:fontName="@string/ubuntu_r" />
@@ -234,7 +235,7 @@
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/new_product_recycler"
+                android:id="@+id/recentproduct_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_10"

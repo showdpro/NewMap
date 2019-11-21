@@ -240,7 +240,6 @@
 
                     </LinearLayout>
 
-
                     <LinearLayout
                         android:id="@+id/layout_menu_wishlist"
                         android:layout_width="match_parent"
@@ -265,6 +264,42 @@
                             app:fontName="@string/ubuntu_l" />
 
                         <in.mapbazar.mapbazar.View.CustomTextView
+                            android:id="@+id/txt_menu_wallet_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/menu_margin_10"
+                            android:layout_weight="1"
+                            android:text=""
+                            android:gravity="right"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/menu_textlist"
+                            app:fontName="@string/ubuntu_m" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/layout_menu_wallet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/menu_margin_13">
+
+                        <ImageView
+                            android:id="@+id/img_wallet"
+                            android:layout_width="@dimen/menu_listimage"
+                            android:layout_height="@dimen/menu_listimage"
+                            android:background="@drawable/icons8_wallet_50px_1"
+                            android:backgroundTint="#FF686D68"/>
+
+                        <in.mapbazar.mapbazar.View.CustomTextView
+                            android:id="@+id/txt_menu_wallet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/menu_margin_10"
+                            android:text="Wallet"
+                            android:textColor="@color/gray2"
+                            android:textSize="@dimen/menu_textlist"
+                            app:fontName="@string/ubuntu_l" />
+
+                        <in.mapbazar.mapbazar.View.CustomTextView
                             android:id="@+id/txt_menu_wishlist_count"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -276,6 +311,43 @@
                             android:textSize="@dimen/menu_textlist"
                             app:fontName="@string/ubuntu_m" />
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/layout_menu_rewards"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/menu_margin_13">
+
+                        <ImageView
+                            android:id="@+id/img_rewards"
+                            android:layout_width="@dimen/menu_listimage"
+                            android:layout_height="@dimen/menu_listimage"
+                            android:background="@drawable/icons8_gift_64px"
+                            android:backgroundTint="#FF686D68"/>
+
+                        <in.mapbazar.mapbazar.View.CustomTextView
+                            android:id="@+id/txt_menu_rewards"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/menu_margin_10"
+                            android:text="Rewards"
+                            android:textColor="@color/gray2"
+                            android:textSize="@dimen/menu_textlist"
+                            app:fontName="@string/ubuntu_l" />
+
+                        <in.mapbazar.mapbazar.View.CustomTextView
+                            android:id="@+id/txt_menu_rewards_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/menu_margin_10"
+                            android:layout_weight="1"
+                            android:text=""
+                            android:gravity="right"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/menu_textlist"
+                            app:fontName="@string/ubuntu_m" />
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:id="@+id/layout_menu_orderhistory"

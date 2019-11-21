@@ -88,10 +88,12 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
         final RelatedProductModel mList = modelList.get(position);
         final String getid = mList.getProduct_id();
 
+
         if(getid.equals(product_id))
         {
-            holder.itemView.setVisibility(View.GONE);
-            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+            modelList.remove(product_id  );
+//            holder.itemView.setVisibility(View.GONE);
+//            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
         }
 
         if(db_wish.isInWishtable( getid ))
@@ -99,7 +101,11 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
             holder.wish_after.setVisibility( View.VISIBLE );
             holder.wish_before.setVisibility( View.GONE );
         }
-
+        else
+        {
+            holder.wish_after.setVisibility( View.GONE );
+            holder.wish_before.setVisibility( View.VISIBLE );
+        }
         preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
         String language=preferences.getString("language","");
         String img_array= mList.getProduct_image();

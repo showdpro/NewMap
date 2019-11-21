@@ -1,6 +1,5 @@
 package in.mapbazar.mapbazar;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -8,14 +7,13 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,7 +26,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
@@ -570,7 +567,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
         }
         else if(id == R.id.layout_cart)
         {
-            Intent intent=new Intent(ActivityProductDetails.this,ActivityNewProductDetails.class);
+            Intent intent=new Intent(ActivityProductDetails.this, ActivityCart.class);
             startActivity(intent);
         }
 
@@ -645,8 +642,9 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                         relatedProductModels = gson.fromJson(response.getString("data"), listType);
                         progressDialog.dismiss();
                         relatedProductAdapter = new RelatedProductAdapter(ActivityProductDetails.this,relatedProductModels,p_id);
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager( ActivityProductDetails.this,LinearLayoutManager.HORIZONTAL,false );
-                        related_recycler.setLayoutManager(linearLayoutManager);
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager( ActivityProductDetails.this,2 );
+                  //      LinearLayoutManager linearLayoutManager = new LinearLayoutManager( ActivityProductDetails.this,LinearLayoutManager.HORIZONTAL,false );
+                        related_recycler.setLayoutManager(gridLayoutManager);
                        related_recycler.setAdapter(relatedProductAdapter);
                         relatedProductAdapter.notifyDataSetChanged();
                        // if (getActivity() != null) {
