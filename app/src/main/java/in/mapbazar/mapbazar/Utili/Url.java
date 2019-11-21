@@ -156,6 +156,7 @@ public class Url {
     public static String GET_PRODUCT_DESC = BASE_URL + "index.php/api/get_products_high";
     public static String GET_PRODUCT_ASC = BASE_URL + "index.php/api/get_products_low";
     public static String GET_PRODUCT_NEWEST = BASE_URL + "index.php/api/get_products_new";
+    public static String GET_PINCODES = BASE_URL + "index.php/api/get_pincode";
 
 
 }

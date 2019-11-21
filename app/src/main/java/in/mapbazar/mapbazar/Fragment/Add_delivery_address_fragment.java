@@ -1,6 +1,10 @@
 package in.mapbazar.mapbazar.Fragment;
 
+import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -8,43 +12,62 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import in.mapbazar.mapbazar.ActivityAddAddress;
 import in.mapbazar.mapbazar.AppController;
 import in.mapbazar.mapbazar.MainActivity;
+import in.mapbazar.mapbazar.Model.PinModel;
+import in.mapbazar.mapbazar.Model.ShippinModel;
 import in.mapbazar.mapbazar.Modules.Module;
 import in.mapbazar.mapbazar.R;
+import in.mapbazar.mapbazar.Utili.Common;
 import in.mapbazar.mapbazar.Utili.Url;
+import in.mapbazar.mapbazar.View.CustomEditTextView;
 import in.mapbazar.mapbazar.View.CustomTextView;
+import in.mapbazar.mapbazar.connection.API;
+import in.mapbazar.mapbazar.connection.RestAdapter;
 import in.mapbazar.mapbazar.util.ConnectivityReceiver;
 import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
+import in.mapbazar.mapbazar.util.JSONParser;
 import in.mapbazar.mapbazar.util.Session_management;
-
+import retrofit2.Call;
+import retrofit2.Callback;
 
 
 public class Add_delivery_address_fragment extends Fragment implements View.OnClickListener {
 
     private static String TAG = Add_delivery_address_fragment.class.getSimpleName();
-
-    private EditText et_phone, et_name, et_address;
-    private AutoCompleteTextView et_pin;
+    Dialog ProgressDialog;
+    List<ShippinModel> modelList;
+    Spinner spinner_pin;
+    List<PinModel> pinList;
+    private CustomEditTextView et_phone, et_name, et_address,edt_city,edt_state;
     private RelativeLayout btn_update;
     private CustomTextView tv_phone, tv_name, tv_pin, tv_address, tv_socity, btn_socity;
     private String getsocity = "";
@@ -55,7 +78,7 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
 
     private String getlocation_id;
     private String [] pincodes ={"202002"};
-
+    String[] sp=null;
     public Add_delivery_address_fragment() {
         // Required empty public constructor
     }
@@ -74,28 +97,26 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
 //        ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.add));
 
         sessionManagement = new Session_management(getActivity());
-
-        et_phone = (EditText) view.findViewById(R.id.et_add_adres_phone);
-        et_name = (EditText) view.findViewById(R.id.et_add_adres_name);
+        spinner_pin=(Spinner)view.findViewById(R.id.spinner_pin);
+        et_phone = (CustomEditTextView) view.findViewById(R.id.et_add_adres_phone);
+        et_name = (CustomEditTextView) view.findViewById(R.id.et_add_adres_name);
         tv_phone = (CustomTextView) view.findViewById(R.id.tv_add_adres_phone);
         tv_name = (CustomTextView) view.findViewById(R.id.tv_add_adres_name);
         tv_pin = (CustomTextView) view.findViewById(R.id.tv_add_adres_pin);
-        et_pin = (AutoCompleteTextView) view.findViewById(R.id.et_add_adres_pin);
-        et_address = (EditText) view.findViewById(R.id.et_add_adres_home);
+        edt_city = (CustomEditTextView) view.findViewById(R.id.edt_city);
+        edt_state = (CustomEditTextView) view.findViewById(R.id.edt_state);
+      //  et_pin = (AutoCompleteTextView) view.findViewById(R.id.et_add_adres_pin);
+        et_address = (CustomEditTextView) view.findViewById(R.id.et_add_adres_home);
         tv_address =(CustomTextView)view.findViewById( R.id.tv_add );
         //tv_socity = (TextView) view.findViewById(R.id.tv_add_adres_socity);
         btn_update = (RelativeLayout) view.findViewById(R.id.btn_add_adres_edit);
       //  btn_socity = (TextView) view.findViewById(R.id.btn_add_adres_socity);
-
+        ProgressDialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar);
+        ProgressDialog.setContentView(R.layout.progressbar);
+        ProgressDialog.setCancelable(false);
         String getsocity_name = sessionManagement.getUserDetails().get(Url.KEY_SOCITY_NAME);
         //String getsocity_id = sessionManagement.getUserDetails().get(BaseURL.KEY_SOCITY_ID);
         String getsocity_id = "1";
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,pincodes);
-        et_pin.setThreshold( 1 );
-        et_pin.setAdapter( arrayAdapter );
-
-        String pin = et_pin.getText().toString();
 
 
 //        for(int i =0 ;i<=pincodes.length ;i++)
@@ -129,7 +150,6 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
 
                 et_name.setText(get_name);
                 et_phone.setText(get_phone);
-                et_pin.setText(get_pine);
                 et_address.setText(add);
               //  btn_socity.setText(get_socity_name);
 
@@ -145,7 +165,28 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
 
         btn_update.setOnClickListener(this);
        // btn_socity.setOnClickListener(this);
+        getPinCodes();
+        spinner_pin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedItemText = (String) adapterView.getItemAtPosition(i);
+                // If user change the default selection
+                // First item is disable and it is used for hint
+                if(i > 0){
+                    // Notify the selected item text
 
+                    edt_city.setText("Jhansi");
+                    edt_state.setText("UP");
+                    edt_city.setEnabled(false);
+                    edt_state.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         return view;
     }
 
@@ -191,7 +232,6 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
 
         String getphone = et_phone.getText().toString();
         String getname = et_name.getText().toString();
-        String getpin = et_pin.getText().toString();
         String getadd = et_address.getText().toString();
        // String getsocity = sessionManagement.getUserDetails().get(BaseURL.KEY_SOCITY_ID);
         String getsocity = "1";
@@ -218,11 +258,6 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
         }
 
 
-        if (TextUtils.isEmpty(getpin)) {
-            tv_pin.setTextColor(getResources().getColor(R.color.colorPrimary));
-            focusView = et_pin;
-            cancel = true;
-        }
 
         if (TextUtils.isEmpty(getadd)) {
             tv_address.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -247,17 +282,12 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
 
             if (ConnectivityReceiver.isConnected()) {
 
-                if(!list.contains(et_pin.getText().toString()))
-                {
-                    Toast.makeText(getActivity(),"We don't delivered at this pincode",Toast.LENGTH_LONG).show();
-                    et_pin.setError("Invalid Pincode");
-                    et_pin.requestFocus();
-                }
-                else
-                {
+
                     String user_id = sessionManagement.getUserDetails().get(Url.KEY_ID);
 
                     // check internet connection
+                   String getpin=spinner_pin.getSelectedItem().toString();
+
                     if (ConnectivityReceiver.isConnected()) {
                         if (isEdit) {
                             makeEditAddressRequest(getlocation_id, getpin,getsocity, getadd, getname, getphone);
@@ -274,11 +304,8 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
                 }
 
             }
-            else
-            {
-              //  ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
-            }
-        }
+
+
     }
 
     private boolean isPhoneValid(String phoneno) {
@@ -316,6 +343,7 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
 
                         DeliveryFragment deliveryFragment=new DeliveryFragment();
                         FragmentManager fragmentManager=getFragmentManager();
+
                         fragmentManager.beginTransaction().replace(R.id.container_delivery, deliveryFragment).commit();
                     }
                 } catch (JSONException e) {
@@ -399,5 +427,238 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
     }
 
 
+//    public void getData()
+//    {
+//        ProgressDialog.show();
+//        modelList=new ArrayList<>();
+//        pinList=new ArrayList<>();
+//        API api = RestAdapter.createAPI();
+//        Call<JsonObject> callback_login = api.get_pincode("");
+//        callback_login.enqueue(new Callback<JsonObject>() {
+//            @Override
+//            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+//
+//                //  Toast.makeText(ActivityAddAddress.this,""+response,Toast.LENGTH_LONG).show();
+//                if(response.isSuccessful())
+//                {
+//                    JsonObject jsonObject=response.body();
+//
+//                    if(jsonObject !=null )
+//                    {
+//                        if (ProgressDialog != null && ProgressDialog.isShowing())
+//                            ProgressDialog.dismiss();
+//
+//                        JsonArray data_arr=jsonObject.getAsJsonArray("pincodedetail");
+//
+//                        for(int i=0; i<data_arr.size();i++) {
+//                            JsonObject object = data_arr.get(i).getAsJsonObject();
+//                            PinModel pinModel = new PinModel();
+//
+//
+//                            pinModel.setPicode(object.get("pincode").getAsString());
+//                            pinModel.setArea(object.get("area").getAsString());
+//                            String str_array = object.get("shipping_amt").getAsString();
+//                            String s = str_array.substring(0, (str_array.length() - 1));
+//                            JsonParser parser = new JsonParser();
+//                            JsonElement tradeElement = parser.parse(str_array);
+//                            JsonArray array = tradeElement.getAsJsonArray();
+//                            //Toast.makeText(ActivityAddAddress.this, "asdas \n"+array.get(0).toString(), Toast.LENGTH_LONG).show();
+//                            //JsonArray array=object.getAsJsonArray("shipping_amt");
+//
+//                            for(int j=0; j<array.size(); j++)
+//                            {
+//                                JsonObject obj=array.get(j).getAsJsonObject();
+//                                //Toast.makeText(ActivityAddAddress.this,""+obj.get("max_quantity").getAsString(),Toast.LENGTH_LONG).show();
+//                                ShippinModel model=new ShippinModel();
+//                                model.setMin_quantity(obj.get("min_quantity").getAsString());
+//                                model.setMax_quantity(obj.get("max_quantity").getAsString());
+//                                model.setShipping_charges(obj.get("shipping_charges").getAsString());
+//
+//                                modelList.add(model);
+//
+//                            }
+//                            pinModel.setShippinModelList(modelList);
+//
+//                            pinList.add(pinModel);
+//
+//                        }
+//
+//                        sp =new String[data_arr.size()+1];
+//                        for(int k=1;k<=pinList.size();k++)
+//                        {
+//                            sp[0]="Select any pin code";
+//                            sp[k]=pinList.get(k-1).getPicode().toString();
+//                        }
+//                        //
+//                        // Toast.makeText(ActivityAddAddress.this,""+sp[0].toString(),Toast.LENGTH_LONG).show();
+//                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, sp){
+//                            @Override
+//                            public boolean isEnabled(int position) {
+//
+//                                if(position==0)
+//                                {
+//                                    return false;
+//                                }
+//                                else {
+//                                    return true;
+//                                }
+//                            }
+//
+//                            @Override
+//                            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+//                                View view = super.getDropDownView(position, convertView, parent);
+//                                TextView tv = (TextView) view;
+//                                if(position == 0){
+//                                    // Set the hint text color gray
+//                                    tv.setTextColor(Color.GRAY);
+//                                }
+//                                else {
+//                                    tv.setTextColor(Color.GRAY);
+//                                }
+//                                return view;
+//                            }
+//                        };
+//                        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+//                        spinner_pin.setAdapter(adapter);
+//                        //  act_pincode.setAdapter(adapter);
+//                        // List<ShippinModel> models=pinList.get(0).getShippinModelList();
+//                        //Toast.makeText(ActivityAddAddress.this,"asdasd"+pinList.get(0).getShippinModelList().get(0).getShipping_charges().toString(),Toast.LENGTH_LONG).show();
+//
+//                    }
+//                }
+//
+//                else
+//                {
+//                    ProgressDialog.dismiss();
+//                    Toast.makeText(getActivity(),"Something Wrong",Toast.LENGTH_LONG).show();
+//                }
+//                //     Toast.makeText(ActivityAddAddress.this,""+response.body(),Toast.LENGTH_LONG).show();
+//            }
+//
+//
+//
+//
+//
+//
+//            @Override
+//            public void onFailure(Call<JsonObject> call, Throwable t) {
+//                ProgressDialog.dismiss();
+//                Toast.makeText(getActivity(),""+t.getMessage(),Toast.LENGTH_LONG).show();
+//
+//            }
+//        });
+//    }
+
+
+    public void getPinCodes()
+    {
+        ProgressDialog.show();
+        modelList=new ArrayList<>();
+        pinList=new ArrayList<>();
+        HashMap<String,String> map=new HashMap<>();
+        String json_tag="json_pincode";
+
+        CustomVolleyJsonRequest customVolleyJsonRequest=new CustomVolleyJsonRequest(Request.Method.POST, Url.GET_PINCODES, map, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try
+                {
+                    ProgressDialog.dismiss();
+                    JSONArray s_array=response.getJSONArray("pincodedetail");
+                    for(int i=0; i<s_array.length();i++) {
+                        JSONObject object = s_array.getJSONObject(i);
+                        PinModel pinModel = new PinModel();
+
+
+                        pinModel.setPicode(object.getString("pincode"));
+                        pinModel.setArea(object.getString("area"));
+                        String str_array = object.getString("shipping_amt");
+                        String s = str_array.substring(0, (str_array.length() - 1));
+                        JSONArray array = new JSONArray(str_array);
+                        //Toast.makeText(ActivityAddAddress.this, "asdas \n"+array.get(0).toString(), Toast.LENGTH_LONG).show();
+                        //JsonArray array=object.getAsJsonArray("shipping_amt");
+
+                        for(int j=0; j<array.length(); j++)
+                        {
+                            JSONObject obj=array.getJSONObject(j);
+                            //Toast.makeText(ActivityAddAddress.this,""+obj.get("max_quantity").getAsString(),Toast.LENGTH_LONG).show();
+                            ShippinModel model=new ShippinModel();
+                            model.setMin_quantity(obj.getString("min_quantity"));
+                            model.setMax_quantity(obj.getString("max_quantity"));
+                            model.setShipping_charges(obj.getString("shipping_charges"));
+
+                            modelList.add(model);
+
+                        }
+                        pinModel.setShippinModelList(modelList);
+
+                        pinList.add(pinModel);
+
+                        sp =new String[s_array.length()+1];
+                        for(int k=1;k<=pinList.size();k++)
+                        {
+                            sp[0]="Select any pin code";
+                            sp[k]=pinList.get(k-1).getPicode().toString();
+                        }
+                        //
+                        // Toast.makeText(ActivityAddAddress.this,""+sp[0].toString(),Toast.LENGTH_LONG).show();
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, sp){
+                            @Override
+                            public boolean isEnabled(int position) {
+
+                                if(position==0)
+                                {
+                                    return false;
+                                }
+                                else {
+                                    return true;
+                                }
+                            }
+
+                            @Override
+                            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if(position == 0){
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                }
+                                else {
+                                    tv.setTextColor(Color.GRAY);
+                                }
+                                return view;
+                            }
+                        };
+                        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                        spinner_pin.setAdapter(adapter);
+                        //  act_pincode.setAdapter(adapter);
+                        // List<ShippinModel> models=pinList.get(0).getShippinModelList();
+                        //Toast.makeText(ActivityAddAddress.this,"asdasd"+pinList.get(0).getShippinModelList().get(0).getShipping_charges().toString(),Toast.LENGTH_LONG).show();
+
+
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ProgressDialog.dismiss();
+                    Toast.makeText(getActivity(),""+ex.getMessage(),Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                ProgressDialog.dismiss();
+                Module module=new Module(getActivity());
+                String msg=module.VolleyErrorMessage(error);
+                Toast.makeText(getActivity(),""+msg,Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(customVolleyJsonRequest,json_tag);
+    }
 
 }
