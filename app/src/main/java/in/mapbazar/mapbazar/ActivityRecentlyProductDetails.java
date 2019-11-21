@@ -1,75 +1,7 @@
 package in.mapbazar.mapbazar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.squareup.picasso.Picasso;
-import in.mapbazar.mapbazar.Adapter.CategoryProductItemAdapter;
-import in.mapbazar.mapbazar.Adapter.RecentproductAdapter;
-import in.mapbazar.mapbazar.Fragment.ShopingCartFragment;
-import in.mapbazar.mapbazar.Model.MatchWithProduct.ColorItem;
-import in.mapbazar.mapbazar.Model.MatchWithProduct.MatchProductAttributeItem;
-import in.mapbazar.mapbazar.Model.MatchWithProduct.MatchProductItem;
-import in.mapbazar.mapbazar.Model.MatchWithProduct.MatchProductSizeItem;
-import in.mapbazar.mapbazar.Model.RecentlyProduct.RecentlyProductItem;
-import in.mapbazar.mapbazar.Model.RecentlyProduct.RecentlyProductSizeItem;
-
-import in.mapbazar.mapbazar.Model.RecentlyProduct.RevcentlyProductAttributeItem;
-
-import in.mapbazar.mapbazar.Utili.Common;
-import in.mapbazar.mapbazar.View.DialogUtils;
-import in.mapbazar.mapbazar.connection.API;
-import in.mapbazar.mapbazar.Adapter.MatchWithproductAdapter;
-import in.mapbazar.mapbazar.Utili.Url;
-import in.mapbazar.mapbazar.Utili.Utils;
-import in.mapbazar.mapbazar.View.CustomTextView;
-import in.mapbazar.mapbazar.callback.CallbackInternate;
-import in.mapbazar.mapbazar.callback.CallbackMessage;
-import in.mapbazar.mapbazar.connection.RestAdapter;
-import in.mapbazar.mapbazar.dialog.SelectSizeDialogFragment;
-import com.viewpagerindicator.CirclePageIndicator;
-
-import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
-import org.sufficientlysecure.htmltextview.HtmlTextView;
-
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class ActivityRecentlyProductDetails extends AppCompatActivity {
@@ -181,7 +113,7 @@ public class ActivityRecentlyProductDetails extends AppCompatActivity {
 //        ButterKnife.bind(this);
 //        Intent intent = getIntent();
 //        productItem = (RecentlyProductItem) intent.getSerializableExtra("RecentProductItem");
-//        shopingCartFragment = null;
+//        deliveryShippingFragment = null;
 //        sPref = PreferenceManager.getDefaultSharedPreferences(ActivityRecentlyProductDetails.this);
 //        initdata();
 //
@@ -354,9 +286,9 @@ public class ActivityRecentlyProductDetails extends AppCompatActivity {
 //        switch (v.getId()) {
 //
 //            case R.id.ly_back:
-//                if (shopingCartFragment != null) {
-//                    getSupportFragmentManager().beginTransaction().remove(shopingCartFragment);
-//                    shopingCartFragment = null;
+//                if (deliveryShippingFragment != null) {
+//                    getSupportFragmentManager().beginTransaction().remove(deliveryShippingFragment);
+//                    deliveryShippingFragment = null;
 //                    layoutCartItem.setVisibility(View.GONE);
 //                }else {
 //                    list_MatchProductItem = new ArrayList<>();
@@ -439,12 +371,12 @@ public class ActivityRecentlyProductDetails extends AppCompatActivity {
 //
 //                break;
 //            case R.id.layout_cart:
-//                if(shopingCartFragment == null) {
+//                if(deliveryShippingFragment == null) {
 //                    layoutCartItem.setVisibility(View.VISIBLE);
-//                    shopingCartFragment = new ShopingCartFragment();
+//                    deliveryShippingFragment = new DeliveryShippingFragment();
 //                    FragmentManager cartfragmentManager = getSupportFragmentManager();
 //                    cartfragmentManager.beginTransaction()
-//                            .replace(R.id.layout_cart_item, shopingCartFragment).addToBackStack("shopingCartFragment")
+//                            .replace(R.id.layout_cart_item, deliveryShippingFragment).addToBackStack("deliveryShippingFragment")
 //                            .commit();
 //                }
 ////                Intent main = new Intent(ActivityRecentlyProductDetails.this,MainActivity.class);
@@ -457,7 +389,7 @@ public class ActivityRecentlyProductDetails extends AppCompatActivity {
 //        }
 //
 //    }
-//    ShopingCartFragment shopingCartFragment;
+//    DeliveryShippingFragment deliveryShippingFragment;
 //
 //    public void setColorView(ArrayList<String> colorlist) {
 //        layout_color.removeAllViews();
@@ -1171,9 +1103,9 @@ public class ActivityRecentlyProductDetails extends AppCompatActivity {
 //    @Override
 //    public void onBackPressed() {
 //        //super.onBackPressed();
-//        if (shopingCartFragment != null) {
-//            getSupportFragmentManager().beginTransaction().remove(shopingCartFragment);
-//            shopingCartFragment = null;
+//        if (deliveryShippingFragment != null) {
+//            getSupportFragmentManager().beginTransaction().remove(deliveryShippingFragment);
+//            deliveryShippingFragment = null;
 //            layoutCartItem.setVisibility(View.GONE);
 //        }else {
 //            ly_back.performClick();

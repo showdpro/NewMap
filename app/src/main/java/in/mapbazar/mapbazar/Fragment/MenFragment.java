@@ -266,10 +266,10 @@ public class MenFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                ShopingCartFragment shopingCartFragment = new ShopingCartFragment();
+                DeliveryShippingFragment deliveryShippingFragment = new DeliveryShippingFragment();
                 FragmentManager cartfragmentManager = getActivity().getSupportFragmentManager();
                 cartfragmentManager.beginTransaction()
-                        .replace(R.id.layout_item, shopingCartFragment)
+                        .replace(R.id.layout_item, deliveryShippingFragment)
                         .commit();
             }
         });

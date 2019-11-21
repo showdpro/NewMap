@@ -1,17 +1,14 @@
 package in.mapbazar.mapbazar.Fragment;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -19,8 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -31,7 +26,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
@@ -52,18 +46,13 @@ import in.mapbazar.mapbazar.AppController;
 import in.mapbazar.mapbazar.Model.Delivery_address_model;
 import in.mapbazar.mapbazar.Modules.Module;
 import in.mapbazar.mapbazar.R;
-import in.mapbazar.mapbazar.Utili.Common;
 import in.mapbazar.mapbazar.Utili.Url;
-import in.mapbazar.mapbazar.connection.API;
-import in.mapbazar.mapbazar.connection.RestAdapter;
 
 import in.mapbazar.mapbazar.util.ConnectivityReceiver;
 import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
 import in.mapbazar.mapbazar.util.DatabaseCartHandler;
 import in.mapbazar.mapbazar.util.Session_management;
 import in.mapbazar.mapbazar.util.SharedPref;
-import retrofit2.Call;
-import retrofit2.Callback;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -311,32 +300,32 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
 
             sessionManagement.cleardatetime();
 //
-//            Bundle args = new Bundle();
-//            android.app.Fragment fm = new Delivery_payment_detail_fragment();
-//            HashMap<String,String> addmap = adapter.getAlladdress();
-//            String name = addmap.get( "name" );
-//            String phone = addmap.get("phone");
-//            String society = addmap.get("society");
-//            String pin = addmap.get("pin");
-//            String house = addmap.get("house");
-//            //args.putString("getdate", getdate);
-//            //args.putString("time", gettime);
-//            args.putString( "address",address );
+            Bundle args = new Bundle();
+            DeliveryShippingFragment fm = new DeliveryShippingFragment();
+            HashMap<String,String> addmap = adapter.getAlladdress();
+            String name = addmap.get( "name" );
+            String phone = addmap.get("phone");
+            String society = addmap.get("society");
+            String pin = addmap.get("pin");
+            String house = addmap.get("house");
+            //args.putString("getdate", getdate);
+            //args.putString("time", gettime);
+            args.putString( "address",address );
 //            args.putString("getdate", "00/00/0000");
 //            args.putString("time", "00:00");
-//            args.putString("location_id", location_id);
-//            args.putString("name",name);
-//            args.putString( "pin",pin );
-//            args.putString( "house",house );
-//            args.putString( "society",society );
-//            args.putString( "phone",phone );
-//
-//            args.putString("deli_charges", deli_charges);
-//            args.putString("store_id", store_id);
-//            fm.setArguments(args);
-//            FragmentManager fragmentManager = getFragmentManager();
-//            fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-//                    .addToBackStack(null).commit();
+            args.putString("location_id", location_id);
+            args.putString("name",name);
+            args.putString( "pin",pin );
+            args.putString( "house",house );
+            args.putString( "society",society );
+            args.putString( "phone",phone );
+
+            args.putString("deli_charges", deli_charges);
+            args.putString("store_id", store_id);
+            fm.setArguments(args);
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                    .addToBackStack(null).commit();
 
         }
     }

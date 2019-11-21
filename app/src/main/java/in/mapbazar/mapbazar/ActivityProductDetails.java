@@ -1,7 +1,9 @@
 package in.mapbazar.mapbazar;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +11,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import in.mapbazar.mapbazar.Adapter.ProductVariantAdapter;
 import in.mapbazar.mapbazar.Adapter.RelatedProductAdapter;
 import in.mapbazar.mapbazar.Model.ProductVariantModel;
 import in.mapbazar.mapbazar.Model.RelatedProductModel;
@@ -47,11 +53,16 @@ import in.mapbazar.mapbazar.Utili.Common;
 import in.mapbazar.mapbazar.Utili.Url;
 import in.mapbazar.mapbazar.View.CustomTextView;
 import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
+import in.mapbazar.mapbazar.util.DatabaseCartHandler;
 
 import static in.mapbazar.mapbazar.Utili.Url.IMG_PRODUCT_URL;
 
 public class ActivityProductDetails extends AppCompatActivity implements View.OnClickListener {
 
+    ArrayList<ProductVariantModel> variantList;
+    ProductVariantAdapter productVariantAdapter;
+    Context context;
+    DatabaseCartHandler db_cart;
     String atr_id="";
     String atr_product_id="";
     String attribute_name="";
@@ -66,7 +77,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
     ElegantNumberButton product_qty;
     RecyclerView related_recycler;
     Button btn_add, btn_Add_to_cart;
-    RelativeLayout ly_back,layout_cart_cout,rel_variant;
+    RelativeLayout ly_back,layout_cart_cout,rel_variant,layout_cart;
     Dialog progressDialog;
     String name,images,cat_id,p_id,desc,in_stock,stock,p_status,price,mrp,unit_value,unit,attr,rewards,increment,title;
 
@@ -150,6 +161,247 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
 
         }
 
+        rel_variant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //      final Product_model mList = modelList.get(position);
+                AlertDialog.Builder builder=new AlertDialog.Builder(ActivityProductDetails.this);
+                LayoutInflater layoutInflater=(LayoutInflater)ActivityProductDetails.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View row=layoutInflater.inflate(R.layout.dialog_vairant_layout,null);
+                variantList.clear();
+                String atr=String.valueOf(attr);
+                JSONArray jsonArr = null;
+                try {
+
+                    jsonArr = new JSONArray(atr);
+                    for (int i = 0; i < jsonArr.length(); i++)
+                    {
+                        ProductVariantModel model=new ProductVariantModel();
+                        JSONObject jsonObj = jsonArr.getJSONObject(i);
+                        String atr_id=jsonObj.getString("id");
+                        String atr_product_id=jsonObj.getString("product_id");
+                        String attribute_name=jsonObj.getString("attribute_name");
+                        String attribute_value=jsonObj.getString("attribute_value");
+                        String attribute_mrp=jsonObj.getString("attribute_mrp");
+
+
+                        model.setId(atr_id);
+                        model.setProduct_id(atr_product_id);
+                        model.setAttribute_value(attribute_value);
+                        model.setAttribute_name(attribute_name);
+                        model.setAttribute_mrp(attribute_mrp);
+
+                        variantList.add(model);
+
+                        //     arrayList.add(new AttributeModel(atr_id,product_id,attribute_name,attribute_value));
+
+                        //Toast.makeText(getActivity(),"id "+atr_id+"\n p_id "+product_id+"\n atr_name "+attribute_name+"\n atr_value "+attribute_value,Toast.LENGTH_LONG).show();
+                    }
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                ListView l1=(ListView)row.findViewById(R.id.list_view_varaint);
+                productVariantAdapter=new ProductVariantAdapter(ActivityProductDetails.this,variantList);
+                //productVariantAdapter.notifyDataSetChanged();
+                l1.setAdapter(productVariantAdapter);
+
+
+                builder.setView(row);
+                final AlertDialog ddlg=builder.create();
+                ddlg.show();
+                l1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                        atr_id=String.valueOf(variantList.get(i).getId());
+                        atr_product_id=String.valueOf(variantList.get(i).getProduct_id());
+                        attribute_name=String.valueOf(variantList.get(i).getAttribute_name());
+                        attribute_value=String.valueOf(variantList.get(i).getAttribute_value());
+                        attribute_mrp=String.valueOf(variantList.get(i).getAttribute_mrp());
+
+                        dialog_unit_type.setText("\u20B9"+attribute_value+"/"+attribute_name);
+                        dialog_txtId.setText(variantList.get(i).getId()+"@"+i);
+                        dialog_txtVar.setText(attribute_value+"@"+attribute_name+"@"+attribute_mrp);
+                        //    txtPer.setText(String.valueOf(df)+"% off");
+
+                        details_product_price.setText("\u20B9"+attribute_value.toString());
+                        details_product_mrp.setText("\u20B9"+attribute_mrp.toString());
+                        String pr=String.valueOf(attribute_value);
+                        String mr=String.valueOf(attribute_mrp);
+                        int atr_dis=getDiscount(pr,mr);
+                        product_rate.setText(""+atr_dis+"% OFF");
+                        String atr=String.valueOf(attr);
+                        if(atr.equals("[]"))
+                        {
+                            boolean st=db_cart.isInCart(p_id);
+                            if(st==true)
+                            {
+                                btn_add.setVisibility(View.GONE);
+                                product_qty.setNumber(db_cart.getCartItemQty(p_id));
+                                product_qty.setVisibility(View.VISIBLE);
+                            }
+                        }
+                        else
+                        {
+                            String str_id=dialog_txtId.getText().toString();
+                            String[] str=str_id.split("@");
+                            String at_id=String.valueOf(str[0]);
+                            boolean st=db_cart.isInCart(at_id);
+                            if(st==true)
+                            {
+                                btn_add.setVisibility(View.GONE);
+                                product_qty.setNumber(db_cart.getCartItemQty(at_id));
+                                product_qty.setVisibility(View.VISIBLE);
+                            }
+                            else
+                            {
+                                btn_add.setVisibility(View.VISIBLE);
+
+                                product_qty.setVisibility(View.GONE);
+                            }
+                        }
+
+                        product_qty.setNumber("1");
+
+                        // txtTotal.setText("\u20B9"+String.valueOf(db_cart.getTotalAmount()));
+                        ddlg.dismiss();
+                    }
+                });
+
+            }
+        });
+        product_qty.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
+            @Override
+            public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
+
+                if(newValue<=0)
+                {
+                    boolean st=checkAttributeStatus(attr);
+                    if(st==false)
+                    {
+                        db_cart.removeItemFromCart(p_id);
+
+                    }
+                    else if(st==true)
+                    {
+
+                        String str_id = dialog_txtId.getText().toString();
+                        String[] str = str_id.split("@");
+                        String at_id = String.valueOf(str[0]);
+                        db_cart.removeItemFromCart(at_id);
+
+                    }
+                    updateCart();
+                    product_qty.setVisibility(View.GONE);
+                    btn_add.setVisibility(View.VISIBLE);
+                }
+                else {
+
+
+                    float qty = Float.parseFloat(String.valueOf(newValue));
+
+                    String atr = String.valueOf(attr);
+                    if (atr.equals("[]")) {
+                        double pr = Double.parseDouble(price);
+                        double amt = pr * qty;
+                        HashMap<String, String> mapProduct = new HashMap<String, String>();
+                        String unt = String.valueOf(unit_value + " " + unit);
+                        mapProduct.put("cart_id", p_id);
+                        mapProduct.put("product_id", p_id);
+                        mapProduct.put("product_image", images);
+                        mapProduct.put("cat_id", cat_id);
+                        mapProduct.put("product_name", name);
+                        mapProduct.put("price", String.valueOf(amt));
+                        mapProduct.put("unit_price", price);
+                        mapProduct.put("unit", unt);
+                        mapProduct.put("mrp", mrp);
+                        mapProduct.put("type", "p");
+                        try {
+
+                            boolean tr = db_cart.setCart(mapProduct, qty);
+                            if (tr == true) {
+                                updateCart();
+                                Toast.makeText(ActivityProductDetails.this, "Added to Cart", Toast.LENGTH_LONG).show();
+                                int n = db_cart.getCartCount();
+
+
+
+                            } else if (tr == false) {
+                                Toast.makeText(ActivityProductDetails.this, "cart updated", Toast.LENGTH_LONG).show();
+                            }
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            //Toast.makeText(getActivity(), "" + ex.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                        //Toast.makeText(context,"1\n"+status+"\n"+modelList.get(position).getProduct_attribute(),Toast.LENGTH_LONG).show();
+                    } else {
+                        //ProductVariantModel model=variantList.get(position);
+
+
+
+
+                        String s = dialog_txtVar.getText().toString();
+                        String[] st = s.split("@");
+                        String st0 = String.valueOf(st[0]);
+                        String st1 = String.valueOf(st[1]);
+                        String st2 = String.valueOf(st[2]);
+                        String str_id = dialog_txtId.getText().toString();
+                        String[] str = str_id.split("@");
+                        String at_id = String.valueOf(str[0]);
+                        int k = Integer.parseInt(String.valueOf(str[1]));
+                        double pr = Double.parseDouble(st0);
+
+
+                        double amt = pr * qty;
+                        //       Toast.makeText(context,""+str[0].toString()+"\n"+str[1].toString(),Toast.LENGTH_LONG).show();
+                        HashMap<String, String> mapProduct = new HashMap<String, String>();
+                        mapProduct.put("cart_id", at_id);
+                        mapProduct.put("product_id", p_id);
+                        mapProduct.put("product_image", images);
+                        mapProduct.put("cat_id", cat_id);
+                        mapProduct.put("product_name", name);
+                        mapProduct.put("price", String.valueOf(amt));
+                        mapProduct.put("unit_price", st0);
+                        mapProduct.put("unit", st1);
+                        mapProduct.put("mrp", st2);
+                        mapProduct.put("type", "a");
+                        //  Toast.makeText(context,""+attributeList.get(j).getId()+"\n"+mapProduct,Toast.LENGTH_LONG).show();
+                        try {
+
+                            boolean tr = db_cart.setCart(mapProduct, qty);
+                            if (tr == true) {
+                                updateCart();
+                                Toast.makeText(context, "Added to Cart", Toast.LENGTH_LONG).show();
+                                int n = db_cart.getCartCount();
+
+
+                            } else if (tr == false) {
+                                Toast.makeText(context, "cart updated", Toast.LENGTH_LONG).show();
+                            }
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            // Toast.makeText(getActivity(), "" + ex.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }
+                //txtTotal.setText("\u20B9"+String.valueOf(db_cart.getTotalAmount()));
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
     }
 
     private void initData() {
@@ -178,12 +430,14 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
         rel_variant=(RelativeLayout)findViewById(R.id.rel_variant);
         ly_back=(RelativeLayout)findViewById(R.id.ly_back);
         layout_cart_cout=(RelativeLayout)findViewById(R.id.layout_cart_cout);
+        layout_cart=(RelativeLayout)findViewById(R.id.layout_cart);
 
-
+        variantList=new ArrayList<>();
         progressDialog = new Dialog(Common.Activity, android.R.style.Theme_Translucent_NoTitleBar);
         progressDialog.setContentView(R.layout.progressbar);
         progressDialog.setCancelable(false);
-
+        db_cart=new DatabaseCartHandler(ActivityProductDetails.this);
+        updateCart();
         Intent intent=getIntent();
              p_map=(HashMap<String, String>) intent.getSerializableExtra("details");
 
@@ -203,9 +457,10 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
              rewards=p_map.get("rewards");
              increment=p_map.get("increment");
              title=p_map.get("title");
-            // makeRelatedProductRequest( cat_id );
              btn_add.setOnClickListener(this);
              ly_back.setOnClickListener( this );
+             layout_cart.setOnClickListener(this);
+
 
     }
 
@@ -216,12 +471,107 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
         int id=view.getId();
         if(id==R.id.btn_add)
         {
-            Toast.makeText(ActivityProductDetails.this,"id : "+p_id+"\n desc :-- "+desc.toString(),Toast.LENGTH_LONG).show();
+          float qty = 1;
+
+            String atr = String.valueOf(attr);
+            if (atr.equals("[]")) {
+                HashMap<String, String> mapProduct = new HashMap<String, String>();
+                String unt = String.valueOf(unit_value + " " + unit);
+                mapProduct.put("cart_id", p_id);
+                mapProduct.put("product_id", p_id);
+                mapProduct.put("product_image", images);
+                mapProduct.put("cat_id", cat_id);
+                mapProduct.put("product_name", name);
+                mapProduct.put("price", price);
+                mapProduct.put("unit_price", price);
+                mapProduct.put("unit", unt);
+                mapProduct.put("mrp", mrp);
+                mapProduct.put("type", "p");
+                try {
+
+                    boolean tr = db_cart.setCart(mapProduct, qty);
+                    if (tr == true) {
+                        updateCart();
+                        //   context.setCartCounter("" + holder.db_cart.getCartCount());
+                        Toast.makeText(ActivityProductDetails.this, "Added to Cart", Toast.LENGTH_LONG).show();
+                        int n = db_cart.getCartCount();
+
+                    } else if (tr == false) {
+                        Toast.makeText(ActivityProductDetails.this, "cart updated", Toast.LENGTH_LONG).show();
+
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    // Toast.makeText(getActivity(), "" + ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+                //Toast.makeText(context,"1\n"+status+"\n"+modelList.get(position).getProduct_attribute(),Toast.LENGTH_LONG).show();
+            }
+            else {
+                //ProductVariantModel model=variantList.get(position);
+
+                String str_id=dialog_txtId.getText().toString();
+                String s=dialog_txtVar.getText().toString();
+                String[] st=s.split("@");
+                String st0=String.valueOf(st[0]);
+                String st1=String.valueOf(st[1]);
+                String st2=String.valueOf(st[2]);
+                String[] str=str_id.split("@");
+                String at_id=String.valueOf(str[0]);
+                int j=Integer.parseInt(String.valueOf(str[1]));
+                //       Toast.makeText(context,""+str[0].toString()+"\n"+str[1].toString(),Toast.LENGTH_LONG).show();
+                HashMap<String, String> mapProduct = new HashMap<String, String>();
+                mapProduct.put("cart_id",at_id);
+                mapProduct.put("product_id",p_id);
+                mapProduct.put("product_image",images);
+                mapProduct.put("cat_id",cat_id);
+                mapProduct.put("product_name",name);
+                mapProduct.put("price", st0);
+                mapProduct.put("unit_price",st0);
+                mapProduct.put("unit",st1);
+                mapProduct.put("mrp",st2);
+                mapProduct.put("type","a");
+                //  Toast.makeText(context,""+attributeList.get(j).getId()+"\n"+mapProduct,Toast.LENGTH_LONG).show();
+                try {
+
+                    boolean tr = db_cart.setCart(mapProduct, qty );
+                    if (tr == true) {
+                        updateCart();
+                        Toast.makeText(ActivityProductDetails.this, "Added to Cart", Toast.LENGTH_LONG).show();
+                        int n= db_cart.getCartCount();
+//                        updateintent();
+
+//
+//                        txtTotal.setText("\u20B9"+String.valueOf(db_cart.getTotalAmount()));
+                    }
+                    else if(tr==false)
+                    {
+                        Toast.makeText(ActivityProductDetails.this,"cart updated",Toast.LENGTH_LONG).show();
+                    //    txtTotal.setText("\u20B9"+String.valueOf(db_cart.getTotalAmount()));
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    //Toast.makeText(activity, "" + ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+            //updateData();
+            btn_add.setVisibility(View.GONE);
+            product_qty.setNumber("1");
+            product_qty.setVisibility(View.VISIBLE);
+
 
         }
         else if(id == R.id.ly_back)
         {
             finish();
+        }
+        else if(id == R.id.layout_cart)
+        {
+            Intent intent=new Intent(ActivityProductDetails.this,ActivityNewProductDetails.class);
+            startActivity(intent);
         }
 
     }
@@ -341,5 +691,34 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
         double df=Math.round(per);
         int d=(int)df;
         return d;
+    }
+
+    public boolean checkAttributeStatus(String atr)
+    {
+        boolean sts=false;
+        if(atr.equals("[]"))
+        {
+            sts=false;
+        }
+        else
+        {
+            sts=true;
+        }
+        return sts;
+    }
+
+    public void updateCart()
+    {
+
+        int cnt=db_cart.getCartCount();
+        if(cnt<1)
+        {
+
+        }
+        else
+        {
+            layout_cart_cout.setVisibility(View.VISIBLE);
+            txt_cart_cout.setText(String.valueOf(cnt));
+        }
     }
 }

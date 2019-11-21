@@ -1,86 +1,33 @@
 package in.mapbazar.mapbazar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.squareup.picasso.Picasso;
 
 import in.mapbazar.mapbazar.Adapter.Cart_Adapter;
-import in.mapbazar.mapbazar.Adapter.CategoryProductItemAdapter;
-import in.mapbazar.mapbazar.Adapter.MatchWithproductAdapter;
-import in.mapbazar.mapbazar.Adapter.RecentproductAdapter;
-import in.mapbazar.mapbazar.Fragment.DeliveryFragment;
-import in.mapbazar.mapbazar.Fragment.ShopingCartFragment;
-import in.mapbazar.mapbazar.Model.HomeData.NewProductAttributeItem;
-import in.mapbazar.mapbazar.Model.HomeData.NewProductItem;
-import in.mapbazar.mapbazar.Model.MatchWithProduct.ColorItem;
-import in.mapbazar.mapbazar.Model.MatchWithProduct.MatchProductAttributeItem;
-import in.mapbazar.mapbazar.Model.MatchWithProduct.MatchProductItem;
-import in.mapbazar.mapbazar.Model.MatchWithProduct.MatchProductSizeItem;
-import in.mapbazar.mapbazar.Model.RecentlyProduct.RecentlyProductItem;
-import in.mapbazar.mapbazar.Model.RecentlyProduct.RecentlyProductSizeItem;
-
-import in.mapbazar.mapbazar.Model.RecentlyProduct.RevcentlyProductAttributeItem;
 
 import in.mapbazar.mapbazar.Modules.Module;
-import in.mapbazar.mapbazar.Utili.Common;
-import in.mapbazar.mapbazar.Utili.Utils;
 import in.mapbazar.mapbazar.View.CustomTextView;
-import in.mapbazar.mapbazar.View.DialogUtils;
-import in.mapbazar.mapbazar.callback.CallbackInternate;
-import in.mapbazar.mapbazar.connection.API;
 import in.mapbazar.mapbazar.Utili.Url;
-import in.mapbazar.mapbazar.callback.CallbackMessage;
-import in.mapbazar.mapbazar.connection.RestAdapter;
-import in.mapbazar.mapbazar.dialog.SelectSizeDialogFragment;
-import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
-import org.sufficientlysecure.htmltextview.HtmlTextView;
 
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import in.mapbazar.mapbazar.util.ConnectivityReceiver;
 import in.mapbazar.mapbazar.util.DatabaseCartHandler;
@@ -114,7 +61,8 @@ public class ActivityNewProductDetails extends AppCompatActivity implements View
 
         //db = new DatabaseHandler(getActivity());
         db_cart=new DatabaseCartHandler(this);
-
+        tv_item.setText(String.valueOf(db_cart.getCartCount()));
+        tv_total.setText(getResources().getString(R.string.currency)+db_cart.getTotalAmount());
 
         ArrayList<HashMap<String, String>> map = db_cart.getCartAll();
 //        final HashMap<String, String> map1 = map.get(0);

@@ -25,7 +25,6 @@ import com.paytm.pgsdk.PaytmOrder;
 import com.paytm.pgsdk.PaytmPGService;
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
 
-import in.mapbazar.mapbazar.Fragment.ShopingCartFragment;
 import in.mapbazar.mapbazar.Model.Address;
 import in.mapbazar.mapbazar.Model.PinModel;
 import in.mapbazar.mapbazar.Model.ProductListModel.ProductItem;
@@ -34,7 +33,6 @@ import in.mapbazar.mapbazar.Model.ShippinModel;
 import in.mapbazar.mapbazar.Payment.Checksum;
 import in.mapbazar.mapbazar.Payment.Paytm;
 import in.mapbazar.mapbazar.Payment.WebServiceCaller;
-import in.mapbazar.mapbazar.R;
 
 import in.mapbazar.mapbazar.Utili.Common;
 import in.mapbazar.mapbazar.View.CustomTextView;
@@ -413,9 +411,9 @@ jsonArr=jsonArray;
 
          d=setShippinCharge();
         txt_shipping.setText(""+d);
-         tot=ShopingCartFragment.subtotal+(float) d;
+         //tot= DeliveryShippingFragment.subtotal+(float) d;
         txt_qty.setText(""+Common.list_ProductItem.size());
-        txt_subtotal.setText(""+ ShopingCartFragment.subtotal);
+       // txt_subtotal.setText(""+ DeliveryShippingFragment.subtotal);
         txt_total.setText(""+tot);
     }
 
@@ -943,7 +941,7 @@ jsonArr=jsonArray;
     public double setShippinCharge()
     {
 
-      double max_price=ShopingCartFragment.subtotal;
+      double max_price= 0;
         double ship_amt=0;
         double dec=gms/1000;
         double min=0;

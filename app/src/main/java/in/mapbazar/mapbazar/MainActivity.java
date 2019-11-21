@@ -2,7 +2,6 @@ package in.mapbazar.mapbazar;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -46,7 +45,7 @@ import in.mapbazar.mapbazar.Fragment.MyAccountFragment;
 import in.mapbazar.mapbazar.Fragment.OrderHistoryFragment;
 import in.mapbazar.mapbazar.Fragment.PrivacyPolicyFragment;
 import in.mapbazar.mapbazar.Fragment.SecurePaymentFragment;
-import in.mapbazar.mapbazar.Fragment.ShopingCartFragment;
+import in.mapbazar.mapbazar.Fragment.DeliveryShippingFragment;
 import in.mapbazar.mapbazar.Fragment.TermConditionFragment;
 import in.mapbazar.mapbazar.Fragment.TestimonialsFragment;
 
@@ -408,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             layout_cart_cout.setVisibility(View.VISIBLE);
         }
     }
-    ShopingCartFragment shopingCartFragment;
+    DeliveryShippingFragment deliveryShippingFragment;
     FragmentManager cartfragmentManager;
     private void initToolbar() {
 
@@ -416,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         layout_cart.setOnClickListener(this);
-        shopingCartFragment = null;
+        deliveryShippingFragment = null;
         cartfragmentManager = getSupportFragmentManager();
         // actionBar.setHomeButtonEnabled(true);
         //actionBar.setTitle(R.string.app_name);
@@ -530,9 +529,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (shopingCartFragment != null) {
-              getSupportFragmentManager().beginTransaction().remove(shopingCartFragment).commit();
-                shopingCartFragment = null;
+        } else if (deliveryShippingFragment != null) {
+              getSupportFragmentManager().beginTransaction().remove(deliveryShippingFragment).commit();
+                deliveryShippingFragment = null;
 
         }else {
 
@@ -564,9 +563,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     HomeFragment fragment;
     public void removeCartFragment(){
-        if (shopingCartFragment != null) {
-            getSupportFragmentManager().beginTransaction().remove(shopingCartFragment).commit();
-            shopingCartFragment = null;
+        if (deliveryShippingFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(deliveryShippingFragment).commit();
+            deliveryShippingFragment = null;
 
         }
     }
@@ -620,9 +619,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 actionBar.setTitle(R.string.ShopingCart);
                 findViewById(R.id.layout_item).setVisibility(View.VISIBLE);
-                shopingCartFragment = new ShopingCartFragment();
+                deliveryShippingFragment = new DeliveryShippingFragment();
                 cartfragmentManager.beginTransaction()
-                        .add(R.id.layout_item, shopingCartFragment).addToBackStack("shopingCartFragment")
+                        .add(R.id.layout_item, deliveryShippingFragment).addToBackStack("deliveryShippingFragment")
                         .addToBackStack(null)
                         .commit();
 
@@ -964,11 +963,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.image_close_drawer:
                 this.onBackPressed();
             case R.id.layout_cart :
-                if (shopingCartFragment == null) {
+                if (deliveryShippingFragment == null) {
                     findViewById(R.id.layout_item).setVisibility(View.VISIBLE);
-                    shopingCartFragment = new ShopingCartFragment();
+                    deliveryShippingFragment = new DeliveryShippingFragment();
                     cartfragmentManager.beginTransaction()
-                            .add(R.id.layout_item, shopingCartFragment).addToBackStack("shopingCartFragment")
+                            .add(R.id.layout_item, deliveryShippingFragment).addToBackStack("deliveryShippingFragment")
                             .commit();
                 }
                  break;

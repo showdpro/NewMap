@@ -59,7 +59,7 @@ public class Delivery_get_address_adapter extends RecyclerView.Adapter<Delivery_
     private String getsocity, gethouse, getphone, getpin, getname, getcharge;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public CustomTextView tv_address, tv_name, tv_phone, tv_charges,txtEdit,txtDelete;
+        public CustomTextView tv_address, tv_name, tv_phone,txtEdit,txtDelete,tv_picode;
         public RadioButton rb_select;
 
 //        SwipeLayout swipeLayout;
@@ -75,7 +75,7 @@ public class Delivery_get_address_adapter extends RecyclerView.Adapter<Delivery_
             tv_address = (CustomTextView) view.findViewById(R.id.tv_adres_address);
             tv_name = (CustomTextView) view.findViewById(R.id.tv_adres_pincode);
             tv_phone = (CustomTextView) view.findViewById(R.id.tv_adres_phone);
-            tv_charges = (CustomTextView) view.findViewById(R.id.tv_adres_charge);
+            tv_picode = (CustomTextView) view.findViewById(R.id.tv_picode);
             txtEdit = (CustomTextView) view.findViewById(R.id.txtEdit);
             txtDelete = (CustomTextView) view.findViewById(R.id.txtDelete);
             rb_select = (RadioButton) view.findViewById(R.id.rb_adres);
@@ -153,7 +153,7 @@ public class Delivery_get_address_adapter extends RecyclerView.Adapter<Delivery_
         holder.tv_address.setText(mList.getReceiver_name());
         holder.tv_phone.setText(mList.getReceiver_mobile());
         holder.tv_name.setText(mList.getHouse_no());
-        holder.tv_charges.setText(mList.getDelivery_charge()+context.getResources().getString(R.string.currency));
+        holder.tv_picode.setText(mList.getPincode());
 
         holder.rb_select.setChecked(mList.getIscheckd());
         holder.rb_select.setTag(new Integer(position));
@@ -177,10 +177,10 @@ public class Delivery_get_address_adapter extends RecyclerView.Adapter<Delivery_
 
             ischecked = true;
 
-            Intent updates = new Intent("Grocery_delivery_charge");
-            updates.putExtra("type", "update");
-            updates.putExtra("charge", getcharge);
-            context.sendBroadcast(updates);
+//            Intent updates = new Intent("Grocery_delivery_charge");
+//            updates.putExtra("type", "update");
+//            updates.putExtra("charge", getcharge);
+//            context.sendBroadcast(updates);
         }
 
         //holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);

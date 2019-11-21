@@ -448,7 +448,7 @@
 
     <!-- row_delivery_time.xml -->
     <string name="tv_deli_socity">Society:</string>
-    <string name="tv_deli_mobile">Mobile No.:</string>
+    <string name="tv_deli_mobile">Mobile No. :</string>
     <string name="tv_deli_pin">Pincode:</string>
 
     <!-- delivery_payment_detail_fragment.java -->

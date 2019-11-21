@@ -7,12 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -20,66 +15,38 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import in.mapbazar.mapbazar.Adapter.CategoryProductItemAdapter;
 import in.mapbazar.mapbazar.Adapter.Product_adapter;
-import in.mapbazar.mapbazar.Adapter.ShoppingCartAdapter;
 import in.mapbazar.mapbazar.Adapter.SortAdapter;
 import in.mapbazar.mapbazar.Fragment.HomeFragment;
-import in.mapbazar.mapbazar.Fragment.ShopingCartFragment;
-import in.mapbazar.mapbazar.Model.FilterProduct.FilterData;
-import in.mapbazar.mapbazar.Model.ProductListModel.ProductAttributeItem;
-import in.mapbazar.mapbazar.Model.ProductListModel.ProductItem;
-import in.mapbazar.mapbazar.Model.ProductListModel.ProductSizeItem;
 
 import in.mapbazar.mapbazar.Model.Product_model;
 import in.mapbazar.mapbazar.Modules.Module;
-import in.mapbazar.mapbazar.R;
 
-import in.mapbazar.mapbazar.Utili.Common;
 import in.mapbazar.mapbazar.Utili.Url;
 import in.mapbazar.mapbazar.View.CustomTextView;
-import in.mapbazar.mapbazar.View.DialogUtils;
-import in.mapbazar.mapbazar.callback.CallbackInternate;
-import in.mapbazar.mapbazar.callback.CallbackMessage;
-import in.mapbazar.mapbazar.connection.API;
 
-
-import in.mapbazar.mapbazar.Model.ProductListModel.ColorItem;
-import in.mapbazar.mapbazar.Model.ProductListModel.ProductImageItem;
-import in.mapbazar.mapbazar.Utili.GridSpacingItemDecoration;
-import in.mapbazar.mapbazar.connection.RestAdapter;
 
 import java.lang.reflect.Type;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import in.mapbazar.mapbazar.util.ConnectivityReceiver;
 import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
-import retrofit2.Call;
-import retrofit2.Callback;
 
 public class ActivityCategoryProduct extends AppCompatActivity implements View.OnClickListener {
 
