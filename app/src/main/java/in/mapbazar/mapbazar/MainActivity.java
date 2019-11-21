@@ -2,6 +2,7 @@ package in.mapbazar.mapbazar;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -35,7 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import in.mapbazar.mapbazar.Fragment.AboutUsFragment;
+import in.mapbazar.mapbazar.Fragment.*;
 import in.mapbazar.mapbazar.Fragment.CancelAndReturnFragment;
 import in.mapbazar.mapbazar.Fragment.DeliveryFragment;
 import in.mapbazar.mapbazar.Fragment.FaqFragment;
@@ -48,9 +49,6 @@ import in.mapbazar.mapbazar.Fragment.SecurePaymentFragment;
 import in.mapbazar.mapbazar.Fragment.ShopingCartFragment;
 import in.mapbazar.mapbazar.Fragment.TermConditionFragment;
 import in.mapbazar.mapbazar.Fragment.TestimonialsFragment;
-import in.mapbazar.mapbazar.Fragment.WishListFragment;
-
-import in.mapbazar.mapbazar.R;
 
 import in.mapbazar.mapbazar.Utili.CircleImageView;
 import in.mapbazar.mapbazar.Utili.Common;
@@ -639,13 +637,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 actionBar.setTitle(R.string.WishList);
                 layout_item.setVisibility(View.VISIBLE);
 
-                WishListFragment wishListFragment = new WishListFragment();
-                FragmentManager wishListfragmentManager = getSupportFragmentManager();
+                Wishlist wishListFragment = new Wishlist();
+                FragmentManager wishListfragmentManager = MainActivity.this.getSupportFragmentManager();
                 wishListfragmentManager.beginTransaction()
                         .replace(R.id.layout_item, wishListFragment)
-                        .addToBackStack(null)
                         .commit();
-
                 break;
 
             case R.id.layout_menu_orderhistory:

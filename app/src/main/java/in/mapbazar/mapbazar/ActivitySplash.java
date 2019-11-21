@@ -41,7 +41,8 @@ public class ActivitySplash extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(ActivitySplash.this, Intro_Viewpager_Activity.class));//Main_activity
+//                        startActivity(new Intent(ActivitySplash.this, Intro_Viewpager_Activity.class));//Main_activity
+                        startActivity(new Intent(ActivitySplash.this, MainActivity.class));
                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
 
                     }

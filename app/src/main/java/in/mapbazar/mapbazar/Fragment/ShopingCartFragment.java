@@ -38,7 +38,7 @@ import in.mapbazar.mapbazar.callback.CallbackInternate;
 import in.mapbazar.mapbazar.callback.CallbackMessage;
 import in.mapbazar.mapbazar.connection.API;
 import in.mapbazar.mapbazar.connection.RestAdapter;
-
+import in.mapbazar.mapbazar.Fragment.*;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +49,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by kananikalpesh on 28/05/18.
- */
 
 public class ShopingCartFragment extends Fragment {
 
@@ -163,7 +160,7 @@ public class ShopingCartFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                WishListFragment wishListFragment = new WishListFragment();
+                Wishlist wishListFragment = new Wishlist();
                 FragmentManager wishListfragmentManager = getActivity().getSupportFragmentManager();
                 wishListfragmentManager.beginTransaction()
                         .replace(R.id.layout_item, wishListFragment)

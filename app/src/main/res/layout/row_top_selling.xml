@@ -28,7 +28,7 @@
         android:layout_margin="@dimen/space_5"
         android:src="@drawable/favorite"
         android:visibility="gone"/>
-    <TextView
+    <in.mapbazar.mapbazar.View.CustomTextView
         android:id="@+id/product_discount"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -38,6 +38,7 @@
         android:background="@color/colorPrimary"
         android:layout_marginRight="2dp"
         android:padding="2dp"
+        app:fontName="@string/ubuntu_l"
         android:textColor="@android:color/white"/>
 
 
@@ -73,14 +74,14 @@
                 />
 
 
-            <TextView
+            <in.mapbazar.mapbazar.View.CustomTextView
                 android:id="@+id/product_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="gravity"
                 android:text="Product Name"
                 android:layout_marginLeft="6dp"
-
+                app:fontName="@string/ubuntu_l"
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:textColor="@android:color/black"
@@ -93,17 +94,18 @@
                 android:layout_height="wrap_content"
                 >
 
-                <TextView
+                <in.mapbazar.mapbazar.View.CustomTextView
                     android:id="@+id/product_prize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="2dp"
-
+                    app:fontName="@string/ubuntu_l"
                     android:text="Price :"
                     android:textSize="14sp" />
-                <TextView
+                <in.mapbazar.mapbazar.View.CustomTextView
+                    app:fontName="@string/ubuntu_l"
                     android:id="@+id/product_mrp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -122,9 +124,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp">
 
-                <TextView
+                <in.mapbazar.mapbazar.View.CustomTextView
                     android:id="@+id/txtId"
-
+                    app:fontName="@string/ubuntu_l"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_10"
@@ -135,9 +137,9 @@
                     android:visibility="invisible"
                     />
 
-                <TextView
+                <in.mapbazar.mapbazar.View.CustomTextView
                     android:id="@+id/txtVar"
-
+                    app:fontName="@string/ubuntu_l"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_10"
@@ -147,17 +149,17 @@
 
                     android:visibility="invisible"
                     />
-                <TextView
+                <in.mapbazar.mapbazar.View.CustomTextView
                     android:id="@+id/single_varient"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/space_10"
-                    android:text="1kg"
+                    android:text=""
                     android:textAlignment="gravity"
                     android:paddingLeft="@dimen/space_2"
                     android:layout_marginTop="@dimen/space_5"
                     android:visibility="gone"
-
+                    app:fontName="@string/ubuntu_l"
 
                     />
                 <RelativeLayout
@@ -171,7 +173,7 @@
                     android:visibility="gone"
                     android:background="@drawable/relative_unit_layout">
 
-                    <TextView
+                    <in.mapbazar.mapbazar.View.CustomTextView
                         android:id="@+id/unit_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -179,6 +181,7 @@
                         android:layout_marginLeft="@dimen/space_5"
                         android:layout_marginRight="35dp"
                         android:text=""
+                        app:fontName="@string/ubuntu_l"
                         android:textColor="@android:color/darker_gray"
                         android:textSize="15sp" />
                     <ImageView

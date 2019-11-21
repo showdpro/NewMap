@@ -66,7 +66,6 @@ public class Deal_OfDay_Adapter extends RecyclerView.Adapter<Deal_OfDay_Adapter.
     public DatabaseHandlerWishList db_wish;
 
 
-
     DatabaseCartHandler db_cart;
      // Activity activity;
     SharedPreferences preferences;
@@ -484,6 +483,8 @@ public class Deal_OfDay_Adapter extends RecyclerView.Adapter<Deal_OfDay_Adapter.
                 mapProduct.put("title",tl);
                 mapProduct.put("mrp",mList.getMrp());
                 mapProduct.put("product_attribute",mList.getProduct_attribute());
+                mapProduct.put( "in_stock",mList.getIn_stock() );
+                mapProduct.put( "status",mList.getStock() );
 
                 // Toast.makeText(context,""+mapProduct,Toast.LENGTH_LONG).show();
 
@@ -494,14 +495,14 @@ public class Deal_OfDay_Adapter extends RecyclerView.Adapter<Deal_OfDay_Adapter.
                     if (tr == true) {
 
                         //   context.setCartCounter("" + holder.db_cart.getCartCount());
-                        Toast.makeText(context, "Added to Wishlist" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Added to Wishlist"+ db_wish.getWishtableCount() , Toast.LENGTH_LONG).show();
 
 
 
                     }
                     else
                     {
-                        Toast.makeText(context, "Something Went Wrong" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Something Went Wrong"+db_wish.getWishtableCount() , Toast.LENGTH_LONG).show();
                     }
 
                 } catch (Exception ex) {

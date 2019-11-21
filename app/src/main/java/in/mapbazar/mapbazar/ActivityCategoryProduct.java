@@ -91,7 +91,7 @@ public class ActivityCategoryProduct extends AppCompatActivity implements View.O
     //Shared Preferences
     private SharedPreferences sPref;
     Activity activity=ActivityCategoryProduct.this;
-
+    RelativeLayout back ;
     RecyclerView recyclerView;
     Dialog ProgressDialog;
     private List<Product_model> product_modelList = new ArrayList<>();
@@ -141,8 +141,10 @@ CustomTextView txt_filter,txt_sort;
         ProgressDialog.setContentView(R.layout.progressbar);
         ProgressDialog.setCancelable(false);
 
+
         txt_sort=(CustomTextView)findViewById(R.id.txt_sort);
         txt_filter=(CustomTextView)findViewById(R.id.txt_filter);
+        back = findViewById( R.id.ly_back );
         //progressBar = (ProgressBar) ProgressDialog.findViewById(R.id.progress_circular);
 
         DisplayMetrics localDisplayMetrics = new DisplayMetrics();
@@ -157,6 +159,7 @@ CustomTextView txt_filter,txt_sort;
 
    txt_filter.setOnClickListener(this);
    txt_sort.setOnClickListener(this);
+   back.setOnClickListener( this );
 
         // on swipe list
 
@@ -183,6 +186,10 @@ CustomTextView txt_filter,txt_sort;
         {
             Intent filter_intent = new Intent(ActivityCategoryProduct.this, ProductFilter.class);
             startActivity(filter_intent);
+        }
+        else if(id == R.id.ly_back)
+        {
+            finish();
         }
         else if (id == R.id.txt_sort) {
 
