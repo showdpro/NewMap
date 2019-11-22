@@ -117,7 +117,7 @@ public class ActivityPayment extends AppCompatActivity {
     ArrayList<String> allTimeSlotList;
     SelectTimeDialogFragment selectTimeDialogFragment;
 
-    CustomTextView txt_total,txt_shipping,txt_subtotal,txt_qty;
+    CustomTextView txt_total,txt_shipping,txt_subtotal,txt_qty,txt_wallet;
 
     int pYear, pMonth, pDay;
     DatePickerDialog.OnDateSetListener pDateSetListener;
@@ -151,9 +151,9 @@ public class ActivityPayment extends AppCompatActivity {
         txt_shipping=findViewById(R.id.txt_shipping);
         txt_subtotal=findViewById(R.id.txt_subtotal);
         txt_total=findViewById(R.id.txt_total);
-        line_pay=(View)findViewById(R.id.line_pay);
-        line1_pay=(View)findViewById(R.id.line1_pay);
-        linear_pay=(LinearLayout)findViewById(R.id.linear_pay);
+//        line_pay=(View)findViewById(R.id.line_pay);
+//        line1_pay=(View)findViewById(R.id.line1_pay);
+//        linear_pay=(LinearLayout)findViewById(R.id.linear_pay);
         notify=(CustomTextView)findViewById(R.id.notify);
 
         allTimeSlotList = new ArrayList<>();
@@ -204,12 +204,13 @@ public class ActivityPayment extends AppCompatActivity {
         llDate=(RelativeLayout)findViewById(R.id.ll_date);
         llTime=(RelativeLayout)findViewById(R.id.ll_time);
         lay_status_delivery=(LinearLayout) findViewById(R.id.lay_status_delivery);
-        lay_status_payment=(LinearLayout) findViewById(R.id.lay_status_payment);
+      //  lay_status_payment=(LinearLayout) findViewById(R.id.lay_status_payment);
         txt_place_order=(Button)findViewById(R.id.txt_place_order);
         image_status=(ImageView) findViewById(R.id.image_status);
-        image_payment=(ImageView) findViewById(R.id.image_payment);
+        //image_payment=(ImageView) findViewById(R.id.image_payment);
         tvDate=(CustomTextView)findViewById(R.id.tv_date);
         tvTime=(CustomTextView)findViewById(R.id.tv_time);
+        txt_wallet=(CustomTextView)findViewById(R.id.txt_wallet);
     }
 
     @Override
@@ -724,5 +725,15 @@ public class ActivityPayment extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
     }
 
+
+    public void getWallet()
+    {
+        ProgressDialog.show();
+        String json_tag="json_wallet";
+        HashMap<String,String> map=new HashMap<>();
+        map.put("user_id",user_id);
+
+       // CustomVolleyJsonRequest customVolleyJsonRequest=new CustomVolleyJsonRequest(Request.Method.POST,)
+    }
 
 }
