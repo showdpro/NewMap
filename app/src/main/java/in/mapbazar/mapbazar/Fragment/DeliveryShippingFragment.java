@@ -90,7 +90,7 @@ CustomTextView recivername,mobileno,pincode,address,tvItems,tvMrp,tvDiscount,tvD
     Dialog ProgressDialog;
     DatabaseCartHandler db_cart;
     Session_management sessionManagement;
-    String rv_address,rv_location_id,rv_name,rv_pin,rv_house,rv_society,rv_phone,rv_deliCharges,rv_store_id;
+    String rv_address,rv_location_id,rv_name,rv_pin,rv_house,rv_society,rv_phone,rv_deliCharges,rv_store_id,user_id;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delivery_shipping, container, false);
@@ -138,6 +138,7 @@ CustomTextView recivername,mobileno,pincode,address,tvItems,tvMrp,tvDiscount,tvD
         rv_location_id=bundle.getString("location_id");
         rv_name=bundle.getString("name");
         rv_pin=bundle.getString("pin");
+        user_id=bundle.getString("user_id");
         //rv_house=bundle.getString("house");
        // rv_society=bundle.getString("society");
         rv_phone=bundle.getString("phone");
@@ -155,10 +156,13 @@ CustomTextView recivername,mobileno,pincode,address,tvItems,tvMrp,tvDiscount,tvD
         if(id == R.id.btn_order_now)
         {
 
+
+
             //Toast.makeText(getActivity(),"d-- "+d+"\n deli-- "+deli_chrgs,Toast.LENGTH_LONG).show();
             Intent intent=new Intent(getActivity(), ActivityPayment.class);
             intent.putExtra("location",rv_location_id);
             intent.putExtra("shipping_charge",String.valueOf(deli_chrgs));
+            intent.putExtra("user_id",user_id);
             startActivity(intent);
 
            // Toast.makeText(getActivity(),"name:- "+rv_name+"\n mobile :- "+rv_phone+"\n pin :- "+rv_pin+"\naddress :- "+rv_address+"\n deli :- "+d,Toast.LENGTH_LONG).show();

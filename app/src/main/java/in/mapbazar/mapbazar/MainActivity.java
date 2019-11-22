@@ -50,17 +50,19 @@ import in.mapbazar.mapbazar.Fragment.TestimonialsFragment;
 
 import in.mapbazar.mapbazar.Utili.CircleImageView;
 import in.mapbazar.mapbazar.Utili.Common;
+import in.mapbazar.mapbazar.Utili.Url;
 import in.mapbazar.mapbazar.View.CustomTextView;
 import in.mapbazar.mapbazar.View.DialogUtils;
 import in.mapbazar.mapbazar.callback.CallbackMessage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import in.mapbazar.mapbazar.util.Session_management;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     SharedPreferences sPref;
-
+ Session_management session_management;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer_layout;
 
@@ -340,6 +342,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        session_management=new Session_management(MainActivity.this);
         Common.Activity = this;
         sPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         initToolbar();
@@ -481,9 +484,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View header = nav_view.getHeaderView(0);
 
 
-        if (sPref.getBoolean("islogin", false)) {
-            txt_menu_mylogin.setText(sPref.getString("name", ""));
-            userName.setText(sPref.getString("name", ""));
+        if (session_management.isLoggedIn()) {
+            txt_menu_mylogin.setText(session_management.getUserDetails().get(Url.KEY_NAME));
+            userName.setText(session_management.getUserDetails().get(Url.KEY_NAME));
             lay_islogin.setVisibility(View.VISIBLE);
             layout_menu_loginregister.setVisibility(View.GONE);
         } else {
@@ -981,23 +984,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onSuccess(Dialog dialog) {
                         dialog.dismiss();
 
-                        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                        SharedPreferences.Editor sh = sPref.edit();
-                        sh.putString("uid", "");
-                        sh.putBoolean("islogin", false);
-                        sh.putString("name", "");
-                        sh.putString("email", "");
-                        sh.putString("password", "");
-                        sh.putString("phonenumber", "");
-                        sh.putString("facebookid", "");
-                        sh.putInt("Cart", 0);
-                        sh.putInt("wishlist", 0);
-                        sh.commit();
-                        sh.clear();
+                        session_management.logoutSession();
+                        onRestart();
 
-                        Toast.makeText(MainActivity.this,"asdasd",Toast.LENGTH_LONG).show();
-                        finishAffinity();
-                        System.exit(0);
+//                        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+//                        SharedPreferences.Editor sh = sPref.edit();
+//                        sh.putString("uid", "");
+//                        sh.putBoolean("islogin", false);
+//                        sh.putString("name", "");
+//                        sh.putString("email", "");
+//                        sh.putString("password", "");
+//                        sh.putString("phonenumber", "");
+//                        sh.putString("facebookid", "");
+//                        sh.putInt("Cart", 0);
+//                        sh.putInt("wishlist", 0);
+//                        sh.commit();
+//                        sh.clear();
+//
+//                        Toast.makeText(MainActivity.this,"asdasd",Toast.LENGTH_LONG).show();
+//                        finishAffinity();
+//                        System.exit(0);
 
 
 

@@ -79,7 +79,8 @@ public class ActivityLoginRegister extends AppCompatActivity implements View.OnC
         }
         else if(id == R.id.txtGuest)
         {
-
+            Intent intent=new Intent(ActivityLoginRegister.this,GuestLoginActivity.class);
+            startActivity(intent);
         }
         else if (id == R.id.imgPassword) {
             if (isConfirmPasswordShow) {

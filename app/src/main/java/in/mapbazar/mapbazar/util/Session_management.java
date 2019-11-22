@@ -21,9 +21,11 @@ public class Session_management {
 
     SharedPreferences prefs;
     SharedPreferences prefs2;
+    SharedPreferences prefs3;
 
     SharedPreferences.Editor editor;
     SharedPreferences.Editor editor2;
+    SharedPreferences.Editor editor3;
 
     Context context;
 
@@ -37,6 +39,8 @@ public class Session_management {
 
         prefs2 = context.getSharedPreferences(PREFS_NAME2, PRIVATE_MODE);
         editor2 = prefs2.edit();
+        prefs3 = context.getSharedPreferences(PREFS_NAME3, PRIVATE_MODE);
+        editor3= prefs3.edit();
 
     }
 
@@ -182,4 +186,16 @@ public class Session_management {
         return prefs.getBoolean(IS_LOGIN, false);
     }
 
+
+    public void setGuestUser(String id)
+    {
+        editor3.putBoolean(IS_LOGIN, true);
+        editor3.putString(KEY_ID, id);
+        editor3.commit();
+    }
+
+    public String getGuestUserId() {
+
+        return prefs3.getString(KEY_ID, null);
+    }
 }

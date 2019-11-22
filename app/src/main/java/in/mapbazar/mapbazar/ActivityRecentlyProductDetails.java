@@ -1171,7 +1171,7 @@ public class ActivityRecentlyProductDetails extends AppCompatActivity {
 //                @Override
 //                public void onClick(View v) {
 //
-//                    Intent i = new Intent(context, RecentProductImagepager.class);
+//                    Intent i = new Intent(context, GuestLoginActivity.class);
 //                    i.putExtra("RecentProductItem", productItem);
 //                    i.putExtra("position", v.getId());
 //                    context.startActivity(i);

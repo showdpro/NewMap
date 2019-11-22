@@ -87,7 +87,24 @@ public class My_Pending_Order extends Fragment {
         rv_myorder.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         Session_management sessionManagement = new Session_management(getActivity());
-        String user_id = sessionManagement.getUserDetails().get(Url.KEY_ID);
+        String user_id="";
+        if(sessionManagement.isLoggedIn())
+        {
+            user_id = sessionManagement.getUserDetails().get(Url.KEY_ID);
+
+        }
+        else
+        {
+            String guest_id=sessionManagement.getGuestUserId();
+            if(guest_id.equals(null))
+            {
+                Toast.makeText(getActivity(),"No order pending",Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                user_id=guest_id;
+            }
+        }
 
         // check internet connection
         if (ConnectivityReceiver.isConnected())

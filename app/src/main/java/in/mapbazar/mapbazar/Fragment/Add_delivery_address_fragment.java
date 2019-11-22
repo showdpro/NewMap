@@ -200,8 +200,7 @@ public class Add_delivery_address_fragment extends Fragment implements View.OnCl
         } /*else if (id == R.id.btn_add_adres_socity) {
 
             /*String getpincode = et_pin.getText().toString();
-
-            if (!TextUtils.isEmpty(getpincode)) {*/
+  if (!TextUtils.isEmpty(getpincode)) {*/
 
 //                Bundle args = new Bundle();
 //                Fragment fm = new Socity_fragment();

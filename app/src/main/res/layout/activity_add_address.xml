@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.techintegrity.trolleypress.in.techintegrity.trolleypress.ActivityAddAddress">
+    tools:context=".ActivityAddAddress">
 
 
     <LinearLayout
@@ -174,7 +174,7 @@
                         android:visibility="gone"/>
                     <Spinner
                         android:id="@+id/spinner_pin"
-                        android:background="@drawable/spin_border_layout"
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 

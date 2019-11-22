@@ -6,6 +6,7 @@ public class Url {
     public static final String APP_NAME = "Mapbazar";
     public static final String PREFS_NAME = "GroceryLoginPrefs";
     public static final String PREFS_NAME2 = "GroceryLoginPrefs2";
+    public static final String PREFS_NAME3 = "GroceryLoginPrefs3";
     public static final String IS_LOGIN = "isLogin";
     public static final String KEY_NAME = "user_fullname";
     public static final String KEY_EMAIL = "user_email";
@@ -157,6 +158,7 @@ public class Url {
     public static String GET_PRODUCT_ASC = BASE_URL + "index.php/api/get_products_low";
     public static String GET_PRODUCT_NEWEST = BASE_URL + "index.php/api/get_products_new";
     public static String GET_PINCODES = BASE_URL + "index.php/api/get_pincode";
+    public static String GUEST_LOGIN = BASE_URL + "index.php/api/guest_login";
 
 
 }

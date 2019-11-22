@@ -80,7 +80,7 @@
             android:name=".MatchProductImagepager"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RecentProductImagepager"
+            android:name=".GuestLoginActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ProductFilter" />
         <activity android:name=".RegisterActivity" />

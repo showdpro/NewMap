@@ -191,6 +191,12 @@ public class ActivityCart extends AppCompatActivity implements View.OnClickListe
                             if (!issmall && !isbig) {
                                 if (sessionManagement.isLoggedIn()) {
                                     Intent i = new Intent( ActivityCart.this, ActivityMatchProductDetails.class);
+                                    i.putExtra("flag","d");
+                                    i.putExtra("address","");
+                                    i.putExtra("location_id","");
+                                    i.putExtra("name","");
+                                    i.putExtra("pin","");
+                                    i.putExtra("phone","");
                                     startActivity(i);
                                 } else {
                                     //Toast.makeText(getActivity(), "Please login or regiter.\ncontinue", Toast.LENGTH_SHORT).show();

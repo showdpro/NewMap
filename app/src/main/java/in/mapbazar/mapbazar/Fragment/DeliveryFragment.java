@@ -313,6 +313,7 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
             args.putString("name",name);
             args.putString( "pin",pin );
             args.putString( "phone",phone );
+            args.putString("user_id",sessionManagement.getUserDetails().get(Url.KEY_ID));
             //args.putString("getdate", getdate);
             //args.putString("time", gettime);
  //            args.putString("getdate", "00/00/0000");

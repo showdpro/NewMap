@@ -244,8 +244,9 @@ public class ActivityPayment extends AppCompatActivity {
 
         location_id=getIntent().getStringExtra("location");
         shipping_charges=getIntent().getStringExtra("shipping_charge");
+        user_id=getIntent().getStringExtra("user_id");
         session_management=new Session_management(ActivityPayment.this);
-        user_id=session_management.getUserDetails().get(KEY_ID);
+
 
 
         txt_qty.setText(String.valueOf(db_cart.getCartCount()));
