@@ -93,7 +93,7 @@
                             android:layout_marginTop="@dimen/margin_5"
                             android:background="@drawable/circle_white"
                             android:gravity="center"
-                            android:visibility="gone">
+                          >
 
                             <in.mapbazar.mapbazar.View.CustomTextView
                                 android:id="@+id/txt_cart_cout"
@@ -286,7 +286,7 @@
                             android:id="@+id/img_wallet"
                             android:layout_width="@dimen/menu_listimage"
                             android:layout_height="@dimen/menu_listimage"
-                            android:background="@drawable/icons8_wallet_50px_1"
+                            android:background="@drawable/icons8_wallet_64px"
                             android:backgroundTint="#FF686D68"/>
 
                         <in.mapbazar.mapbazar.View.CustomTextView

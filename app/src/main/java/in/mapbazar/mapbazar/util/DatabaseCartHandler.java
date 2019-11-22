@@ -11,11 +11,11 @@ import java.util.HashMap;
 
 public class DatabaseCartHandler extends SQLiteOpenHelper {
 
-    private static String DB_NAME = "ch_db";
+    private static String DB_NAME = "maps_cart";
     private static int DB_VERSION = 3;
     private SQLiteDatabase db;
 
-    public static final String CART_TABLE = "cart";
+    public static final String CART_TABLE = "cart_table";
 
     public static final String COLUMN_ID = "product_id";
     public static final String COLUMN_CID = "cart_id";
@@ -26,9 +26,15 @@ public class DatabaseCartHandler extends SQLiteOpenHelper {
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_MRP = "mrp";
     public static final String COLUMN_UNIT_PRICE = "unit_price";
-   // public static final String COLUMN_UNIT_VALUE = "unit_value";
+    public static final String COLUMN_REWARDS = "rewards";
     public static final String COLUMN_UNIT = "unit";
     public static final String COLUMN_TYPE = "type";
+
+
+
+
+
+
 
     public DatabaseCartHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -46,6 +52,7 @@ public class DatabaseCartHandler extends SQLiteOpenHelper {
                 + COLUMN_PRICE + " DOUBLE NOT NULL, "
                 + COLUMN_MRP + " DOUBLE NOT NULL, "
                 + COLUMN_UNIT_PRICE + " DOUBLE NOT NULL, "
+                + COLUMN_REWARDS + " DOUBLE NOT NULL, "
                 + COLUMN_UNIT + " TEXT NOT NULL, "
                 + COLUMN_TYPE + " TEXT NOT NULL "
 
@@ -68,7 +75,7 @@ public class DatabaseCartHandler extends SQLiteOpenHelper {
             values.put(COLUMN_QTY, Qty);
             values.put(COLUMN_CAT_ID, map.get(COLUMN_CAT_ID));
             values.put(COLUMN_IMAGE, map.get(COLUMN_IMAGE));
-
+            values.put(COLUMN_REWARDS, map.get(COLUMN_REWARDS));
             values.put(COLUMN_NAME, map.get(COLUMN_NAME));
             values.put(COLUMN_PRICE, map.get(COLUMN_PRICE));
             values.put(COLUMN_MRP, map.get(COLUMN_MRP));
@@ -188,12 +195,12 @@ public class DatabaseCartHandler extends SQLiteOpenHelper {
         //    map.put(COLUMN_UNIT_VALUE, cursor.getString(cursor.getColumnIndex(COLUMN_UNIT_VALUE)));
             map.put(COLUMN_UNIT, cursor.getString(cursor.getColumnIndex(COLUMN_UNIT)));
             map.put(COLUMN_TYPE, cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)));
+            map.put(COLUMN_REWARDS, cursor.getString(cursor.getColumnIndex(COLUMN_REWARDS)));
 //            map.put(COLUMN_DESC, cursor.getString(cursor.getColumnIndex(COLUMN_DESC)));
 
             list.add(map);
             cursor.moveToNext();
         }
-        cursor.close();
         return list;
     }
 
@@ -217,6 +224,7 @@ public class DatabaseCartHandler extends SQLiteOpenHelper {
          //   map.put(COLUMN_UNIT_VALUE, cursor.getString(cursor.getColumnIndex(COLUMN_UNIT_VALUE)));
             map.put(COLUMN_UNIT, cursor.getString(cursor.getColumnIndex(COLUMN_UNIT)));
             map.put(COLUMN_TYPE, cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)));
+            map.put(COLUMN_REWARDS, cursor.getString(cursor.getColumnIndex(COLUMN_REWARDS)));
 //            map.put(COLUMN_DESC, cursor.getString(cursor.getColumnIndex(COLUMN_DESC)));
 
             list.add(map);

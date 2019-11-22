@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,6 +52,7 @@ import in.mapbazar.mapbazar.Utili.Url;
 import in.mapbazar.mapbazar.View.CustomTextView;
 import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
 import in.mapbazar.mapbazar.util.DatabaseCartHandler;
+import in.mapbazar.mapbazar.util.DatabaseHandlerWishList;
 
 import static in.mapbazar.mapbazar.Utili.Url.IMG_PRODUCT_URL;
 
@@ -60,17 +62,20 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
     ProductVariantAdapter productVariantAdapter;
     Context context;
     DatabaseCartHandler db_cart;
+    DatabaseHandlerWishList db_wish;
     String atr_id="";
     String atr_product_id="";
     String attribute_name="";
     String attribute_value="";
     String attribute_mrp="";
+    String attribute_reward="";
     int status=0;
     private TextView dialog_unit_type,dialog_txtId,dialog_txtVar;
     //Activity activity;
     SliderLayout img_slider;
+    ImageView wish_before,wish_after ;
     CustomTextView details_product_name,details_product_price,details_product_mrp,details_product_per,
-            details_product_description,product_rate,unit_type,txt_cart_cout;
+            details_product_description,product_rate,unit_type,txt_cart_cout ,details_product_rewards;
     ElegantNumberButton product_qty;
     RecyclerView related_recycler;
     Button btn_add, btn_Add_to_cart;
@@ -89,9 +94,34 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
 
+
         initData();
         makeRelatedProductRequest( cat_id );
         useSlider(images);
+
+if (db_wish.isInWishtable( p_id ))
+{
+    wish_before.setVisibility( View.GONE );
+    wish_after.setVisibility( View.VISIBLE );
+}
+else
+{
+    wish_before.setVisibility( View.VISIBLE );
+    wish_after.setVisibility( View.GONE );
+}
+
+if (db_cart.isInCart( p_id ))
+{
+    btn_add.setVisibility( View.GONE );
+    product_qty.setNumber( db_cart.getCartItemQty( p_id ) );
+    product_qty.setVisibility( View.VISIBLE );
+}
+else
+{
+    btn_add.setVisibility( View.VISIBLE );
+    product_qty.setVisibility( View.GONE );
+}
+
 
 
         details_product_name.setText(name);
@@ -107,7 +137,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
             status=1;
             details_product_price.setText(getResources().getString(R.string.currency)+price);
             details_product_mrp.setText(getResources().getString(R.string.currency)+mrp);
-
+            details_product_rewards.setText( rewards );
             product_rate.setVisibility(View.VISIBLE);
             //  Toast.makeText(getActivity(),""+atr,Toast.LENGTH_LONG).show();
             product_rate.setText(unit_value+unit);
@@ -131,6 +161,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                 attribute_name=jsonObj.getString("attribute_name");
                 attribute_value=jsonObj.getString("attribute_value");
                 attribute_mrp=jsonObj.getString("attribute_mrp");
+                attribute_reward=jsonObj.getString( "rewards" );
 
 
 
@@ -149,6 +180,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                 dialog_unit_type.setText("\u20B9"+attribute_value+"/"+attribute_name);
                 //  holder.txtTotal.setText("\u20B9"+String.valueOf(list_atr_value.get(0).toString()));
                 details_product_per.setText(""+getDiscount(price,mrp)+"% OFF");
+                details_product_rewards.setText( attribute_reward );
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -181,6 +213,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                         String attribute_name=jsonObj.getString("attribute_name");
                         String attribute_value=jsonObj.getString("attribute_value");
                         String attribute_mrp=jsonObj.getString("attribute_mrp");
+                        String attribute_reward = jsonObj.getString( "rewards" );
 
 
                         model.setId(atr_id);
@@ -188,6 +221,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                         model.setAttribute_value(attribute_value);
                         model.setAttribute_name(attribute_name);
                         model.setAttribute_mrp(attribute_mrp);
+                        model.setAttribute_rewards( attribute_reward );
 
                         variantList.add(model);
 
@@ -219,7 +253,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                         attribute_name=String.valueOf(variantList.get(i).getAttribute_name());
                         attribute_value=String.valueOf(variantList.get(i).getAttribute_value());
                         attribute_mrp=String.valueOf(variantList.get(i).getAttribute_mrp());
-
+                        attribute_reward=String.valueOf( variantList.get( i ).getAttribute_rewards() );
                         dialog_unit_type.setText("\u20B9"+attribute_value+"/"+attribute_name);
                         dialog_txtId.setText(variantList.get(i).getId()+"@"+i);
                         dialog_txtVar.setText(attribute_value+"@"+attribute_name+"@"+attribute_mrp);
@@ -227,6 +261,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
 
                         details_product_price.setText("\u20B9"+attribute_value.toString());
                         details_product_mrp.setText("\u20B9"+attribute_mrp.toString());
+                        details_product_rewards.setText( attribute_reward );
                         String pr=String.valueOf(attribute_value);
                         String mr=String.valueOf(attribute_mrp);
                         int atr_dis=getDiscount(pr,mr);
@@ -315,6 +350,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                         mapProduct.put("price", String.valueOf(amt));
                         mapProduct.put("unit_price", price);
                         mapProduct.put("unit", unt);
+                        mapProduct.put( "rewards",rewards );
                         mapProduct.put("mrp", mrp);
                         mapProduct.put("type", "p");
                         try {
@@ -368,6 +404,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                         mapProduct.put("unit", st1);
                         mapProduct.put("mrp", st2);
                         mapProduct.put("type", "a");
+                        mapProduct.put( "rewards",rewards );
                         //  Toast.makeText(context,""+attributeList.get(j).getId()+"\n"+mapProduct,Toast.LENGTH_LONG).show();
                         try {
 
@@ -410,6 +447,9 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
         details_product_mrp.setPaintFlags(details_product_mrp.getPaintFlags() |Paint.STRIKE_THRU_TEXT_FLAG );
         details_product_per=findViewById(R.id.details_product_per);
         details_product_description=findViewById(R.id.details_product_description);
+        details_product_rewards=findViewById( R.id.details_product_rewards );
+        wish_before = findViewById( R.id.wish_before );
+        wish_after=findViewById( R.id.wish_after );
         product_rate=findViewById(R.id.product_rate);
         unit_type=findViewById(R.id.unit_type);
         txt_cart_cout=findViewById(R.id.txt_cart_cout);
@@ -428,12 +468,12 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
         ly_back=(RelativeLayout)findViewById(R.id.ly_back);
         layout_cart_cout=(RelativeLayout)findViewById(R.id.layout_cart_cout);
         layout_cart=(RelativeLayout)findViewById(R.id.layout_cart);
-
         variantList=new ArrayList<>();
         progressDialog = new Dialog(Common.Activity, android.R.style.Theme_Translucent_NoTitleBar);
         progressDialog.setContentView(R.layout.progressbar);
         progressDialog.setCancelable(false);
         db_cart=new DatabaseCartHandler(ActivityProductDetails.this);
+        db_wish =new DatabaseHandlerWishList( ActivityProductDetails.this );
         updateCart();
         Intent intent=getIntent();
              p_map=(HashMap<String, String>) intent.getSerializableExtra("details");
@@ -457,6 +497,8 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
              btn_add.setOnClickListener(this);
              ly_back.setOnClickListener( this );
              layout_cart.setOnClickListener(this);
+             wish_before.setOnClickListener( this );
+             wish_after.setOnClickListener( this );
 
 
     }
@@ -483,6 +525,7 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                 mapProduct.put("unit_price", price);
                 mapProduct.put("unit", unt);
                 mapProduct.put("mrp", mrp);
+                mapProduct.put( "rewards",rewards);
                 mapProduct.put("type", "p");
                 try {
 
@@ -526,16 +569,17 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
                 mapProduct.put("product_name",name);
                 mapProduct.put("price", st0);
                 mapProduct.put("unit_price",st0);
+                mapProduct.put( "rewards",attribute_reward );
                 mapProduct.put("unit",st1);
                 mapProduct.put("mrp",st2);
                 mapProduct.put("type","a");
-                //  Toast.makeText(context,""+attributeList.get(j).getId()+"\n"+mapProduct,Toast.LENGTH_LONG).show();
+                //  Toast.makeText(ActivityProductDetails.this,""+attribute_reward,Toast.LENGTH_LONG).show();
                 try {
 
                     boolean tr = db_cart.setCart(mapProduct, qty );
                     if (tr == true) {
                         updateCart();
-                        Toast.makeText(ActivityProductDetails.this, "Added to Cart", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ActivityProductDetails.this, "Added to Cart" +attribute_reward, Toast.LENGTH_LONG).show();
                         int n= db_cart.getCartCount();
 //                        updateintent();
 
@@ -569,6 +613,65 @@ public class ActivityProductDetails extends AppCompatActivity implements View.On
         {
             Intent intent=new Intent(ActivityProductDetails.this, ActivityCart.class);
             startActivity(intent);
+        }
+        else if(id == R.id.wish_before)
+        {
+            wish_before.setVisibility( View.GONE );
+            wish_after.setVisibility( View.VISIBLE );
+
+
+
+            HashMap<String, String> mapProduct = new HashMap<String, String>();
+            mapProduct.put("product_id", p_id);
+            mapProduct.put("product_images",images);
+            mapProduct.put("cat_id",cat_id);
+            mapProduct.put("product_name",name);
+            mapProduct.put("price", price);
+            mapProduct.put("product_description",desc);
+            mapProduct.put("rewards",rewards);
+            mapProduct.put("unit_value",unit_value);
+            mapProduct.put("unit",unit);
+            mapProduct.put("increment",increment);
+            mapProduct.put("stock",stock);
+            mapProduct.put("title",title);
+            mapProduct.put("mrp",mrp);
+            mapProduct.put("product_attribute",attr);
+            mapProduct.put("in_stock",in_stock);
+            mapProduct.put("status", String.valueOf( status ) );
+            try {
+
+                boolean tr =db_wish.setwishTable(mapProduct);
+                if (tr == true) {
+
+                    //   context.setCartCounter("" + holder.db_cart.getCartCount());
+                    Toast.makeText(ActivityProductDetails.this, "Added to Wishlist" +db_wish.getWishtableCount(), Toast.LENGTH_LONG).show();
+
+
+
+                }
+                else
+                {
+                    Toast.makeText(ActivityProductDetails.this, "Something Went Wrong" +db_wish.getWishtableCount(), Toast.LENGTH_LONG).show();
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                //  Toast.makeText(context, "" + ex.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+
+
+
+        }
+
+        else if (id == R.id.wish_after)
+        {
+            wish_before.setVisibility( View.VISIBLE );
+            wish_after.setVisibility( View.GONE );
+
+            db_wish.removeItemFromWishtable( p_id );
+            Toast.makeText(ActivityProductDetails.this, "removed from Wishlist", Toast.LENGTH_LONG).show();
+            // list.remove(position);
         }
 
     }

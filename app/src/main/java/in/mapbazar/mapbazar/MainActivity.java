@@ -50,19 +50,17 @@ import in.mapbazar.mapbazar.Fragment.TestimonialsFragment;
 
 import in.mapbazar.mapbazar.Utili.CircleImageView;
 import in.mapbazar.mapbazar.Utili.Common;
-import in.mapbazar.mapbazar.Utili.Url;
 import in.mapbazar.mapbazar.View.CustomTextView;
 import in.mapbazar.mapbazar.View.DialogUtils;
 import in.mapbazar.mapbazar.callback.CallbackMessage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import in.mapbazar.mapbazar.util.Session_management;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     SharedPreferences sPref;
- Session_management session_management;
+
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer_layout;
 
@@ -342,8 +340,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        session_management=new Session_management(MainActivity.this);
         Common.Activity = this;
+        db_cart=new DatabaseCartHandler( MainActivity.this );
         sPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         initToolbar();
         initDrawerMenu();
@@ -484,9 +482,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View header = nav_view.getHeaderView(0);
 
 
-        if (session_management.isLoggedIn()) {
-            txt_menu_mylogin.setText(session_management.getUserDetails().get(Url.KEY_NAME));
-            userName.setText(session_management.getUserDetails().get(Url.KEY_NAME));
+        if (sPref.getBoolean("islogin", false)) {
+            txt_menu_mylogin.setText(sPref.getString("name", ""));
+            userName.setText(sPref.getString("name", ""));
             lay_islogin.setVisibility(View.VISIBLE);
             layout_menu_loginregister.setVisibility(View.GONE);
         } else {
@@ -701,17 +699,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 txt_menu_orderhistory.setTextColor(getResources().getColor(R.color.colorPrimary));
                 drawer_layout.closeDrawer(GravityCompat.START);
 
-                Intent intent1=new Intent(MainActivity.this,ActivityOrderDetails.class);
-                startActivity(intent1);
-//                actionBar.setTitle(R.string.Orderhistory);
-//                layout_item.setVisibility(View.VISIBLE);
-//
-//                OrderHistoryFragment orderHistoryFragment = new OrderHistoryFragment();
-//                FragmentManager orderHistoryfragmentManager = getSupportFragmentManager();
-//                orderHistoryfragmentManager.beginTransaction()
-//                        .replace(R.id.layout_item, orderHistoryFragment)
-//                        .addToBackStack(null)
-//                        .commit();
+                actionBar.setTitle(R.string.Orderhistory);
+                layout_item.setVisibility(View.VISIBLE);
+
+                OrderHistoryFragment orderHistoryFragment = new OrderHistoryFragment();
+                FragmentManager orderHistoryfragmentManager = getSupportFragmentManager();
+                orderHistoryfragmentManager.beginTransaction()
+                        .replace(R.id.layout_item, orderHistoryFragment)
+                        .addToBackStack(null)
+                        .commit();
 
                 break;
 
@@ -984,26 +980,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onSuccess(Dialog dialog) {
                         dialog.dismiss();
 
-                        session_management.logoutSession();
-                        onRestart();
+                        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                        SharedPreferences.Editor sh = sPref.edit();
+                        sh.putString("uid", "");
+                        sh.putBoolean("islogin", false);
+                        sh.putString("name", "");
+                        sh.putString("email", "");
+                        sh.putString("password", "");
+                        sh.putString("phonenumber", "");
+                        sh.putString("facebookid", "");
+                        sh.putInt("Cart", 0);
+                        sh.putInt("wishlist", 0);
+                        sh.commit();
+                        sh.clear();
 
-//                        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-//                        SharedPreferences.Editor sh = sPref.edit();
-//                        sh.putString("uid", "");
-//                        sh.putBoolean("islogin", false);
-//                        sh.putString("name", "");
-//                        sh.putString("email", "");
-//                        sh.putString("password", "");
-//                        sh.putString("phonenumber", "");
-//                        sh.putString("facebookid", "");
-//                        sh.putInt("Cart", 0);
-//                        sh.putInt("wishlist", 0);
-//                        sh.commit();
-//                        sh.clear();
-//
-//                        Toast.makeText(MainActivity.this,"asdasd",Toast.LENGTH_LONG).show();
-//                        finishAffinity();
-//                        System.exit(0);
+                        Toast.makeText(MainActivity.this,"asdasd",Toast.LENGTH_LONG).show();
+                        finishAffinity();
+                        System.exit(0);
 
 
 
@@ -1022,8 +1015,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.layout_cart :
                 if (deliveryShippingFragment == null) {
                     findViewById(R.id.layout_item).setVisibility(View.VISIBLE);
-                    Intent intent5 = new Intent( MainActivity.this, ActivityCart.class );
-                   startActivity( intent5);
+                    Intent intent1 = new Intent( MainActivity.this, ActivityCart.class );
+                   startActivity( intent1);
                 }
                  break;
             default:

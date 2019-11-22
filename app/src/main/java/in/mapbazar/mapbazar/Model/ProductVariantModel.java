@@ -2,17 +2,18 @@ package in.mapbazar.mapbazar.Model;
 
 public class ProductVariantModel {
 
-    String id,product_id,attribute_name,attribute_value,attribute_mrp;
+    String id, product_id, attribute_name, attribute_value, attribute_mrp, attribute_rewards;
 
     public ProductVariantModel() {
     }
 
-    public ProductVariantModel(String id, String product_id, String attribute_name, String attribute_value, String attribute_mrp) {
+    public ProductVariantModel(String id, String product_id, String attribute_name, String attribute_value, String attribute_mrp, String attribute_rewards) {
         this.id = id;
         this.product_id = product_id;
         this.attribute_name = attribute_name;
         this.attribute_value = attribute_value;
         this.attribute_mrp = attribute_mrp;
+        this.attribute_rewards = attribute_rewards;
     }
 
     public String getId() {
@@ -53,5 +54,13 @@ public class ProductVariantModel {
 
     public void setAttribute_mrp(String attribute_mrp) {
         this.attribute_mrp = attribute_mrp;
+    }
+
+    public String getAttribute_rewards() {
+        return attribute_rewards;
+    }
+
+    public void setAttribute_rewards(String attribute_rewards) {
+        this.attribute_rewards = attribute_rewards;
     }
 }

@@ -52,6 +52,7 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
     String attribute_name="";
     String attribute_value="";
     String attribute_mrp="";
+    String attribute_rewards;
 
     ArrayList<ProductVariantModel> variantList;
     ArrayList<ProductVariantModel> attributeList;
@@ -123,13 +124,23 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
             status=1;
             String p=String.valueOf(map.get("price"));
             String m=String.valueOf(map.get("mrp"));
+            double mm = Double.parseDouble( m );
+            double pp = Double.parseDouble( p );
             holder.product_price.setText(activity.getResources().getString(R.string.currency)+ map.get("price"));
-            holder.product_mrp.setText(activity.getResources().getString(R.string.currency)+map.get("mrp"));
+            if(mm>pp) {
+                holder.product_mrp.setText(activity.getResources().getString( R.string.currency ) + map.get( "mrp" ) );
+                int discount=getDiscount(p,m);
+                //Toast.makeText(getActivity(),""+atr,Toast.LENGTH_LONG).show();
+                holder.discount.setText(""+discount+"% OFF");
+            }
+            else
+            {
+                holder.discount.setVisibility( View.GONE );
+                holder.product_mrp.setVisibility( View.GONE );
+            }
             holder.txtrate.setVisibility(View.VISIBLE);
             holder.txtrate.setText(map.get("unit_value")+" "+map.get("unit"));
-            int discount=getDiscount(p,m);
-            //Toast.makeText(getActivity(),""+atr,Toast.LENGTH_LONG).show();
-            holder.discount.setText(""+discount+"% OFF");
+
         }
 
         else
@@ -151,13 +162,14 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
                     String attributename=jsonObj.getString("attribute_name");
                     String attributevalue=jsonObj.getString("attribute_value");
                     String attributemrp=jsonObj.getString("attribute_mrp");
-
+                    String attribute_reward=jsonObj.getString( "rewards" );
 
                     model.setId(atrid);
                     model.setProduct_id(atrproductid);
                     model.setAttribute_value(attributevalue);
                     model.setAttribute_name(attributename);
                     model.setAttribute_mrp(attributemrp);
+                    model.setAttribute_rewards( attribute_reward );
 
                     attributeList.add(model);
 
@@ -183,6 +195,7 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
                 attribute_name=attributeList.get(0).getAttribute_name();
                 attribute_value=attributeList.get(0).getAttribute_value();
                 attribute_mrp=attributeList.get(0).getAttribute_mrp();
+                attribute_rewards=attributeList.get( 0 ).getAttribute_rewards();
 
 
 
@@ -194,14 +207,24 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
 
                 String atr_price=String.valueOf(attribute_value);
                 String atr_mrp=String.valueOf(attribute_mrp);
-                int atr_dis=getDiscount(atr_price,atr_mrp);
+                double a_mrp = Double.parseDouble( atr_mrp );
+                double a_price = Double.valueOf( price );
                 holder.product_price.setText("\u20B9"+attribute_value.toString());
-                holder.product_mrp.setText("\u20B9"+attribute_mrp.toString());
+                if (a_mrp>a_price) {
+                    int atr_dis = getDiscount( atr_price, atr_mrp );
+                    holder.product_mrp.setText( "\u20B9" + attribute_mrp.toString() );
+                    holder.discount.setText(""+atr_dis+"% OFF");
+                }
+                else
+                {
+                    holder.product_mrp.setVisibility( View.GONE );
+                    holder.discount.setVisibility( View.GONE );
+                }
                 holder.dialog_txtId.setText(atr_id.toString()+"@"+"0");
                 holder.dialog_unit_type.setText("\u20B9"+attribute_value+"/"+attribute_name);
                 holder.dialog_txtVar.setText(attribute_value+"@"+attribute_name+"@"+attribute_mrp);
                 //  holder.txtTotal.setText("\u20B9"+String.valueOf(list_atr_value.get(0).toString()));
-                holder.discount.setText(""+atr_dis+"% OFF");
+
             }
             catch (Exception ex)
             {
@@ -268,6 +291,7 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
                         String attribute_name=jsonObj.getString("attribute_name");
                         String attribute_value=jsonObj.getString("attribute_value");
                         String attribute_mrp=jsonObj.getString("attribute_mrp");
+                        String attribute_reward=jsonObj.getString( "rewards" );
 
 
                         model.setId(atr_id);
@@ -275,6 +299,7 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
                         model.setAttribute_value(attribute_value);
                         model.setAttribute_name(attribute_name);
                         model.setAttribute_mrp(attribute_mrp);
+                        model.setAttribute_rewards( attribute_reward );
 
                         variantList.add(model);
 
@@ -371,52 +396,24 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
             @Override
             public void onClick(View view) {
 
-                Bundle args = new Bundle();
 
-
-               // details_product_attribute=bundle.getString("product_attribute");
-
-
-                //args.putString("product_id",mList.getProduct_id());
-                args.putString("cat_id",map.get( "cat_id" ));
-                args.putString("product_id",map.get( "product_id" ));
-                args.putString("product_images",map.get( "product_images" ));
-                args.putString("product_name",map.get("product_name"));
-                args.putString("product_description",map.get( "product_description" ));
-                args.putString("product_attribute",map.get( "product_attribute" ));
-                args.putString("stock",map.get("stock"));
-                args.putString("price",map.get("price"));
-                args.putString("mrp",map.get("mrp"));
-                args.putString("unit_value",map.get( "unit_value" ));
-                args.putString("unit",map.get("unit"));
-                args.putString("rewards",map.get("rewards"));
-                args.putString("increment",map.get("increment"));
-                args.putString("title",map.get( "title" ));
-                // Toast.makeText(getActivity(),""+getid,Toast.LENGTH_LONG).show();
-//                Details_Fragment fm = new Details_Fragment();
-//                fm.setArguments(args);
-////                FragmentManager fragmentManager = .beginTransaction().replace(R.id.contentPanel, fm)
-////                        .addToBackStack(null).commit();
-//
-//                AppCompatActivity activity=(AppCompatActivity) view.getContext();
-//                activity.getFragmentManager().beginTransaction().replace(R.id.contentPanel,fm)
-//                        .addToBackStack(null)
-//                        .commit();
                 Intent intent = new Intent( activity,ActivityProductDetails.class );
-                intent.putExtra("cat_id",map.get( "cat_id" ));
-               intent.putExtra("product_id",map.get( "product_id" ));
-                intent.putExtra("product_images",map.get( "product_images" ));
-                intent.putExtra("product_name",map.get("product_name"));
-                intent.putExtra("product_description",map.get( "product_description" ));
-                intent.putExtra("product_attribute",map.get( "product_attribute" ));
-                intent.putExtra("stock",map.get("stock"));
-                intent.putExtra("price",map.get("price"));
-                intent.putExtra("mrp",map.get("mrp"));
-                intent.putExtra("unit_value",map.get( "unit_value" ));
-                intent.putExtra("unit",map.get("unit"));
-                intent.putExtra("rewards",map.get("rewards"));
-                intent.putExtra("increment",map.get("increment"));
-                intent.putExtra("title",map.get( "title" ));
+                HashMap<String, String> args = new HashMap<>();
+                args.put("cat_id",map.get( "cat_id" ));
+               args.put("product_id",map.get( "product_id" ));
+                args.put("product_images",map.get( "product_images" ));
+                args.put("product_name",map.get("product_name"));
+                args.put("product_description",map.get( "product_description" ));
+                args.put("product_attribute",map.get( "product_attribute" ));
+                args.put("stock",map.get("stock"));
+                args.put("price",map.get("price"));
+                args.put("mrp",map.get("mrp"));
+                args.put("unit_value",map.get( "unit_value" ));
+                args.put("unit",map.get("unit"));
+                args.put("rewards",map.get("rewards"));
+                args.put("increment",map.get("increment"));
+                args.put("title",map.get( "title" ));
+                intent.putExtra("details",args);
                 activity.startActivity( intent );
 
             }
@@ -440,6 +437,7 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
                     mapProduct.put("cat_id",map.get("cat_id"));
                     mapProduct.put("product_name",map.get("product_name"));
                     mapProduct.put("price", map.get("price"));
+                    mapProduct.put( "rewards",map.get("rewards") );
                     mapProduct.put("unit_price",map.get("price"));
                     mapProduct.put("unit",unt);
                     mapProduct.put("mrp",map.get("mrp"));
@@ -489,6 +487,7 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
                     mapProduct.put("product_image",map.get("product_images"));
                     mapProduct.put("cat_id",map.get("cat_id"));
                     mapProduct.put("product_name",map.get("product_name"));
+                    mapProduct.put( "rewards",attribute_rewards );
                     mapProduct.put("price", st0);
                     mapProduct.put("unit_price",st0);
                     mapProduct.put("unit",st1);
@@ -572,6 +571,7 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
                         mapProduct.put("price", map.get("price"));
                         mapProduct.put("unit_price", map.get("price"));
                         mapProduct.put("unit", unt);
+                        mapProduct.put( "rewards",map.get( "rewards" ) );
                         mapProduct.put("mrp", map.get("mrp"));
                         mapProduct.put("type", "p");
                         try {
@@ -619,6 +619,7 @@ public class Wishlist_Adapter extends RecyclerView.Adapter<Wishlist_Adapter.Wish
                         mapProduct.put("product_image", map.get("product_images"));
                         mapProduct.put("cat_id", map.get("cat_id"));
                         mapProduct.put("product_name", map.get("product_name"));
+                        mapProduct.put( "rewards",attribute_rewards );
                         mapProduct.put("price", st0);
                         mapProduct.put("unit_price", st0);
                         mapProduct.put("unit", st1);

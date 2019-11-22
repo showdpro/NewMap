@@ -64,6 +64,7 @@ public class Product_adapter extends RecyclerView.Adapter<Product_adapter.MyView
     String attribute_name="";
     String attribute_value="";
     String attribute_mrp="";
+    String attribute_rewards ="";
     ArrayList<ProductVariantModel> variantList;
     ArrayList<ProductVariantModel> attributeList;
     ProductVariantAdapter productVariantAdapter;
@@ -178,6 +179,7 @@ SharedPreferences preferences;
                         mapProduct.put("price", mList.getPrice());
                         mapProduct.put("unit_price",mList.getPrice());
                         mapProduct.put("unit",unt);
+                        mapProduct.put( "rewards",mList.getRewards() );
                         mapProduct.put("mrp",mList.getMrp());
                         mapProduct.put("type","p");
                         try {
@@ -191,6 +193,7 @@ SharedPreferences preferences;
                                 Toast.makeText(context, "Added to Cart", Toast.LENGTH_LONG).show();
                                 int n= db_cart.getCartCount();
                                 updateintent();
+                                updateCart();
 
 
                             }
@@ -225,6 +228,7 @@ SharedPreferences preferences;
                         mapProduct.put("product_image",mList.getProduct_image());
                         mapProduct.put("cat_id",mList.getCategory_id());
                         mapProduct.put("product_name",mList.getProduct_name());
+                        mapProduct.put( "rewards",attribute_rewards );
                         mapProduct.put("price", st0);
                         mapProduct.put("unit_price",st0);
                         mapProduct.put("unit",st1);
@@ -242,7 +246,7 @@ SharedPreferences preferences;
                                 Toast.makeText(context, "Added to Cart", Toast.LENGTH_LONG).show();
                                 int n= db_cart.getCartCount();
                                 updateintent();
-
+                                updateCart();
 
                             }
                             else if(tr==false)
@@ -256,6 +260,7 @@ SharedPreferences preferences;
 
                     }
                     updateintent();
+                    updateCart();
                     add.setVisibility(View.GONE);
                     elegantNumberButton.setNumber("1");
                     elegantNumberButton.setVisibility(View.VISIBLE);
@@ -284,6 +289,7 @@ SharedPreferences preferences;
                             String attribute_name=jsonObj.getString("attribute_name");
                             String attribute_value=jsonObj.getString("attribute_value");
                             String attribute_mrp=jsonObj.getString("attribute_mrp");
+                            String attribute_rewards=jsonObj.getString( "rewards" );
 
 
                             model.setId(atr_id);
@@ -291,7 +297,7 @@ SharedPreferences preferences;
                             model.setAttribute_value(attribute_value);
                             model.setAttribute_name(attribute_name);
                             model.setAttribute_mrp(attribute_mrp);
-
+                            model.setAttribute_rewards( attribute_rewards );
                             variantList.add(model);
 
                             //     arrayList.add(new AttributeModel(atr_id,product_id,attribute_name,attribute_value));
@@ -569,6 +575,7 @@ SharedPreferences preferences;
                     String attributename=jsonObj.getString("attribute_name");
                     String attributevalue=jsonObj.getString("attribute_value");
                     String attributemrp=jsonObj.getString("attribute_mrp");
+                    String attributerrewards=jsonObj.getString( "rewards" );
 
 
                     model.setId(atrid);
@@ -576,7 +583,7 @@ SharedPreferences preferences;
                     model.setAttribute_value(attributevalue);
                     model.setAttribute_name(attributename);
                     model.setAttribute_mrp(attributemrp);
-
+                    model.setAttribute_rewards( attributerrewards );
                     attributeList.add(model);
 
                     //     arrayList.add(new AttributeModel(atr_id,product_id,attribute_name,attribute_value));
@@ -602,6 +609,7 @@ SharedPreferences preferences;
                      attribute_name=attributeList.get(0).getAttribute_name();
                      attribute_value=attributeList.get(0).getAttribute_value();
                      attribute_mrp=attributeList.get(0).getAttribute_mrp();
+                     attribute_rewards=attributeList.get( 0 ).getAttribute_rewards();
 
 
 
@@ -694,6 +702,7 @@ SharedPreferences preferences;
 //                        mapProduct.put("product_image",mList.getProduct_image());
 //                        mapProduct.put("cat_id",mList.getCategory_id());
 //                        mapProduct.put("product_name",mList.getProduct_name());
+//        mapProduct.put("product_name",mList.getRewards());
 //                        mapProduct.put("price", mList.getPrice());
 //                        mapProduct.put("unit_price",mList.getPrice());
 //                        mapProduct.put("unit",unt);
@@ -744,6 +753,7 @@ SharedPreferences preferences;
 //                        mapProduct.put("product_image",mList.getProduct_image());
 //                        mapProduct.put("cat_id",mList.getCategory_id());
 //                        mapProduct.put("product_name",mList.getProduct_name());
+//        mapProduct.put("product_name",attribute_rewards);
 //                        mapProduct.put("price", st0);
 //                        mapProduct.put("unit_price",st0);
 //                        mapProduct.put("unit",st1);
@@ -825,6 +835,7 @@ SharedPreferences preferences;
                         mapProduct.put("cat_id", mList.getCategory_id());
                         mapProduct.put("product_name", mList.getProduct_name());
                         mapProduct.put("price", String.valueOf(amt));
+                        mapProduct.put( "rewards",mList.getRewards() );
                         mapProduct.put("unit_price", mList.getPrice());
                         mapProduct.put("unit", unt);
                         mapProduct.put("mrp", mList.getMrp());
@@ -874,6 +885,7 @@ SharedPreferences preferences;
                         mapProduct.put("product_image", mList.getProduct_image());
                         mapProduct.put("cat_id", mList.getCategory_id());
                         mapProduct.put("product_name", mList.getProduct_name());
+                        mapProduct.put( "rewards",attribute_rewards );
                         mapProduct.put("price", String.valueOf(amt));
                         mapProduct.put("unit_price", st0);
                         mapProduct.put("unit", st1);
@@ -1012,4 +1024,18 @@ SharedPreferences preferences;
             return sts;
         }
 
+    public void updateCart()
+    {
+
+        int cnt=db_cart.getCartCount();
+        if(cnt<1)
+        {
+
+        }
+        else
+        {
+//         MainActivity.layout_cart_cout.setVisibility(View.VISIBLE);
+//           MainActivity.txt_cart_cout.setText(String.valueOf(cnt));
+        }
+    }
 }

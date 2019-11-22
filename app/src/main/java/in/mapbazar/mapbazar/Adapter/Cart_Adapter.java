@@ -104,48 +104,10 @@ final HashMap<String, String> map = list.get(position);
         price = Double.parseDouble(map.get("unit_price"));
         holder.tv_subcat_weight.setText("Weight : "+map.get("unit"));
         holder.tv_total.setText("" + price * items);
-        //   holder.tv_reward.setText("" + reward * items);
+         holder.tv_reward.setText("" +map.get( "rewards" ));
         // holder.btnQty.setNumber(String.valueOf(items));
 
-//        holder.btnQty.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
-//            @Override
-//            public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
-//
-//                double tot_cart_amount=Double.parseDouble(db_cart.getTotalAmount());
-//                float qt=Float.valueOf(newValue);
-//                float price=Float.parseFloat(map.get("price"));
-//                float unit_price=Float.parseFloat(map.get("unit_price"));
-//                float tot_amt=price+unit_price;
-//                holder.tv_total.setText(activity.getResources().getString(R.string.currency)+" "+tot_amt);
-//                HashMap<String, String> mapProduct = new HashMap<String, String>();
-//                mapProduct.put("product_id", map.get("product_id"));
-//                mapProduct.put("product_image", map.get("product_image"));
-//                mapProduct.put("category_id", map.get("category_id"));
-//                mapProduct.put("product_name",map.get("product_name"));
-//                mapProduct.put("price",String.valueOf(tot_amt));
-//                mapProduct.put("unit_price",map.get("unit_price"));
-//                mapProduct.put("size", map.get("size"));
-//                mapProduct.put("color", map.get("color"));
-//                mapProduct.put("rewards", map.get("rewards"));
-//                mapProduct.put("unit_value", map.get("unit_value"));
-//                mapProduct.put("unit", map.get("unit"));
-//                mapProduct.put("increament", map.get("increament"));
-//                mapProduct.put("stock", map.get("stock"));
-//                mapProduct.put("title", map.get("title"));
-//
-//                boolean u=db_cart.updateCart(mapProduct,qt);
-//                if(u)
-//                {
-//                  //  Toast.makeText(activity,"updated",Toast.LENGTH_LONG).show();
-//                    Cart_fragment.tv_total.setText(activity.getResources().getString(R.string.currency)+" "+db_cart.getTotalAmount());
-//                }
-//                else
-//                {
-//                    //Toast.makeText(activity," not updated",Toast.LENGTH_LONG).show();
-//                }
-//
-//            }
-//        });
+
         holder.iv_minus.setOnClickListener(new View.OnClickListener() {
 @Override
 public void onClick(View view) {
@@ -181,7 +143,7 @@ public void onClick(View view) {
         mapProduct.put("product_name",map.get("product_name"));
         mapProduct.put("price",pr);
         mapProduct.put("unit_price",map.get("unit_price"));
-
+        mapProduct.put( "rewards",map.get( "rewards" ) );
         mapProduct.put("unit", map.get("unit"));
         mapProduct.put("mrp",map.get("mrp"));
 
@@ -259,7 +221,7 @@ public void onClick(View view) {
         mapProduct.put("mrp",map.get("mrp"));
         mapProduct.put("unit_price",map.get("unit_price"));
         mapProduct.put("unit", map.get("unit"));
-
+        mapProduct.put( "rewards",map.get( "rewards" ) );
 //
 //                Toast.makeText(activity,"id- "+map.get("product_id")+"\n img- "+map.get("product_image")+"\n cat_id- "+map.get("category_id")+"\n" +
 //                        "\n name- "+map.get("product_name")+"\n price- "+pr+"\n unit_price- "+map.get("unit_price")+
@@ -343,9 +305,9 @@ public int getItemCount() {
         }
 
 class ProductHolder extends RecyclerView.ViewHolder {
-    public CustomTextView tv_title, tv_price,  tv_total,tv_contetiy,
+    public CustomTextView tv_title, tv_price,  tv_total,tv_contetiy, tv_reward,
             tv_unit, tv_unit_value,tv_subcat_weight;
-    //tv_reward,
+
     // ElegantNumberButton btnQty;
     public ImageView iv_logo,iv_plus,iv_minus, iv_remove;
 
@@ -355,7 +317,7 @@ class ProductHolder extends RecyclerView.ViewHolder {
         tv_title = (CustomTextView) view.findViewById(R.id.tv_subcat_title);
         tv_price = (CustomTextView) view.findViewById(R.id.tv_subcat_price);
         tv_total = (CustomTextView) view.findViewById(R.id.tv_subcat_total);
-        // tv_reward = (CustomTextView) view.findViewById(R.id.tv_reward_point);
+        tv_reward = (CustomTextView) view.findViewById(R.id.tv_reward_point);
         tv_contetiy = (CustomTextView) view.findViewById(R.id.tv_subcat_contetiy);
         tv_subcat_weight = (CustomTextView) view.findViewById(R.id.tv_subcat_weight);
         //tv_add = (TextView) view.findViewById(R.id.tv_subcat_add);

@@ -44,9 +44,6 @@ import in.mapbazar.mapbazar.util.DatabaseHandlerWishList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * Created by Rajesh Dabhi on 22/6/2017.
- */
 
 public class Top_Selling_Adapter extends RecyclerView.Adapter<Top_Selling_Adapter.MyViewHolder> {
 
@@ -62,6 +59,7 @@ public class Top_Selling_Adapter extends RecyclerView.Adapter<Top_Selling_Adapte
     String attribute_name="";
     String attribute_value="";
     String attribute_mrp="";
+    String attribute_rewards="";
     ArrayList<ProductVariantModel> variantList;
     ProductVariantAdapter productVariantAdapter;
 
@@ -209,6 +207,7 @@ public class Top_Selling_Adapter extends RecyclerView.Adapter<Top_Selling_Adapte
                 attribute_name = jsonObj.getString( "attribute_name" );
                 attribute_value = jsonObj.getString( "attribute_value" );
                 attribute_mrp = jsonObj.getString( "attribute_mrp" );
+                attribute_rewards=jsonObj.getString( "rewards" );
 
 
                 //     arrayList.add(new AttributeModel(atr_id,product_id,attribute_name,attribute_value));
@@ -305,6 +304,7 @@ public class Top_Selling_Adapter extends RecyclerView.Adapter<Top_Selling_Adapte
                         String attribute_name=jsonObj.getString("attribute_name");
                         String attribute_value=jsonObj.getString("attribute_value");
                         String attribute_mrp=jsonObj.getString("attribute_mrp");
+                        String attribute_rewards=jsonObj.getString( "rewards" );
 
 
                         model.setId(atr_id);
@@ -312,6 +312,7 @@ public class Top_Selling_Adapter extends RecyclerView.Adapter<Top_Selling_Adapte
                         model.setAttribute_value(attribute_value);
                         model.setAttribute_name(attribute_name);
                         model.setAttribute_mrp(attribute_mrp);
+                        model.setAttribute_rewards( attribute_rewards );
 
                         variantList.add(model);
 
@@ -343,6 +344,7 @@ public class Top_Selling_Adapter extends RecyclerView.Adapter<Top_Selling_Adapte
                         attribute_name=String.valueOf(variantList.get(i).getAttribute_name());
                         attribute_value=String.valueOf(variantList.get(i).getAttribute_value());
                         attribute_mrp=String.valueOf(variantList.get(i).getAttribute_mrp());
+                        attribute_rewards=String.valueOf( variantList.get( i ).getAttribute_rewards() );
 
                         holder.dialog_unit_type.setText("\u20B9"+attribute_value+"/"+attribute_name);
                         holder.dialog_txtId.setText(variantList.get(i).getId()+"@"+i);
@@ -517,6 +519,7 @@ public class Top_Selling_Adapter extends RecyclerView.Adapter<Top_Selling_Adapte
                     mapProduct.put("product_id", mList.getProduct_id());
                     mapProduct.put("product_image",mList.getProduct_image());
                     mapProduct.put("cat_id",mList.getCategory_id());
+                    mapProduct.put( "rewards",mList.getRewards() );
                     mapProduct.put("product_name",mList.getProduct_name());
                     mapProduct.put("price", mList.getPrice());
                     mapProduct.put("unit_price",mList.getPrice());
@@ -568,6 +571,7 @@ public class Top_Selling_Adapter extends RecyclerView.Adapter<Top_Selling_Adapte
                     mapProduct.put("product_image",mList.getProduct_image());
                     mapProduct.put("cat_id",mList.getCategory_id());
                     mapProduct.put("product_name",mList.getProduct_name());
+                    mapProduct.put( "rewards",attribute_rewards );
                     mapProduct.put("price", st0);
                     mapProduct.put("unit_price",st0);
                     mapProduct.put("unit",st1);

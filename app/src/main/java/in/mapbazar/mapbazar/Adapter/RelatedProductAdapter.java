@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
+import in.mapbazar.mapbazar.ActivityProductDetails;
 import in.mapbazar.mapbazar.Model.ProductVariantModel;
 import in.mapbazar.mapbazar.Model.RelatedProductModel;
 import in.mapbazar.mapbazar.R;
@@ -60,6 +61,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
     String attribute_name="";
     String attribute_value="";
     String attribute_mrp="";
+    String attribute_rewards="";
 
     ArrayList<ProductVariantModel> variantList;
     ProductVariantAdapter productVariantAdapter;
@@ -175,6 +177,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
                 attribute_name=jsonObj.getString("attribute_name");
                 attribute_value=jsonObj.getString("attribute_value");
                 attribute_mrp=jsonObj.getString("attribute_mrp");
+                attribute_rewards=jsonObj.getString( "rewards" );
 
 
 
@@ -270,6 +273,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
                         String attribute_name=jsonObj.getString("attribute_name");
                         String attribute_value=jsonObj.getString("attribute_value");
                         String attribute_mrp=jsonObj.getString("attribute_mrp");
+                        String attribute_rewards=jsonObj.getString( "rewards" );
 
 
                         model.setId(atr_id);
@@ -277,6 +281,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
                         model.setAttribute_value(attribute_value);
                         model.setAttribute_name(attribute_name);
                         model.setAttribute_mrp(attribute_mrp);
+                        model.setAttribute_rewards( attribute_rewards );
 
                         variantList.add(model);
 
@@ -308,6 +313,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
                         attribute_name=String.valueOf(variantList.get(i).getAttribute_name());
                         attribute_value=String.valueOf(variantList.get(i).getAttribute_value());
                         attribute_mrp=String.valueOf(variantList.get(i).getAttribute_mrp());
+                        attribute_rewards=String.valueOf( variantList.get( i ).getAttribute_rewards() );
 
                         holder.dialog_unit_type.setText("\u20B9"+attribute_value+"/"+attribute_name);
                      //   holder.dialog_txtId.setText(variantList.get(i).getId());
@@ -380,39 +386,30 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
         holder.relativeLayout.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final RelatedProductModel mList = modelList.get(position);
-                Bundle args = new Bundle();
+
+                Intent intent = new Intent(context, ActivityProductDetails.class);
+                HashMap<String, String> args = new HashMap<>();
 //
 
-                //args.putString("product_id",mList.getProduct_id());
-                args.putString("cat_id", modelList.get(position).getCategory_id());
-                args.putString("product_id",modelList.get(position).getProduct_id());
-                args.putString("product_images",modelList.get(position).getProduct_image());
+                args.put("cat_id", modelList.get(position).getCategory_id());
+                args.put("product_id", modelList.get(position).getProduct_id());
+                args.put("product_images", modelList.get(position).getProduct_image());
+                args.put("product_name", modelList.get(position).getProduct_name());
+                args.put("product_description", modelList.get(position).getProduct_description());
+                args.put("in_stock", modelList.get(position).getIn_stock());
+                args.put("stock", modelList.get(position).getStock());
+                args.put("status", modelList.get(position).getStatus());
+                args.put("price", modelList.get(position).getPrice());
+                args.put("mrp", modelList.get(position).getMrp());
+                args.put("unit_value", modelList.get(position).getUnit_value());
+                args.put("unit", modelList.get(position).getUnit());
+                args.put("product_attribute", modelList.get(position).getProduct_attribute());
+                args.put("rewards", modelList.get(position).getRewards());
+                args.put("increment", modelList.get(position).getIncreament());
+                args.put("title", modelList.get(position).getTitle());
 
-                args.putString("product_name",modelList.get(position).getProduct_name());
-                args.putString("product_description",modelList.get(position).getProduct_description());
-                args.putString("stock",modelList.get(position).getIn_stock());
-//                args.putString("product_size",modelList.get(position).getSize());
-//                args.putString("product_color",modelList.get( position).getColor());
-                args.putString("price",modelList.get(position).getPrice());
-                args.putString("mrp",modelList.get(position).getMrp());
-                args.putString("unit_value",modelList.get(position).getUnit_value());
-                args.putString("unit",modelList.get(position).getUnit());
-                args.putString("product_attribute",modelList.get(position).getProduct_attribute());
-                args.putString("rewards",modelList.get(position).getRewards());
-                args.putString("increment",modelList.get(position).getIncreament());
-                args.putString("title",modelList.get(position).getTitle());
-                // Toast.makeText(getActivity(),""+getid,Toast.LENGTH_LONG).show();
-//                Details_Fragment fm = new Details_Fragment();
-//                fm.setArguments(args);
-//                FragmentManager fragmentManager = .beginTransaction().replace(R.id.contentPanel, fm)
-//                        .addToBackStack(null).commit();
-
-//                AppCompatActivity activity=(AppCompatActivity) view.getContext();
-//                activity.getFragmentManager().beginTransaction().replace(R.id.contentPanel,fm)
-//                        .addToBackStack(null)
-//                        .commit();
-
+                intent.putExtra("details", args);
+                context.startActivity(intent);
 
             }
         } );
@@ -503,6 +500,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
                     mapProduct.put("price", mList.getPrice());
                     mapProduct.put("unit_price",mList.getPrice());
                     mapProduct.put("unit",unt);
+                    mapProduct.put( "rewards",mList.getRewards() );
                     mapProduct.put("mrp",mList.getMrp());
                     mapProduct.put("type","p");
                     try {
@@ -550,6 +548,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
                     mapProduct.put("product_image",mList.getProduct_image());
                     mapProduct.put("cat_id",mList.getCategory_id());
                     mapProduct.put("product_name",mList.getProduct_name());
+                    mapProduct.put( "rewards",attribute_rewards );
                     mapProduct.put("price", st0);
                     mapProduct.put("unit_price",st0);
                     mapProduct.put("unit",st1);
@@ -638,6 +637,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
                     mapProduct.put("product_image",mList.getProduct_image());
                     mapProduct.put("cat_id",mList.getCategory_id());
                     mapProduct.put("product_name",mList.getProduct_name());
+                    mapProduct.put( "rewards",mList.getRewards() );
                     mapProduct.put("price", String.valueOf(amt));
                     mapProduct.put("unit_price",mList.getPrice());
                     mapProduct.put("unit",unt);
@@ -698,6 +698,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
                     mapProduct.put("unit",st1);
                     mapProduct.put("mrp",st2);
                     mapProduct.put("type","a");
+                    mapProduct.put( "rewards",attribute_rewards );
 
                     //  Toast.makeText(context,""+attributeList.get(j).getId()+"\n"+mapProduct,Toast.LENGTH_LONG).show();
                     try {

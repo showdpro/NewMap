@@ -71,6 +71,49 @@
                     android:text=""
                     android:textColor="#000"
                     android:textSize="17dp" />
+                <RelativeLayout
+                    android:id="@+id/rel_rewards"
+                    android:layout_below="@+id/details_product_mrp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:id="@+id/img_rewards"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/icons8_gift_64px_1"
+                        android:backgroundTint="@color/colorPrimary"/>
+                    <in.mapbazar.mapbazar.View.CustomTextView
+                        android:id="@+id/txt_rewards"
+                        android:layout_toRightOf="@+id/img_rewards"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:textSize="16dp"
+                        app:fontName="@string/ubuntu_l"
+                        android:padding="2dp"
+                        android:textStyle="bold"
+                        android:text="Reward Points :"
+
+                        />
+                    <in.mapbazar.mapbazar.View.CustomTextView
+                        android:id="@+id/tv_reward_point"
+                        android:layout_toRightOf="@+id/txt_rewards"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        app:fontName="@string/ubuntu_l"
+                        android:padding="2dp"
+                        android:textStyle="bold"
+                        android:text="Reward Points :"
+                        android:textColor="@color/gray2"
+
+                        />
+                </RelativeLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -113,42 +156,6 @@
 
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="130dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="@dimen/space_4"
-
-                    android:layout_marginBottom="@dimen/space_3"
-                    android:background="@drawable/slider_shape"
-                    android:gravity="center_vertical"
-                    android:visibility="gone"
-                    >
-
-                    <in.mapbazar.mapbazar.View.CustomTextView
-                        app:fontName="@string/ubuntu_l"
-                        android:id="@+id/text_rw"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/space_3"
-                        android:text="@string/rewards_points"
-                        android:textColor="#000"
-                        android:textSize="@dimen/text_size_small"
-                         />
-
-                    <in.mapbazar.mapbazar.View.CustomTextView
-                        app:fontName="@string/ubuntu_l"
-
-                        android:id="@+id/tv_reward_point"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@dimen/space_18"
-                        android:layout_alignParentEnd="true"
-                        android:text=""
-                        android:textColor="#000"
-                        android:textSize="@dimen/text_size_small" />
-
-
-                </RelativeLayout>
 
             </LinearLayout>
             <ImageView

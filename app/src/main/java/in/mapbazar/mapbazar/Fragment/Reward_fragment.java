@@ -63,7 +63,7 @@ public class Reward_fragment extends Fragment {
 
         String getrewards = sessionManagement.getUserDetails().get( Url.KEY_REWARDS_POINTS);
         Rewards_Points = (TextView) view.findViewById(R.id.reward_points);
-        //  Rewards_Points.setText(getrewards);
+        Rewards_Points.setText(getrewards);
 //        gifImageView = (GifImageView) view.findViewById(R.id.gif_image);
 //        gifImageView.setBackgroundResource( R.drawable.pay );
        // gifImageView.setImageResource(R.drawable.pay);
@@ -73,7 +73,7 @@ public class Reward_fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Shift_Reward_to_WAllet();
-                gifImageView.setVisibility(View.VISIBLE);
+              //  gifImageView.setVisibility(View.VISIBLE);
                 final View myview = gifImageView;
                 view.postDelayed(new Runnable() {
                     public void run() {
