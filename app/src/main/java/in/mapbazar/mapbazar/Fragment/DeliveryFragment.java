@@ -308,20 +308,19 @@ public class DeliveryFragment extends Fragment implements View.OnClickListener {
             String society = addmap.get("society");
             String pin = addmap.get("pin");
             String house = addmap.get("house");
-            //args.putString("getdate", getdate);
-            //args.putString("time", gettime);
             args.putString( "address",address );
-//            args.putString("getdate", "00/00/0000");
-//            args.putString("time", "00:00");
             args.putString("location_id", location_id);
             args.putString("name",name);
             args.putString( "pin",pin );
-            args.putString( "house",house );
-            args.putString( "society",society );
             args.putString( "phone",phone );
-
-            args.putString("deli_charges", deli_charges);
-            args.putString("store_id", store_id);
+            //args.putString("getdate", getdate);
+            //args.putString("time", gettime);
+ //            args.putString("getdate", "00/00/0000");
+//            args.putString("time", "00:00");
+            // args.putString( "house",house );
+//            args.putString( "society",society );
+           // args.putString("deli_charges", deli_charges);
+          //  args.putString("store_id", store_id);
             fm.setArguments(args);
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container_delivery, fm)

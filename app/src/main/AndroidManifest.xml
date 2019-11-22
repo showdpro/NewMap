@@ -54,6 +54,9 @@
         <activity
             android:name=".ActivityCart"
             android:screenOrientation="portrait" />
+                <activity
+            android:name="in.mapbazar.mapbazar.MyOrderDetail"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ActivityMatchProductDetails"
             android:screenOrientation="portrait" />

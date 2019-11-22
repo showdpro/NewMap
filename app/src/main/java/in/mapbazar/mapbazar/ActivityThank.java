@@ -34,33 +34,32 @@ public class ActivityThank extends AppCompatActivity {
     @BindView(R.id.txt_go_home)
     CustomTextView txt_go_home;
 
+    String id="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thank);
         ButterKnife.bind(this);
 
+        id=getIntent().getStringExtra("id");
         sPref = PreferenceManager.getDefaultSharedPreferences(ActivityThank.this);
 
         initdata();
+
     }
 
     private void initdata() {
 
-        txt_thank_orderid.setText(getString(R.string.thank_order_id) + "  #" + sPref.getInt("order_id", 0));
+        txt_thank_orderid.setText(getString(R.string.thank_order_id) + "  #" + id);
         txt_thank_phone.setText(getString(R.string.thank_phone) + " ");
 
         txt_view_order_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(ActivityThank.this,MainActivity.class);
-                SharedPreferences.Editor sh = sPref.edit();
-                sh.putInt("Cart", 0);
-                sh.putInt("order_id", 0);
-                sh.putString("mobile", "");
-                sh.putBoolean("IsOrder",true);
-                sh.commit();
+                Intent i = new Intent(ActivityThank.this,ActivityOrderDetails.class);
+
                 startActivity(i);
             }
         });

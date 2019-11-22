@@ -2,6 +2,8 @@ package in.mapbazar.mapbazar;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,12 +13,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,16 +31,22 @@ import com.paytm.pgsdk.PaytmOrder;
 import com.paytm.pgsdk.PaytmPGService;
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import in.mapbazar.mapbazar.Model.Address;
 import in.mapbazar.mapbazar.Model.PinModel;
 import in.mapbazar.mapbazar.Model.ProductListModel.ProductItem;
 
 import in.mapbazar.mapbazar.Model.ShippinModel;
+import in.mapbazar.mapbazar.Modules.Module;
 import in.mapbazar.mapbazar.Payment.Checksum;
 import in.mapbazar.mapbazar.Payment.Paytm;
 import in.mapbazar.mapbazar.Payment.WebServiceCaller;
 
 import in.mapbazar.mapbazar.Utili.Common;
+import in.mapbazar.mapbazar.Utili.Url;
 import in.mapbazar.mapbazar.View.CustomTextView;
 import in.mapbazar.mapbazar.View.DialogUtils;
 import in.mapbazar.mapbazar.callback.CallbackMessage;
@@ -44,16 +56,27 @@ import in.mapbazar.mapbazar.dialog.SelectTimeDialogFragment;
 
 import java.net.SocketTimeoutException;
 import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import in.mapbazar.mapbazar.util.ConnectivityReceiver;
+import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
+import in.mapbazar.mapbazar.util.DatabaseCartHandler;
+import in.mapbazar.mapbazar.util.Session_management;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.android.volley.VolleyLog.TAG;
+import static in.mapbazar.mapbazar.Utili.Url.KEY_ID;
+import static in.mapbazar.mapbazar.Utili.Url.TOPIC_GLOBAL;
 
 public class ActivityPayment extends AppCompatActivity {
 
@@ -62,8 +85,12 @@ public class ActivityPayment extends AppCompatActivity {
     String website="";
     String indus_type_id="";
     String call_url="";
+    double subtotal=0;
+    double delivery_carges=0;
+    double amount=0;
     CustomTextView notify;
-
+    private Double rewards;
+    String gettime,getdate,getuser_id,getlocation_id,getstore_id;
     double gms=0;
     double pcs=0;
    LinearLayout linear_pay;
@@ -74,42 +101,24 @@ public class ActivityPayment extends AppCompatActivity {
 
     Dialog ProgressDialog;
 
-    @BindView(R.id.ly_back)
     RelativeLayout ly_back;
-
-    @BindView(R.id.lay_status_delivery)
     LinearLayout lay_status_delivery;
-
-    @BindView(R.id.lay_status_payment)
     LinearLayout lay_status_payment;
-
-    @BindView(R.id.txt_place_order)
-    CustomTextView txt_place_order;
-
-    @BindView(R.id.image_status)
+    Button txt_place_order;
     ImageView image_status;
-
-    @BindView(R.id.image_payment)
     ImageView image_payment;
-
-    @BindView(R.id.ll_date)
     RelativeLayout llDate;
-
-    @BindView(R.id.ll_time)
     RelativeLayout llTime;
-
-    @BindView(R.id.tv_date)
     CustomTextView tvDate;
-
-    @BindView(R.id.tv_time)
     CustomTextView tvTime;
     Address address;
-   String pin=null;
+    String pin=null;
     ArrayList<String> timeSlotList;
     ArrayList<String> allTimeSlotList;
     SelectTimeDialogFragment selectTimeDialogFragment;
 
     CustomTextView txt_total,txt_shipping,txt_subtotal,txt_qty;
+
     int pYear, pMonth, pDay;
     DatePickerDialog.OnDateSetListener pDateSetListener;
 
@@ -122,16 +131,22 @@ public class ActivityPayment extends AppCompatActivity {
     double sum_qty=0;
     float tot=0;
 
-
+  String location_id="";
+  String shipping_charges="";
+  String user_id="";
+  String total_amount="";
 
     double del=0;
     JsonArray jsonArr=null;
+    Session_management session_management;
+    private DatabaseCartHandler db_cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
-        ButterKnife.bind(this);
+        db_cart=new DatabaseCartHandler(this);
+
         txt_qty=findViewById(R.id.txt_qty);
         txt_shipping=findViewById(R.id.txt_shipping);
         txt_subtotal=findViewById(R.id.txt_subtotal);
@@ -147,35 +162,54 @@ public class ActivityPayment extends AppCompatActivity {
         modelList=new ArrayList<>();
         sPref = PreferenceManager.getDefaultSharedPreferences(ActivityPayment.this);
         jsonArr=new JsonArray();
+        initComponents();
         initdata();
-        request_payment_status();
+      //  request_payment_status();
 
-        pin=address.getPincode().toString();
-        getData(pin);
+//        pin=address.getPincode().toString();
+//        getData(pin);
         //setAmount();
 
 
         txt_place_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (image_payment.getVisibility() == View.VISIBLE) {
 
-                  GetOnlineJsonObject();
-                   // Common.Errordialog(ActivityPayment.this, "Feature not implemented ");
+               if (image_status.getVisibility() == View.VISIBLE) {
 
-                }else  if (image_payment.getVisibility() == View.GONE && image_status.getVisibility() == View.GONE) {
+//                    Toast.makeText(ActivityPayment.this,"data :- "+tvDate.getText().toString()+"\n time :-- "+tvTime.getText().toString()+
+//                            "\n loc"+location_id+"\n user_id "+user_id+"\n ship - "+shipping_charges,Toast.LENGTH_LONG).show();
+
+                    attemptOrder();
+                 // GetOnlineJsonObject();
+                //    Common.Errordialog(ActivityPayment.this, "Feature not implemented ");
+
+                }else  if (image_status.getVisibility() == View.GONE && image_status.getVisibility() == View.GONE) {
                     Common.Errordialog(ActivityPayment.this, "Please select a payment method ");
 
-                }  else if (Common.list_ProductItem != null && Common.list_ProductItem.size() > 0) {
-                    if (tvTime.getText().toString().equalsIgnoreCase("No time slot for today")) {
-                        Common.Errordialog(ActivityPayment.this, "Please select a time slot ");
-
-                    } else {
-                        GetJsonObject();
-                    }
                 }
+                else
+                {
+                    Toast.makeText(ActivityPayment.this,"data :- "+tvDate.getText().toString()+"\n time :-- "+tvTime.getText().toString()+
+                            "\n loc"+location_id+"\n user_id "+user_id+"\n ship - "+shipping_charges,Toast.LENGTH_LONG).show();
+
+                }
+
             }
         });
+    }
+
+    private void initComponents() {
+        ly_back=(RelativeLayout)findViewById(R.id.ly_back);
+        llDate=(RelativeLayout)findViewById(R.id.ll_date);
+        llTime=(RelativeLayout)findViewById(R.id.ll_time);
+        lay_status_delivery=(LinearLayout) findViewById(R.id.lay_status_delivery);
+        lay_status_payment=(LinearLayout) findViewById(R.id.lay_status_payment);
+        txt_place_order=(Button)findViewById(R.id.txt_place_order);
+        image_status=(ImageView) findViewById(R.id.image_status);
+        image_payment=(ImageView) findViewById(R.id.image_payment);
+        tvDate=(CustomTextView)findViewById(R.id.tv_date);
+        tvTime=(CustomTextView)findViewById(R.id.tv_time);
     }
 
     @Override
@@ -207,6 +241,20 @@ public class ActivityPayment extends AppCompatActivity {
             }
         });
 
+
+        location_id=getIntent().getStringExtra("location");
+        shipping_charges=getIntent().getStringExtra("shipping_charge");
+        session_management=new Session_management(ActivityPayment.this);
+        user_id=session_management.getUserDetails().get(KEY_ID);
+
+
+        txt_qty.setText(String.valueOf(db_cart.getCartCount()));
+        subtotal=Double.parseDouble(db_cart.getTotalAmount());
+        delivery_carges=Double.parseDouble(shipping_charges);
+        amount=subtotal+delivery_carges;
+        txt_subtotal.setText(getResources().getString(R.string.currency)+String.valueOf(subtotal));
+        txt_shipping.setText(getResources().getString(R.string.currency)+String.valueOf(delivery_carges));
+        txt_total.setText(getResources().getString(R.string.currency)+String.valueOf(subtotal)+" + "+getResources().getString(R.string.currency)+String.valueOf(delivery_carges)+" = "+getResources().getString(R.string.currency)+String.valueOf(amount));
 
         ly_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,136 +366,6 @@ public class ActivityPayment extends AppCompatActivity {
 
     }
 
-    private void getDataShip()
-    {
-
-        JsonArray jsonArray = new JsonArray();
-
-
-        for (int i = 0; i < Common.list_ProductItem.size(); i++) {
-
-            ProductItem productItem = Common.list_ProductItem.get(i);
-
-            JsonObject product = new JsonObject();
-
-            product.addProperty("Font_type_1", "");
-            product.addProperty("Font_type_2", "");
-            product.addProperty("Font_type_3", "");
-            product.addProperty("Font_type_4", "");
-            product.addProperty("Font_type_5", "");
-            product.addProperty("Font_type_6", "");
-            product.addProperty("Font_type_7", "");
-            product.addProperty("Font_type_8", "");
-            product.addProperty("Text_1", "");
-            product.addProperty("Text_2", "");
-            product.addProperty("Text_3", "");
-            product.addProperty("Text_4", "");
-            product.addProperty("Text_5", "");
-            product.addProperty("Text_6", "");
-            product.addProperty("Text_7", "");
-            product.addProperty("Text_8", "");
-            product.addProperty("Text_comment", "");
-            product.addProperty("Text_line_instruction", "");
-            product.addProperty("Text_quantity", "");
-
-            product.addProperty("back_Font_type_1", "");
-            product.addProperty("back_Font_type_2", "");
-            product.addProperty("back_Font_type_3", "");
-            product.addProperty("back_Font_type_4", "");
-            product.addProperty("back_Font_type_5", "");
-            product.addProperty("back_Font_type_6", "");
-            product.addProperty("back_Font_type_7", "");
-            product.addProperty("back_Font_type_8", "");
-            product.addProperty("back_Text_1", "");
-            product.addProperty("back_Text_2", "");
-            product.addProperty("back_Text_3", "");
-            product.addProperty("back_Text_4", "");
-            product.addProperty("back_Text_5", "");
-            product.addProperty("back_Text_6", "");
-            product.addProperty("back_Text_7", "");
-            product.addProperty("back_Text_8", "");
-            product.addProperty("back_Text_comment", "");
-            product.addProperty("back_Text_line_instruction", "");
-            product.addProperty("back_Text_quantity", "");
-            product.addProperty("city", "");
-            product.addProperty("comment", "");
-            product.addProperty("image_2_image_path", "");
-            product.addProperty("image_path", "");
-
-            product.addProperty("color", productItem.getColorCode());
-            product.addProperty("isFormSelected", productItem.getIsFormSelected());
-
-            product.addProperty("product_id", productItem.getProductId());
-            product.addProperty("quantity", productItem.getQuantity());
-            product.addProperty("size_id", productItem.getSizeId());
-
-            product.addProperty("price", productItem.getProductAttribute().get(0).getAttributeValue());
-            String s=productItem.getProductAttribute().get(0).getAttributeName().toString();
-
-            String[] st=getType(s);
-
-            if(st[1].equals("k"))
-            {
-                del= del+Double.parseDouble(st[0])*Double.parseDouble(productItem.getQuantity());
-            }
-            else if(st[1].equals("p"))
-            {
-                pcs=pcs+Double.parseDouble(st[0])*Double.parseDouble(productItem.getQuantity());
-            }
-            else if(st[1].equals("g"))
-            {
-              //  double gm=Double.parseDouble(st[0])/1000;
-                gms=gms+Double.parseDouble(st[0])*Double.parseDouble(productItem.getQuantity());
-            }
-            //double sd=getQtySum(productItem.getProductAttribute().get(0).getAttributeName());
-            //sum_qty=sum_qty+sd;
-
-            jsonArray.add(product);
-        }
-
-
-
-jsonArr=jsonArray;
-
-         d=setShippinCharge();
-        txt_shipping.setText(""+d);
-         //tot= DeliveryShippingFragment.subtotal+(float) d;
-        txt_qty.setText(""+Common.list_ProductItem.size());
-       // txt_subtotal.setText(""+ DeliveryShippingFragment.subtotal);
-        txt_total.setText(""+tot);
-    }
-
-    private void GetJsonObject() {
-        JsonObject finalobject = new JsonObject();
-
-     //   Toast.makeText(ActivityPayment.this,"del"+del+"\n ship"+d,Toast.LENGTH_LONG).show();
-        finalobject.add("product_order_detail", jsonArr);
-
-        finalobject.addProperty("user_id", "" + sPref.getString("uid", ""));
-        finalobject.addProperty("user_name", sPref.getString("name", ""));
-        finalobject.addProperty("user_email", sPref.getString("email", ""));
-        finalobject.addProperty("address1", "" + address.getAddress());
-        finalobject.addProperty("address2", "");
-        finalobject.addProperty("address_name", "" + address.getName());
-        finalobject.addProperty("city", "" + address.getCity());
-        finalobject.addProperty("mobile", "" + address.getMobile_no());
-        finalobject.addProperty("payment_type", "cash");
-        finalobject.addProperty("pincode", "" + address.getPincode());
-        finalobject.addProperty("state", "" + address.getState());
-        finalobject.addProperty("tax", sPref.getString("TAX", "0"));
-        finalobject.addProperty("tax_price", sPref.getString("tax_value", "0"));
-        finalobject.addProperty("transaction_id", "");
-        finalobject.addProperty("delivery_date", tvDate.getText().toString());
-        finalobject.addProperty("delivery_time", tvTime.getText().toString());
-        finalobject.addProperty("shipping_charge", d);
-        finalobject.addProperty("quantity" ,sPref.getString("quantity",""));
-
-
-        //Toast.makeText(ActivityPayment.this,""+address.getPincode().toString()+"\n"+address.getAddress(),Toast.LENGTH_LONG).show();
-        Log.e("Product Object", "" + finalobject.toString());
-
-       requestsubmitProductOrder(finalobject);
-    }
 
     private void request_payment_status()
     {
@@ -515,204 +433,7 @@ jsonArr=jsonArray;
         });
     }
 
-    private void requestsubmitProductOrder(JsonObject finalobject) {
 
-        ProgressDialog.show();
-
-        API api = RestAdapter.createAPI();
-        Call<JsonObject> callback_login = api.checkout_ProductOrder(finalobject);
-        callback_login.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e("Submit Order", "=>" + response.body());
-
-                if (response.isSuccessful()) {
-                    JsonObject jsonObject = response.body();
-
-                    if (jsonObject != null && jsonObject.get("status").getAsString().equals("success")) {
-
-                        /*{"total_order":"11","status":"success","Isactive":"1"}*/
-
-                        if (ProgressDialog != null && ProgressDialog.isShowing())
-                            ProgressDialog.dismiss();
-
-                      /*  {"status":"success","order_id":62,"Isactive":"1"}*/
-
-                        int order_id = 0;
-                        if (jsonObject.has("order_id") && !jsonObject.get("order_id").isJsonNull())
-                            order_id = jsonObject.get("order_id").getAsInt();
-                        else
-                            order_id = 0;
-
-                        SharedPreferences.Editor sh = sPref.edit();
-                        sh.putInt("Cart", 0);
-                        sh.putInt("order_id", order_id);
-                        sh.putString("mobile", "" + address.getMobile_no());
-                        sh.commit();
-
-                        SuccessDailog(getString(R.string.place_order_successful));
-
-                    } else {
-
-                        if (ProgressDialog != null && ProgressDialog.isShowing())
-                            ProgressDialog.dismiss();
-
-                        int Isactive = 0;
-                        if (jsonObject.has("Isactive") && !jsonObject.get("Isactive").isJsonNull()) {
-                            Isactive = jsonObject.get("Isactive").getAsInt();
-                        }
-
-                        if (Isactive == 0) {
-                            Common.AccountLock(ActivityPayment.this);
-                        } else if (jsonObject.has("message") && !jsonObject.get("message").isJsonNull()) {
-                            Common.Errordialog(ActivityPayment.this, jsonObject.get("message").toString());
-                        }
-
-                    }
-
-                } else {
-
-                    if (ProgressDialog != null && ProgressDialog.isShowing())
-                        ProgressDialog.dismiss();
-
-                    ErrorMessage(getString(R.string.error));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                if (ProgressDialog != null && ProgressDialog.isShowing())
-                    ProgressDialog.dismiss();
-
-                String message = "";
-                if (t instanceof SocketTimeoutException) {
-                    message = "Socket Time out. Please try again.";
-                    Common.ShowHttpErrorMessage(ActivityPayment.this, message);
-                } else {
-                    ErrorMessage(getString(R.string.error));
-                }
-            }
-        });
-
-    }
-
-
-    private void GetOnlineJsonObject() {
-        JsonObject finalobject = new JsonObject();
-
-        //   Toast.makeText(ActivityPayment.this,"del"+del+"\n ship"+d,Toast.LENGTH_LONG).show();
-        finalobject.add("product_order_detail", jsonArr);
-
-        finalobject.addProperty("user_id", "" + sPref.getString("uid", ""));
-        finalobject.addProperty("user_name", sPref.getString("name", ""));
-        finalobject.addProperty("user_email", sPref.getString("email", ""));
-        finalobject.addProperty("address1", "" + address.getAddress());
-        finalobject.addProperty("address2", "");
-        finalobject.addProperty("address_name", "" + address.getName());
-        finalobject.addProperty("city", "" + address.getCity());
-        finalobject.addProperty("mobile", "" + address.getMobile_no());
-        finalobject.addProperty("payment_type", "online");
-        finalobject.addProperty("pincode", "" + address.getPincode());
-        finalobject.addProperty("state", "" + address.getState());
-        finalobject.addProperty("tax", sPref.getString("TAX", "0"));
-        finalobject.addProperty("tax_price", sPref.getString("tax_value", "0"));
-        finalobject.addProperty("transaction_id", "");
-        finalobject.addProperty("delivery_date", tvDate.getText().toString());
-        finalobject.addProperty("delivery_time", tvTime.getText().toString());
-        finalobject.addProperty("shipping_charge", d);
-        finalobject.addProperty("quantity" ,sPref.getString("quantity",""));
-
-
-        //Toast.makeText(ActivityPayment.this,""+address.getPincode().toString()+"\n"+address.getAddress(),Toast.LENGTH_LONG).show();
-        Log.e("Product Object", "" + finalobject.toString());
-
-        requestonlinesubmitProductOrder(finalobject);
-    }
-
-    private void requestonlinesubmitProductOrder(JsonObject finalobject) {
-
-        ProgressDialog.show();
-
-        API api = RestAdapter.createAPI();
-        Call<JsonObject> callback_login = api.checkout_ProductOrder(finalobject);
-        callback_login.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e("Submit Order", "=>" + response.body());
-
-                if (response.isSuccessful()) {
-                    JsonObject jsonObject = response.body();
-
-                    if (jsonObject != null && jsonObject.get("status").getAsString().equals("success")) {
-
-                        /*{"total_order":"11","status":"success","Isactive":"1"}*/
-
-                        if (ProgressDialog != null && ProgressDialog.isShowing())
-                            ProgressDialog.dismiss();
-
-                        /*  {"status":"success","order_id":62,"Isactive":"1"}*/
-
-                        int order_id = 0;
-                        if (jsonObject.has("order_id") && !jsonObject.get("order_id").isJsonNull()) {
-                            order_id = jsonObject.get("order_id").getAsInt();
-                            processPaytm(String.valueOf(order_id), String.valueOf(tot));
-                        }
-                        else
-                            order_id = 0;
-
-                        SharedPreferences.Editor sh = sPref.edit();
-                        sh.putInt("Cart", 0);
-                        sh.putInt("order_id", order_id);
-                        sh.putString("mobile", "" + address.getMobile_no());
-                        sh.commit();
-
-                        SuccessDailog(getString(R.string.place_order_successful));
-
-                    } else {
-
-                        if (ProgressDialog != null && ProgressDialog.isShowing())
-                            ProgressDialog.dismiss();
-
-                        int Isactive = 0;
-                        if (jsonObject.has("Isactive") && !jsonObject.get("Isactive").isJsonNull()) {
-                            Isactive = jsonObject.get("Isactive").getAsInt();
-                        }
-
-                        if (Isactive == 0) {
-                            Common.AccountLock(ActivityPayment.this);
-                        } else if (jsonObject.has("message") && !jsonObject.get("message").isJsonNull()) {
-                            Common.Errordialog(ActivityPayment.this, jsonObject.get("message").toString());
-                        }
-
-                    }
-
-                } else {
-
-                    if (ProgressDialog != null && ProgressDialog.isShowing())
-                        ProgressDialog.dismiss();
-
-                    ErrorMessage(getString(R.string.error));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                if (ProgressDialog != null && ProgressDialog.isShowing())
-                    ProgressDialog.dismiss();
-
-                String message = "";
-                if (t instanceof SocketTimeoutException) {
-                    message = "Socket Time out. Please try again.";
-                    Common.ShowHttpErrorMessage(ActivityPayment.this, message);
-                } else {
-                    ErrorMessage(getString(R.string.error));
-                }
-            }
-        });
-
-    }
 
 
     private void ErrorMessage(String Message) {
@@ -762,238 +483,6 @@ jsonArr=jsonArray;
         super.onBackPressed();
     }
 
-
-    public void getData(String pin)
-    {
-        ProgressDialog.show();
-
-        pinList=new ArrayList<>();
-        API api = RestAdapter.createAPI();
-        Call<JsonObject> callback_login = api.get_pincode(pin);
-        callback_login.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                if(response.isSuccessful())
-                {
-                    JsonObject jsonObject=response.body();
-
-                    if(jsonObject !=null )
-                    {
-                        if (ProgressDialog != null && ProgressDialog.isShowing())
-                            ProgressDialog.dismiss();
-
-                        JsonArray data_arr=jsonObject.getAsJsonArray("pincodedetail");
-
-                        for(int i=0; i<data_arr.size();i++) {
-                            JsonObject object = data_arr.get(i).getAsJsonObject();
-                            PinModel pinModel = new PinModel();
-
-
-                            pinModel.setPicode(object.get("pincode").getAsString());
-                            pinModel.setArea(object.get("area").getAsString());
-                            String str_array = object.get("shipping_amt").getAsString();
-                            String s = str_array.substring(0, (str_array.length() - 1));
-                            JsonParser parser = new JsonParser();
-                            JsonElement tradeElement = parser.parse(str_array);
-                            JsonArray array = tradeElement.getAsJsonArray();
-                            //Toast.makeText(ActivityAddAddress.this, "asdas \n"+array.get(0).toString(), Toast.LENGTH_LONG).show();
-                            //JsonArray array=object.getAsJsonArray("shipping_amt");
-
-                            for(int j=0; j<array.size(); j++)
-                            {
-                                JsonObject obj=array.get(j).getAsJsonObject();
-                                //Toast.makeText(ActivityAddAddress.this,""+obj.get("max_quantity").getAsString(),Toast.LENGTH_LONG).show();
-                                ShippinModel model=new ShippinModel();
-                                model.setMin_quantity(obj.get("min_quantity").getAsString());
-                                model.setMax_quantity(obj.get("max_quantity").getAsString());
-                                model.setShipping_charges(obj.get("shipping_charges").getAsString());
-
-                                modelList.add(model);
-
-                            }
-                            pinModel.setShippinModelList(modelList);
-
-                            pinList.add(pinModel);
-
-                        }
-
-                        getDataShip();
-
-                        //Toast.makeText(ActivityPayment.this,""+sp[0].toString(),Toast.LENGTH_LONG).show();
-                        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(ActivityPayment.this, android.R.layout.simple_list_item_1, sp);
-                       // act_pincode.setAdapter(adapter);
-                        // List<ShippinModel> models=pinList.get(0).getShippinModelList();
-                        //Toast.makeText(ActivityAddAddress.this,"asdasd"+pinList.get(0).getShippinModelList().get(0).getShipping_charges().toString(),Toast.LENGTH_LONG).show();
-
-                    }
-                }
-
-                else
-                {
-                    ProgressDialog.dismiss();
-                    ErrorMessage("Something Wrong");
-                }
-                //     Toast.makeText(ActivityAddAddress.this,""+response.body(),Toast.LENGTH_LONG).show();
-            }
-
-
-
-
-
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Toast.makeText(ActivityPayment.this,""+t.getMessage(),Toast.LENGTH_LONG).show();
-
-            }
-        });
-    }
-
-
-    public double getQtySum(String qty)
-    {
-        double qt=0;
-        int q=Integer.parseInt(qty);
-        if(q>=100)
-        {
-           qt=Double.parseDouble("."+q);
-        }
-        else
-        {
-            qt=q;
-        }
-
-        return qt;
-    }
-
-
-
-    public String[] getType(String atr)
-    {
-        String[] str=new String[2];
-        double atr_value=0;
-        String s="";
-        if(atr.contains("kg") || atr.contains("Kg"))
-        {
-            atr_value=Double.parseDouble(atr.substring(0,(atr.length()-2)));
-            s="k";
-        }
-        else if(atr.contains("gm") || atr.contains("Gm") || atr.contains("gms") || atr.contains("Gms")|| atr.contains("g") || atr.contains("G"))
-        {
-            if(atr.contains("gms") || atr.contains("Gms"))
-            {
-                atr_value=Double.parseDouble(atr.substring(0,(atr.length()-3)));
-                s="g";
-            }
-            else if(atr.contains("gm") || atr.contains("Gm"))
-            {
-                atr_value=Double.parseDouble(atr.substring(0,(atr.length()-2)));
-                s="g";
-            }
-            else if(atr.contains("g") || atr.contains("G"))
-            {
-                atr_value=Double.parseDouble(atr.substring(0,(atr.length()-1)));
-                s="g";
-            }
-        }
-        else if(atr.contains("Piece") || atr.contains("Pieces") || atr.contains("piece") || atr.contains("pieces") || atr.contains("pic")|| atr.contains("Pic")|| atr.contains("pcs")|| atr.contains("Pcs"))
-        {
-            if(atr.contains("Pieces") || atr.contains("pieces"))
-            {
-                atr_value=Double.parseDouble(atr.substring(0,(atr.length()-6)));
-                s="p";
-            }
-            else if(atr.contains("Piece") || atr.contains("piece"))
-            {
-                atr_value=Double.parseDouble(atr.substring(0,(atr.length()-5)));
-                s="p";
-            }
-            else if(atr.contains("Pic") || atr.contains("pic"))
-            {
-                atr_value=Double.parseDouble(atr.substring(0,(atr.length()-3)));
-                s="p";
-            }
-            else if(atr.contains("pcs") || atr.contains("Pcs"))
-            {
-                atr_value=Double.parseDouble(atr.substring(0,(atr.length()-3)));
-                s="p";
-            }
-            else
-            {
-                atr_value=Double.parseDouble(atr.substring(0,(atr.length()-3)));
-                s="p";
-            }
-
-        }
-        else if(atr.contains("Pack") || atr.contains("pack"))
-        {
-            atr_value=Double.parseDouble(atr.substring(0,(atr.length()-4)));
-            s="p";
-        }
-
-
-        str[0]=String.valueOf(atr_value);
-        str[1]=s;
-        return str;
-    }
-
-    public double setShippinCharge()
-    {
-
-      double max_price= 0;
-        double ship_amt=0;
-        double dec=gms/1000;
-        double min=0;
-        double max=0;
-            del=del+dec;
-
-        if( max_price>=500)
-        {
-            ship_amt=0;
-        }
-        else
-        {
-          if(del==0)
-          {
-              if(pcs<=2)
-              {
-                  ship_amt=10;
-              }
-              else if(pcs>=2 && pcs<=5)
-              {
-                  ship_amt=20;
-              }
-              else if(pcs>5)
-              {
-                  ship_amt=20;
-              }
-          }
-          else
-          {
-              ship_amt = Double.parseDouble(modelList.get(0).getShipping_charges());
-              //double ship_amt = 0;
-              for(int i=0;i<modelList.size();i++)
-              {
-                  min=Double.parseDouble(modelList.get(i).getMin_quantity());
-                  max=Double.parseDouble(modelList.get(i).getMax_quantity());
-
-                  if(del>=min && del<=max) {
-                      ship_amt = Double.parseDouble(modelList.get(i).getShipping_charges());
-                      break;
-                  }
-
-              }
-
-          }
-
-
-
-
-        }
-
-        return ship_amt;
-    }
 
 
     private void processPaytm(String paytm_oreder_id,String total_amount) {
@@ -1099,4 +588,140 @@ jsonArr=jsonArray;
             }
         });
     }
+
+    private void attemptOrder() {
+        try
+        {
+            List<HashMap<String, String>> items = new ArrayList<>();
+            items=db_cart.getCartAll();
+            //rewards = Double.parseDouble(db_cart.getColumnRewards());
+            rewards = Double.parseDouble("0");
+
+            if (items.size() > 0) {
+                JSONArray passArray = new JSONArray();
+                for (int i = 0; i < items.size(); i++) {
+                    HashMap<String, String> map = items.get(i);
+                    // String unt=
+                    JSONObject jObjP = new JSONObject();
+                    try {
+
+                        jObjP.put("product_id", map.get("product_id"));
+                        jObjP.put("qty", map.get("qty"));
+                        jObjP.put("unit_value", map.get("unit_price"));
+                        jObjP.put("unit", map.get("unit"));
+                        jObjP.put("price", map.get("price"));
+                        jObjP.put("rewards", "0");
+                        passArray.put(jObjP);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(ActivityPayment.this,""+e.getMessage(),Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                getuser_id = user_id;
+
+                if (ConnectivityReceiver.isConnected()) {
+
+
+
+                    Date date=new Date();
+
+                    SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+                    String g=dateFormat.format(date);
+                    SimpleDateFormat dateFormat1=new SimpleDateFormat("hh:mm a");
+                    String t=dateFormat1.format(date);
+
+                    gettime=tvTime.getText().toString();
+                    //   Toast.makeText(getActivity(),"Time"+t,Toast.LENGTH_LONG).show();
+                    getdate=tvDate.getText().toString();
+                    getlocation_id=location_id;
+                    getstore_id="";
+                    //gettime="03:00 PM - 03:30 PM";
+                    // getdate="2019-7-23";
+                    Log.e(TAG, "from:" +"03:00 PM - 03:30 PM" + "\ndate:" + "2019-7-23" +
+                            "\n" + "\nuser_id:" + getuser_id + "\n l" + getlocation_id + getstore_id + "\ndata:" + passArray.toString());
+//                    Toast.makeText(ActivityPayment.this, "from:" + gettime + "\ndate:" + getdate +
+//                            "\n" + "\nuser_id:" + getuser_id + "\n" + getlocation_id + getstore_id + "\ndata:" + passArray.toString(),Toast.LENGTH_LONG).show();
+
+                    makeAddOrderRequest(getdate, gettime, getuser_id, getlocation_id, getstore_id, passArray);
+
+
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Toast.makeText(ActivityPayment.this,""+ex.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
     }
+
+    private void makeAddOrderRequest(String date, String gettime, String userid, String
+            location, String store_id, JSONArray passArray) {
+
+        ProgressDialog.show();
+        String tag_json_obj = "json_add_order_req";
+       String  getvalue="Cash On Delivery";
+        total_amount=String.valueOf(amount);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("date", date);
+        params.put("time", gettime);
+        params.put("user_id", userid);
+        params.put("location", location);
+        params.put("delivery_charges", shipping_charges);
+        params.put("total_ammount",total_amount);
+        params.put("payment_method", getvalue);
+        params.put("data", passArray.toString());
+        // Toast.makeText(getActivity(),""+passArray,Toast.LENGTH_LONG).show();
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                Url.ADD_ORDER_URL, params, new com.android.volley.Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    Boolean status = response.getBoolean("responce");
+                    if (status) {
+                        JSONObject object = response.getJSONObject("data");
+                        String msg=object.getString("msg");
+                        String id=object.getString("order_id");
+                        db_cart.clearCart();
+                      ProgressDialog.dismiss();
+
+                      Intent intent=new Intent(ActivityPayment.this,ActivityThank.class);
+                      intent.putExtra("id",id);
+                      intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                      startActivity(intent);
+                      finish();
+
+                        //      Toast.makeText(getActivity(),"success",Toast.LENGTH_LONG).show();
+                    }
+                    else
+
+                    {
+                      ProgressDialog.dismiss();
+                        Toast.makeText(ActivityPayment.this,"Something went wrong",Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    ProgressDialog.dismiss();
+                    Toast.makeText(ActivityPayment.this,""+e.getMessage() ,Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ProgressDialog.dismiss();
+                Module module=new Module(ActivityPayment.this);
+                String msg=module.VolleyErrorMessage(error);
+                Toast.makeText(ActivityPayment.this, ""+msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+
+
+}

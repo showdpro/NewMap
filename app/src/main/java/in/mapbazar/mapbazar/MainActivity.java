@@ -698,15 +698,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 txt_menu_orderhistory.setTextColor(getResources().getColor(R.color.colorPrimary));
                 drawer_layout.closeDrawer(GravityCompat.START);
 
-                actionBar.setTitle(R.string.Orderhistory);
-                layout_item.setVisibility(View.VISIBLE);
-
-                OrderHistoryFragment orderHistoryFragment = new OrderHistoryFragment();
-                FragmentManager orderHistoryfragmentManager = getSupportFragmentManager();
-                orderHistoryfragmentManager.beginTransaction()
-                        .replace(R.id.layout_item, orderHistoryFragment)
-                        .addToBackStack(null)
-                        .commit();
+                Intent intent1=new Intent(MainActivity.this,ActivityOrderDetails.class);
+                startActivity(intent1);
+//                actionBar.setTitle(R.string.Orderhistory);
+//                layout_item.setVisibility(View.VISIBLE);
+//
+//                OrderHistoryFragment orderHistoryFragment = new OrderHistoryFragment();
+//                FragmentManager orderHistoryfragmentManager = getSupportFragmentManager();
+//                orderHistoryfragmentManager.beginTransaction()
+//                        .replace(R.id.layout_item, orderHistoryFragment)
+//                        .addToBackStack(null)
+//                        .commit();
 
                 break;
 
@@ -1014,8 +1016,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.layout_cart :
                 if (deliveryShippingFragment == null) {
                     findViewById(R.id.layout_item).setVisibility(View.VISIBLE);
-                    Intent intent1 = new Intent( MainActivity.this, ActivityCart.class );
-                   startActivity( intent1);
+                    Intent intent5 = new Intent( MainActivity.this, ActivityCart.class );
+                   startActivity( intent5);
                 }
                  break;
             default:

@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class DatabaseCartHandler extends SQLiteOpenHelper {
 
-    private static String DB_NAME = "prodct_cartdb";
+    private static String DB_NAME = "ch_db";
     private static int DB_VERSION = 3;
     private SQLiteDatabase db;
 
@@ -29,12 +29,6 @@ public class DatabaseCartHandler extends SQLiteOpenHelper {
    // public static final String COLUMN_UNIT_VALUE = "unit_value";
     public static final String COLUMN_UNIT = "unit";
     public static final String COLUMN_TYPE = "type";
-
-
-
-
-
-
 
     public DatabaseCartHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -199,6 +193,7 @@ public class DatabaseCartHandler extends SQLiteOpenHelper {
             list.add(map);
             cursor.moveToNext();
         }
+        cursor.close();
         return list;
     }
 
