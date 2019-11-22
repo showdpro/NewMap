@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,7 +24,10 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -70,6 +75,7 @@ import in.mapbazar.mapbazar.util.ConnectivityReceiver;
 import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
 import in.mapbazar.mapbazar.util.DatabaseCartHandler;
 import in.mapbazar.mapbazar.util.Session_management;
+import in.mapbazar.mapbazar.util.SharedPref;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -93,7 +99,7 @@ public class ActivityPayment extends AppCompatActivity {
     String gettime,getdate,getuser_id,getlocation_id,getstore_id;
     double gms=0;
     double pcs=0;
-   LinearLayout linear_pay;
+   LinearLayout linear_pay,lin_wall;
    View line_pay,line1_pay;
 
     //Shared Preferences
@@ -103,10 +109,10 @@ public class ActivityPayment extends AppCompatActivity {
 
     RelativeLayout ly_back;
     LinearLayout lay_status_delivery;
-    LinearLayout lay_status_payment;
+    LinearLayout lay_status_wallet;
     Button txt_place_order;
     ImageView image_status;
-    ImageView image_payment;
+    ImageView image_payment,image_wallet;
     RelativeLayout llDate;
     RelativeLayout llTime;
     CustomTextView tvDate;
@@ -116,8 +122,10 @@ public class ActivityPayment extends AppCompatActivity {
     ArrayList<String> timeSlotList;
     ArrayList<String> allTimeSlotList;
     SelectTimeDialogFragment selectTimeDialogFragment;
+    View view_lin_wall;
+    CheckBox chk_wallet;
 
-    CustomTextView txt_total,txt_shipping,txt_subtotal,txt_qty,txt_wallet;
+    CustomTextView txt_total,txt_shipping,txt_subtotal,txt_qty,txt_wallet,txt_tot_amt;
 
     int pYear, pMonth, pDay;
     DatePickerDialog.OnDateSetListener pDateSetListener;
@@ -164,6 +172,10 @@ public class ActivityPayment extends AppCompatActivity {
         jsonArr=new JsonArray();
         initComponents();
         initdata();
+        if(ConnectivityReceiver.isConnected())
+        {
+            getRefresrh();
+        }
       //  request_payment_status();
 
 //        pin=address.getPincode().toString();
@@ -184,7 +196,12 @@ public class ActivityPayment extends AppCompatActivity {
                  // GetOnlineJsonObject();
                 //    Common.Errordialog(ActivityPayment.this, "Feature not implemented ");
 
-                }else  if (image_status.getVisibility() == View.GONE && image_status.getVisibility() == View.GONE) {
+                }
+               else if(image_wallet.getVisibility() == View.VISIBLE)
+               {
+
+               }
+               else  if (image_status.getVisibility() == View.GONE && image_wallet.getVisibility() == View.GONE) {
                     Common.Errordialog(ActivityPayment.this, "Please select a payment method ");
 
                 }
@@ -197,6 +214,23 @@ public class ActivityPayment extends AppCompatActivity {
 
             }
         });
+
+        chk_wallet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if(b)
+                {
+                    lin_wall.setVisibility(View.VISIBLE);
+                    view_lin_wall.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    lin_wall.setVisibility(View.GONE);
+                    view_lin_wall.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void initComponents() {
@@ -204,13 +238,19 @@ public class ActivityPayment extends AppCompatActivity {
         llDate=(RelativeLayout)findViewById(R.id.ll_date);
         llTime=(RelativeLayout)findViewById(R.id.ll_time);
         lay_status_delivery=(LinearLayout) findViewById(R.id.lay_status_delivery);
-      //  lay_status_payment=(LinearLayout) findViewById(R.id.lay_status_payment);
+        lay_status_wallet=(LinearLayout) findViewById(R.id.lay_status_wallet);
+        lin_wall=(LinearLayout) findViewById(R.id.lin_wall);
         txt_place_order=(Button)findViewById(R.id.txt_place_order);
         image_status=(ImageView) findViewById(R.id.image_status);
-        //image_payment=(ImageView) findViewById(R.id.image_payment);
+        image_wallet=(ImageView) findViewById(R.id.image_wallet);
         tvDate=(CustomTextView)findViewById(R.id.tv_date);
         tvTime=(CustomTextView)findViewById(R.id.tv_time);
         txt_wallet=(CustomTextView)findViewById(R.id.txt_wallet);
+        txt_tot_amt=(CustomTextView)findViewById(R.id.txt_tot_amt);
+        view_lin_wall=(View)findViewById(R.id.view_lin_wall);
+        chk_wallet=(CheckBox)findViewById(R.id.chk_wallet);
+
+
     }
 
     @Override
@@ -231,14 +271,14 @@ public class ActivityPayment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 image_status.setVisibility(View.VISIBLE);
-                image_payment.setVisibility(View.GONE);
+                image_wallet.setVisibility(View.GONE);
             }
         });
-        lay_status_payment.setOnClickListener(new View.OnClickListener() {
+        lay_status_wallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                image_payment.setVisibility(View.VISIBLE);
                 image_status.setVisibility(View.GONE);
+                image_wallet.setVisibility(View.VISIBLE);
             }
         });
 
@@ -596,8 +636,8 @@ public class ActivityPayment extends AppCompatActivity {
         {
             List<HashMap<String, String>> items = new ArrayList<>();
             items=db_cart.getCartAll();
-            //rewards = Double.parseDouble(db_cart.getColumnRewards());
-            rewards = Double.parseDouble("0");
+            rewards = Double.parseDouble(db_cart.getColumnRewards());
+          //  rewards = Double.parseDouble("0");
 
             if (items.size() > 0) {
                 JSONArray passArray = new JSONArray();
@@ -612,7 +652,7 @@ public class ActivityPayment extends AppCompatActivity {
                         jObjP.put("unit_value", map.get("unit_price"));
                         jObjP.put("unit", map.get("unit"));
                         jObjP.put("price", map.get("price"));
-                        jObjP.put("rewards", "0");
+                        jObjP.put("rewards", rewards);
                         passArray.put(jObjP);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -726,14 +766,38 @@ public class ActivityPayment extends AppCompatActivity {
     }
 
 
-    public void getWallet()
-    {
-        ProgressDialog.show();
-        String json_tag="json_wallet";
-        HashMap<String,String> map=new HashMap<>();
-        map.put("user_id",user_id);
+    public void getRefresrh() {
+        String user_id = session_management.getUserDetails().get(Url.KEY_ID);
+        RequestQueue rq = Volley.newRequestQueue(ActivityPayment.this);
+        StringRequest strReq = new StringRequest( Request.Method.GET, Url.WALLET_REFRESH + user_id,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            if (jObj.optString("success").equalsIgnoreCase("success")) {
+                                String wallet_amount = jObj.getString("wallet");
+                                txt_wallet.setText(getResources().getString(R.string.currency)+wallet_amount);
+                                SharedPref.putString(ActivityPayment.this, Url.KEY_WALLET_Ammount, wallet_amount);
+                            } else {
+                                // Toast.makeText(DashboardPage.this, "" + jObj.optString("msg"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-       // CustomVolleyJsonRequest customVolleyJsonRequest=new CustomVolleyJsonRequest(Request.Method.POST,)
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+        };
+        rq.add(strReq);
     }
+
 
 }

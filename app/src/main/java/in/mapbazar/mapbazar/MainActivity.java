@@ -56,6 +56,7 @@ import in.mapbazar.mapbazar.callback.CallbackMessage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import in.mapbazar.mapbazar.util.DatabaseCartHandler;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -334,6 +335,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Broadcast Receiver
     BroadcastReceiver Wishlist = null;
     Boolean WishlistRegistered = false;
+    DatabaseCartHandler db_cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
