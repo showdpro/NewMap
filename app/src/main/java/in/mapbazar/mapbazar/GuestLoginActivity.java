@@ -124,6 +124,10 @@ public class GuestLoginActivity extends AppCompatActivity implements View.OnClic
         //String getsocity_id = sessionManagement.getUserDetails().get(BaseURL.KEY_SOCITY_ID);
         String getsocity_id = "1";
 
+        String mobile = getIntent().getStringExtra( "mobile" );
+        et_phone.setText( mobile );
+        et_phone.setEnabled( false );
+
 
         btn_update.setOnClickListener(this);
         // btn_socity.setOnClickListener(this);

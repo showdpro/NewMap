@@ -132,11 +132,24 @@ else
 
         if(attr.equals("[]"))
         {
-            details_product_per.setText(""+getDiscount(price,mrp)+"% OFF");
+            details_product_price.setText(getResources().getString(R.string.currency)+price);
+            double pp = Double.parseDouble( price );
+            double mm = Double.parseDouble( mrp );
+            if (mm>pp)
+            {
+                details_product_mrp.setText(getResources().getString(R.string.currency)+mrp);
+                details_product_per.setText(""+getDiscount(price,mrp)+"% OFF");
+            }
+            else
+            {
+                details_product_mrp.setVisibility( View.GONE );
+                details_product_per.setVisibility( View.GONE );
+            }
+
 
             status=1;
-            details_product_price.setText(getResources().getString(R.string.currency)+price);
-            details_product_mrp.setText(getResources().getString(R.string.currency)+mrp);
+
+
             details_product_rewards.setText( rewards );
             product_rate.setVisibility(View.VISIBLE);
             //  Toast.makeText(getActivity(),""+atr,Toast.LENGTH_LONG).show();
@@ -172,14 +185,26 @@ else
 
                 String atr_price=String.valueOf(attribute_value);
                 String atr_mrp=String.valueOf(attribute_mrp);
-                int atr_dis=getDiscount(atr_price,atr_mrp);
+                double a_mrp = Double.parseDouble( atr_mrp );
+                double a_price=Double.parseDouble( atr_price );
+
+
                 details_product_price.setText(getResources().getString(R.string.currency)+attribute_value);
-                details_product_mrp.setText(getResources().getString(R.string.currency)+attribute_mrp);
+
+                if (a_mrp>a_price) {
+                    details_product_mrp.setText( getResources().getString( R.string.currency ) + attribute_mrp );
+                    details_product_per.setText( "" + getDiscount( price, mrp ) + "% OFF" );
+                }
+                else
+                {
+                    details_product_per.setVisibility( View.GONE );
+                    details_product_mrp.setVisibility( View.GONE );
+                }
                 dialog_txtId.setText(String.valueOf(atr_id.toString()+"@"+"0"));
                 dialog_txtVar.setText(attribute_value+"@"+attribute_name+"@"+attribute_mrp);
                 dialog_unit_type.setText("\u20B9"+attribute_value+"/"+attribute_name);
                 //  holder.txtTotal.setText("\u20B9"+String.valueOf(list_atr_value.get(0).toString()));
-                details_product_per.setText(""+getDiscount(price,mrp)+"% OFF");
+
                 details_product_rewards.setText( attribute_reward );
 
             } catch (JSONException e) {

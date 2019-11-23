@@ -61,16 +61,27 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/font_20"
                             app:fontName="@string/ubuntu_l"/>
+                        <ImageView
+                            android:id="@+id/search"
+                            android:layout_width="27dp"
+                            android:layout_height="27dp"
+                            android:layout_toLeftOf="@+id/ly_cart"
+                            android:background="@drawable/icons8_search_52px"
+                            android:backgroundTint="@color/white"
+                            android:layout_centerVertical="true"
+                            android:padding="@dimen/space_10"
+                           android:layout_marginRight="@dimen/space_15"/>
                     <RelativeLayout
                         android:id="@+id/ly_cart"
                         android:layout_alignParentRight="true"
                         android:layout_width="@dimen/height_55"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical">
 
                         <RelativeLayout
                             android:id="@+id/layout_cart"
-                            android:layout_width="@dimen/wallet_circle_width"
-                            android:layout_height="@dimen/wallet_circle_width"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:gravity="center"
                             android:padding="@dimen/margin_7">
 
@@ -79,6 +90,7 @@
                                 android:id="@+id/img_filter"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
                                 android:src="@drawable/cart_icon_action" />
 
 
@@ -86,10 +98,10 @@
 
                         <RelativeLayout
                             android:id="@+id/layout_cart_cout"
-                            android:layout_width="@dimen/height_25"
-                            android:layout_height="@dimen/height_25"
+                            android:layout_width="@dimen/height_20"
+                            android:layout_height="@dimen/height_20"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/margin_5"
+                            android:layout_marginRight="@dimen/margin_10"
                             android:layout_marginTop="@dimen/margin_5"
                             android:background="@drawable/circle_white"
                             android:gravity="center"
@@ -286,8 +298,8 @@
                             android:id="@+id/img_wallet"
                             android:layout_width="@dimen/menu_listimage"
                             android:layout_height="@dimen/menu_listimage"
-                            android:background="@drawable/icons8_wallet_64px"
-                            android:backgroundTint="#FF686D68"/>
+                            android:background="@drawable/wallet_64px"
+                           />
 
                         <in.mapbazar.mapbazar.View.CustomTextView
                             android:id="@+id/txt_menu_wallet"
@@ -322,8 +334,8 @@
                             android:id="@+id/img_rewards"
                             android:layout_width="@dimen/menu_listimage"
                             android:layout_height="@dimen/menu_listimage"
-                            android:background="@drawable/icons8_gift_64px"
-                            android:backgroundTint="#FF686D68"/>
+                            android:background="@drawable/gift_64px_1"
+                           />
 
                         <in.mapbazar.mapbazar.View.CustomTextView
                             android:id="@+id/txt_menu_rewards"

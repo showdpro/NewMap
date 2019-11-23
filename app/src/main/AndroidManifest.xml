@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <!-- <intent-filter android:label="@string/app_name"> -->
+        <activity android:name=".ResetPassword"></activity>
+        <activity android:name=".OtpVerification" />
+        <activity android:name=".MobileVerify" /> <!-- <intent-filter android:label="@string/app_name"> -->
         <!-- <action android:name="android.intent.action.VIEW" /> -->
         <!-- <category android:name="android.intent.category.DEFAULT" /> -->
         <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
@@ -54,8 +56,8 @@
         <activity
             android:name=".ActivityCart"
             android:screenOrientation="portrait" />
-                <activity
-            android:name="in.mapbazar.mapbazar.MyOrderDetail"
+        <activity
+            android:name=".MyOrderDetail"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ActivityMatchProductDetails"
@@ -92,11 +94,11 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
 </manifest>

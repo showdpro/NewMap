@@ -85,8 +85,9 @@ public class Url {
     public static String GET_CATEGORY_ICON_URL = BASE_URL + "index.php/api/icon";
     public static String COUPON_CODE = BASE_URL + "index.php/api/get_coupons";
 
-    public static String URL_SEND_OTP = BASE_URL + "index.php/api/login_with_otp";
-    public static String URL_REG_OTP = BASE_URL + "index.php/api/register_with_otp";
+    public static String URL_SEND_OTP = BASE_URL + "index.php/api/generate_otp";
+    public static String URL_REG_OTP = BASE_URL + "index.php/api/verification_mobile";
+    public static String URL_GUEST_OTP = BASE_URL + "index.php/api/guest_verification_mobile";
 
     //Home PAGE
 

@@ -30,7 +30,7 @@ public class ActivityLoginRegister extends AppCompatActivity implements View.OnC
 
     Dialog ProgressDialog;
   CustomEditTextView edtMobile_login,edtPassword_login;
-  CustomTextView txtLogin,txtRegister,txtGuest;
+  CustomTextView txtLogin,txtRegister,txtGuest ,txt_frgotpass;
   ImageView imgPassword;
 
     private boolean isConfirmPasswordShow;
@@ -54,12 +54,14 @@ public class ActivityLoginRegister extends AppCompatActivity implements View.OnC
         txtLogin=(CustomTextView)findViewById(R.id.txtLogin);
         txtRegister=(CustomTextView)findViewById(R.id.txtRegister);
         txtGuest=(CustomTextView)findViewById(R.id.txtGuest);
+        txt_frgotpass=(CustomTextView)findViewById( R.id.txtForgotPassword );
         imgPassword=(ImageView)findViewById(R.id.imgPassword);
 
         txtLogin.setOnClickListener(this);
         txtRegister.setOnClickListener(this);
         txtGuest.setOnClickListener(this);
         imgPassword.setOnClickListener(this);
+        txt_frgotpass.setOnClickListener( this );
 
     }
 
@@ -74,13 +76,21 @@ public class ActivityLoginRegister extends AppCompatActivity implements View.OnC
         }
         else if(id == R.id.txtRegister)
         {
-            Intent intent=new Intent(ActivityLoginRegister.this,RegisterActivity.class);
+            Intent intent=new Intent(ActivityLoginRegister.this,MobileVerify.class);
+            intent.putExtra("type","r");
             startActivity(intent);
         }
         else if(id == R.id.txtGuest)
         {
-            Intent intent=new Intent(ActivityLoginRegister.this,GuestLoginActivity.class);
+            Intent intent=new Intent(ActivityLoginRegister.this,MobileVerify.class);
+            intent.putExtra("type","g");
             startActivity(intent);
+        }
+        else if(id == R.id.txtForgotPassword)
+        {
+            Intent intent = new Intent( ActivityLoginRegister.this , MobileVerify.class );
+            intent.putExtra("type","f");
+            startActivity( intent );
         }
         else if (id == R.id.imgPassword) {
             if (isConfirmPasswordShow) {

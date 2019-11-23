@@ -74,10 +74,10 @@ public class Reward_fragment extends Fragment {
             public void onClick(View v) {
                 Shift_Reward_to_WAllet();
               //  gifImageView.setVisibility(View.VISIBLE);
-                final View myview = gifImageView;
+              //  final View myview = gifImageView;
                 view.postDelayed(new Runnable() {
                     public void run() {
-                        myview.setVisibility(View.GONE);
+                       // myview.setVisibility(View.GONE);
                     }
                 }, 5000);
             }

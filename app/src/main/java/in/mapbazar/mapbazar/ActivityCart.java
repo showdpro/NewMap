@@ -37,7 +37,7 @@ import in.mapbazar.mapbazar.util.Session_management;
 
 public class ActivityCart extends AppCompatActivity implements View.OnClickListener{
     private RecyclerView rv_cart;
-    public static CustomTextView tv_clear, tv_total, tv_item;
+    public static CustomTextView tv_clear, tv_total, tv_item ,tv_rewards;
     private RelativeLayout btn_checkout ,back;
 
     //  private DatabaseHandler db;
@@ -55,6 +55,7 @@ public class ActivityCart extends AppCompatActivity implements View.OnClickListe
         tv_clear = (CustomTextView) findViewById(R.id.tv_cart_clear);
         tv_total = (CustomTextView) findViewById(R.id.tv_cart_total);
         tv_item = (CustomTextView) findViewById(R.id.tv_cart_item);
+        tv_rewards=(CustomTextView)findViewById( R.id.tv_total_rewards );
         btn_checkout = (RelativeLayout) findViewById(R.id.btn_cart_checkout);
         rv_cart = (RecyclerView) findViewById(R.id.rv_cart);
         rv_cart.setLayoutManager(new LinearLayoutManager( ActivityCart.this));
@@ -63,6 +64,7 @@ public class ActivityCart extends AppCompatActivity implements View.OnClickListe
         db_cart=new DatabaseCartHandler(this);
         tv_item.setText(String.valueOf(db_cart.getCartCount()));
         tv_total.setText(getResources().getString(R.string.currency)+db_cart.getTotalAmount());
+        tv_rewards.setText( db_cart.getTotalRewards() );
 
         ArrayList<HashMap<String, String>> map = db_cart.getCartAll();
 //        final HashMap<String, String> map1 = map.get(0);

@@ -11,11 +11,11 @@ import java.util.HashMap;
 
 public class DatabaseCartHandler extends SQLiteOpenHelper {
 
-    private static String DB_NAME = "maps_cart";
+    private static String DB_NAME = "maps_cartdbs";
     private static int DB_VERSION = 3;
     private SQLiteDatabase db;
 
-    public static final String CART_TABLE = "cart_table";
+    public static final String CART_TABLE = "cart_tables";
 
     public static final String COLUMN_ID = "product_id";
     public static final String COLUMN_CID = "cart_id";
@@ -159,6 +159,20 @@ public class DatabaseCartHandler extends SQLiteOpenHelper {
             return "0";
         }
     }
+    public String getTotalRewards() {
+        db = getReadableDatabase();
+        String qry = "Select SUM(" + COLUMN_REWARDS + ") as total_rewards  from " + CART_TABLE;
+        Cursor cursor = db.rawQuery(qry, null);
+        cursor.moveToFirst();
+        String total = cursor.getString(cursor.getColumnIndex("total_rewards"));
+        if (total != null) {
+
+            return total;
+        } else {
+            return "0";
+        }
+    }
+
 
     public String getTotalMRP() {
         db = getReadableDatabase();

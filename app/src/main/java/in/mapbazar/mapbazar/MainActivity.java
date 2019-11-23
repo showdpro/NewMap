@@ -317,6 +317,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.image_close_drawer)
     ImageView imageCloseDrawer;
 
+    @BindView(R.id.search)
+    ImageView search_icon;
 
     @BindView(R.id.layout_cart)
     RelativeLayout layout_cart;
@@ -539,6 +541,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layout_menu_mylogin.setOnClickListener(this);
         layout_menu_logout.setOnClickListener(this);
         imageCloseDrawer.setOnClickListener(this);
+        search_icon.setOnClickListener( this );
     }
 
     public void initView() {
@@ -673,7 +676,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.layout_menu_wallet:
                 selectedItem();
-                img_wallet.setImageResource(R.drawable.icons8_wallet_50px_1);
+                img_wallet.setImageResource(R.drawable.icons8_wallet_64px_1);
                 txt_menu_wallet.setTextColor(getResources().getColor(R.color.colorPrimary));
                 drawer_layout.closeDrawer(GravityCompat.START);
 
@@ -688,7 +691,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.layout_menu_rewards:
                 selectedItem();
-                img_rewards.setImageResource(R.drawable.icons8_prize_32px);
+                img_rewards.setImageResource(R.drawable.gift_64px);
                 txt_menu_rewards.setTextColor(getResources().getColor(R.color.colorPrimary));
                 drawer_layout.closeDrawer(GravityCompat.START);
 
@@ -1013,6 +1016,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                    startActivity( intent1);
                 }
                  break;
+            case R.id.search :
+                Search_fragment search_fragment = new Search_fragment();
+                FragmentManager searchManager = getSupportFragmentManager();
+               searchManager.beginTransaction()
+                        .replace(R.id.layout_item, search_fragment)
+                        .addToBackStack(null)
+                        .commit();
+                break;
+
             default:
                 break;
 

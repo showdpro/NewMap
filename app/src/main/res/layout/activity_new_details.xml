@@ -159,6 +159,41 @@
                 android:layout_height="@dimen/margin_1"
                 android:visibility="gone"
                 android:background="@color/gray1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_100"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_7"
+                >
+
+                <in.mapbazar.mapbazar.View.CustomTextView
+                    android:id="@+id/txt_rewards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Rewards :"
+                    android:textColor="@color/black_gray"
+                    android:textSize="@dimen/font_15"
+                    app:fontName="@string/ubuntu_r" />
+
+
+                <in.mapbazar.mapbazar.View.CustomTextView
+                    android:id="@+id/tv_total_rewards"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|right"
+                    android:padding="@dimen/margin_3"
+                    android:textColor="@color/black_gray"
+                    android:textSize="@dimen/font_15"
+                    app:fontName="@string/ubuntu_r" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_1"
+                android:background="@color/gray1"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -172,7 +207,7 @@
                     android:id="@+id/txt_tax"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total :"
+                    android:text="Total Amount :"
                     android:textColor="@color/black_gray"
                     android:textSize="@dimen/font_15"
                     app:fontName="@string/ubuntu_r" />

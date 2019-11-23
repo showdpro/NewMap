@@ -58,6 +58,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         edtconfirmPassword=(CustomEditTextView)findViewById(R.id.edtconfirmPassword);
 
         switch_driver_status=(Switch)findViewById(R.id.switch_driver_status);
+        String phone_number = getIntent().getStringExtra( "mobile" );
+        edtMobile.setText( phone_number );
+        edtMobile.setEnabled(false);
 
         txtregister=(CustomTextView)findViewById(R.id.txtregister);
         imgConfirmpass=(ImageView) findViewById(R.id.imgConfirmpass);
