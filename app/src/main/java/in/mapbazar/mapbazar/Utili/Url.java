@@ -159,6 +159,7 @@ public class Url {
     public static String GET_PRODUCT_NEWEST = BASE_URL + "index.php/api/get_products_new";
     public static String GET_PINCODES = BASE_URL + "index.php/api/get_pincode";
     public static String GUEST_LOGIN = BASE_URL + "index.php/api/guest_login";
+    public static String WALLET_ORDER = BASE_URL + "index.php/api/send_order_with_wallet";
 
 
 }

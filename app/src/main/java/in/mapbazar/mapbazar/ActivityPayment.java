@@ -90,10 +90,13 @@ public class ActivityPayment extends AppCompatActivity {
     String channel_id="";
     String website="";
     String indus_type_id="";
+    double wlt_amt=0;
     String call_url="";
     double subtotal=0;
+    String flag="";
     double delivery_carges=0;
     double amount=0;
+    String getvalue="";
     CustomTextView notify;
     private Double rewards;
     String gettime,getdate,getuser_id,getlocation_id,getstore_id;
@@ -189,6 +192,8 @@ public class ActivityPayment extends AppCompatActivity {
 
                if (image_status.getVisibility() == View.VISIBLE) {
 
+                   getvalue="Cash On Delivery";
+                   flag="cash";
 //                    Toast.makeText(ActivityPayment.this,"data :- "+tvDate.getText().toString()+"\n time :-- "+tvTime.getText().toString()+
 //                            "\n loc"+location_id+"\n user_id "+user_id+"\n ship - "+shipping_charges,Toast.LENGTH_LONG).show();
 
@@ -199,7 +204,18 @@ public class ActivityPayment extends AppCompatActivity {
                 }
                else if(image_wallet.getVisibility() == View.VISIBLE)
                {
+                getvalue="Wallet";
+                   flag="wallet";
 
+                   double tot=amount;
+                   if(wlt_amt>tot)
+                   {
+                      attemptOrder();
+                   }
+                   else
+                   {
+                       Toast.makeText(ActivityPayment.this,"No enough wallet amount to order",Toast.LENGTH_LONG).show();
+                   }
                }
                else  if (image_status.getVisibility() == View.GONE && image_wallet.getVisibility() == View.GONE) {
                     Common.Errordialog(ActivityPayment.this, "Please select a payment method ");
@@ -682,10 +698,21 @@ public class ActivityPayment extends AppCompatActivity {
                     // getdate="2019-7-23";
                     Log.e(TAG, "from:" +"03:00 PM - 03:30 PM" + "\ndate:" + "2019-7-23" +
                             "\n" + "\nuser_id:" + getuser_id + "\n l" + getlocation_id + getstore_id + "\ndata:" + passArray.toString());
+
+                    if(flag.equals("cash"))
+                    {
+                        Toast.makeText(ActivityPayment.this,"cash",Toast.LENGTH_LONG).show();
+                        makeAddOrderRequest(getdate, gettime, getuser_id, getlocation_id, getstore_id, passArray);
+                    }
+                    else if(flag.equals("wallet"))
+                    {
+                        Toast.makeText(ActivityPayment.this,"wallet",Toast.LENGTH_LONG).show();
+                        makeWalletOrderRequest(getdate, gettime, getuser_id, getlocation_id, getstore_id,String.valueOf(wlt_amt) ,passArray);
+                    }
 //                    Toast.makeText(ActivityPayment.this, "from:" + gettime + "\ndate:" + getdate +
 //                            "\n" + "\nuser_id:" + getuser_id + "\n" + getlocation_id + getstore_id + "\ndata:" + passArray.toString(),Toast.LENGTH_LONG).show();
 
-                    makeAddOrderRequest(getdate, gettime, getuser_id, getlocation_id, getstore_id, passArray);
+
 
 
                 }
@@ -704,7 +731,7 @@ public class ActivityPayment extends AppCompatActivity {
 
         ProgressDialog.show();
         String tag_json_obj = "json_add_order_req";
-       String  getvalue="Cash On Delivery";
+
         total_amount=String.valueOf(amount);
         Map<String, String> params = new HashMap<String, String>();
         params.put("date", date);
@@ -766,6 +793,74 @@ public class ActivityPayment extends AppCompatActivity {
     }
 
 
+    private void makeWalletOrderRequest(String date, String gettime, String userid, String
+            location, String store_id,String wall_amt, JSONArray passArray) {
+
+        ProgressDialog.show();
+        Toast.makeText(ActivityPayment.this,"amt:- "+amount+"\n wal:- "+wall_amt+"\n get_value :- "+getvalue,Toast.LENGTH_LONG).show();
+        String tag_json_obj = "json_add_order_req";
+        total_amount=String.valueOf(amount);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("date", date);
+        params.put("time", gettime);
+        params.put("user_id", userid);
+        params.put("location", location);
+        params.put("delivery_charges", shipping_charges);
+        params.put("total_ammount",total_amount);
+        params.put("payment_method", getvalue);
+        params.put("wallet_amount", wall_amt);
+        params.put("data", passArray.toString());
+        // Toast.makeText(getActivity(),""+passArray,Toast.LENGTH_LONG).show();
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                Url.WALLET_ORDER, params, new com.android.volley.Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    Boolean status = response.getBoolean("responce");
+                    if (status) {
+                        JSONObject object = response.getJSONObject("data");
+                        String msg=object.getString("msg");
+                        String id=object.getString("order_id");
+                        db_cart.clearCart();
+                        ProgressDialog.dismiss();
+
+                        Intent intent=new Intent(ActivityPayment.this,ActivityThank.class);
+                        intent.putExtra("id",id);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+
+                        //      Toast.makeText(getActivity(),"success",Toast.LENGTH_LONG).show();
+                    }
+                    else
+
+                    {
+                        ProgressDialog.dismiss();
+                        Toast.makeText(ActivityPayment.this,"Something went wrong",Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    ProgressDialog.dismiss();
+                    Toast.makeText(ActivityPayment.this,""+e.getMessage() ,Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ProgressDialog.dismiss();
+                Module module=new Module(ActivityPayment.this);
+                String msg=module.VolleyErrorMessage(error);
+                Toast.makeText(ActivityPayment.this, ""+msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+
+
     public void getRefresrh() {
         String user_id = session_management.getUserDetails().get(Url.KEY_ID);
         RequestQueue rq = Volley.newRequestQueue(ActivityPayment.this);
@@ -777,6 +872,7 @@ public class ActivityPayment extends AppCompatActivity {
                             JSONObject jObj = new JSONObject(response);
                             if (jObj.optString("success").equalsIgnoreCase("success")) {
                                 String wallet_amount = jObj.getString("wallet");
+                                wlt_amt=Double.parseDouble(wallet_amount);
                                 txt_wallet.setText(getResources().getString(R.string.currency)+wallet_amount);
                                 SharedPref.putString(ActivityPayment.this, Url.KEY_WALLET_Ammount, wallet_amount);
                             } else {

@@ -50,6 +50,7 @@ import in.mapbazar.mapbazar.Fragment.TestimonialsFragment;
 
 import in.mapbazar.mapbazar.Utili.CircleImageView;
 import in.mapbazar.mapbazar.Utili.Common;
+import in.mapbazar.mapbazar.Utili.Url;
 import in.mapbazar.mapbazar.View.CustomTextView;
 import in.mapbazar.mapbazar.View.DialogUtils;
 import in.mapbazar.mapbazar.callback.CallbackMessage;
@@ -57,6 +58,7 @@ import in.mapbazar.mapbazar.callback.CallbackMessage;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.mapbazar.mapbazar.util.DatabaseCartHandler;
+import in.mapbazar.mapbazar.util.Session_management;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -336,6 +338,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     BroadcastReceiver Wishlist = null;
     Boolean WishlistRegistered = false;
     DatabaseCartHandler db_cart;
+    Session_management session_management;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -484,14 +487,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View header = nav_view.getHeaderView(0);
 
 
-        if (sPref.getBoolean("islogin", false)) {
-            txt_menu_mylogin.setText(sPref.getString("name", ""));
-            userName.setText(sPref.getString("name", ""));
+        if (session_management.isLoggedIn()) {
+            txt_menu_mylogin.setText(session_management.getUserDetails().get(Url.KEY_NAME));
+            userName.setText(session_management.getUserDetails().get(Url.KEY_NAME));
             lay_islogin.setVisibility(View.VISIBLE);
             layout_menu_loginregister.setVisibility(View.GONE);
+
         } else {
             lay_islogin.setVisibility(View.GONE);
             layout_menu_loginregister.setVisibility(View.VISIBLE);
+            layout_menu_rewards.setVisibility(View.GONE);
+            layout_menu_wallet.setVisibility(View.GONE);
         }
 
         if (sPref.getInt("wishlist", 0) == 0) {
@@ -704,12 +710,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 actionBar.setTitle(R.string.Orderhistory);
                 layout_item.setVisibility(View.VISIBLE);
 
-                OrderHistoryFragment orderHistoryFragment = new OrderHistoryFragment();
-                FragmentManager orderHistoryfragmentManager = getSupportFragmentManager();
-                orderHistoryfragmentManager.beginTransaction()
-                        .replace(R.id.layout_item, orderHistoryFragment)
-                        .addToBackStack(null)
-                        .commit();
+                Intent myOrderDetail=new Intent(MainActivity.this,ActivityOrderDetails.class);
+                startActivity(myOrderDetail);
+//                OrderHistoryFragment orderHistoryFragment = new OrderHistoryFragment();
+//                FragmentManager orderHistoryfragmentManager = getSupportFragmentManager();
+//                orderHistoryfragmentManager.beginTransaction()
+//                        .replace(R.id.layout_item, orderHistoryFragment)
+//                        .addToBackStack(null)
+//                        .commit();
 
                 break;
 
@@ -731,9 +739,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.layout_menu_loginregister:
-             //   selectedItem();
-             //   img_loginregister.setImageResource(R.drawable.user_icon_active);
-             //   txt_menu_loginregister.setTextColor(getResources().getColor(R.color.colorPrimary));
+                selectedItem();
+                img_loginregister.setImageResource(R.drawable.user_icon_active);
+                txt_menu_loginregister.setTextColor(getResources().getColor(R.color.colorPrimary));
                 drawer_layout.closeDrawers();
 
                 Intent login = new Intent(MainActivity.this, ActivityLoginRegister.class);
@@ -982,25 +990,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onSuccess(Dialog dialog) {
                         dialog.dismiss();
 
-                        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                        SharedPreferences.Editor sh = sPref.edit();
-                        sh.putString("uid", "");
-                        sh.putBoolean("islogin", false);
-                        sh.putString("name", "");
-                        sh.putString("email", "");
-                        sh.putString("password", "");
-                        sh.putString("phonenumber", "");
-                        sh.putString("facebookid", "");
-                        sh.putInt("Cart", 0);
-                        sh.putInt("wishlist", 0);
-                        sh.commit();
-                        sh.clear();
-
-                        Toast.makeText(MainActivity.this,"asdasd",Toast.LENGTH_LONG).show();
-                        finishAffinity();
-                        System.exit(0);
-
-
+                        session_management.logoutSession();
+                        onRestart();
 
                     }
 
