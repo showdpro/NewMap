@@ -120,6 +120,7 @@ import in.mapbazar.mapbazar.util.ConnectivityReceiver;
 import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
 import in.mapbazar.mapbazar.util.DatabaseCartHandler;
 import in.mapbazar.mapbazar.util.RecyclerTouchListener;
+import in.mapbazar.mapbazar.util.Session_management;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -138,6 +139,7 @@ public class HomeFragment extends Fragment {
     String getcat_title;
     ScrollView scrollView;
     TextView footer ;
+    Session_management session_management;
     SharedPreferences sharedpreferences;
     Dialog ProgressDialog;
     Animation animation;
@@ -180,6 +182,7 @@ public class HomeFragment extends Fragment {
         ProgressDialog = new Dialog(Common.Activity, android.R.style.Theme_Translucent_NoTitleBar);
         ProgressDialog.setContentView(R.layout.progressbar);
         ProgressDialog.setCancelable(false);
+        session_management=new Session_management(getActivity());
         setHasOptionsMenu(true);
         ((MainActivity) getActivity()).setTitle(getResources().getString(R.string.app_name));
        // ((MainActivity) getActivity()).updateHeader();
@@ -415,6 +418,8 @@ public class HomeFragment extends Fragment {
                 Intent intent=new Intent(getActivity(),ActivityCategoryProduct.class);
                 intent.putExtra("cat_id",getid);
                 intent.putExtra( "title" ,title );
+                session_management.setCat_id(getid);
+                session_management.setFilter_id("");
                 startActivity(intent);
                 // args.putString( "" );
 

@@ -47,6 +47,7 @@ import java.util.Map;
 
 import in.mapbazar.mapbazar.util.ConnectivityReceiver;
 import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
+import in.mapbazar.mapbazar.util.Session_management;
 
 public class ActivityCategoryProduct extends AppCompatActivity implements View.OnClickListener {
 
@@ -56,11 +57,13 @@ public class ActivityCategoryProduct extends AppCompatActivity implements View.O
 
     SortAdapter sortAdapter;
     //Shared Preferences
+    Session_management session_management;
     private SharedPreferences sPref;
     Activity activity=ActivityCategoryProduct.this;
     RelativeLayout back ,layout_cart ;
     RecyclerView recyclerView;
     Dialog ProgressDialog;
+    String filter_cat_id,min,max;
     private List<Product_model> product_modelList = new ArrayList<>();
     private Product_adapter adapter_product;
 String getcat_id="";
@@ -75,16 +78,33 @@ CustomTextView txt_filter,txt_sort;
    recyclerView=findViewById(R.id.recyclerView);
    layout_cart=findViewById( R.id.layout_cart );
    layout_cart.setOnClickListener( this );
+   session_management=new Session_management(ActivityCategoryProduct.this);
 
         initComponent();
-     getcat_id=getIntent().getStringExtra("cat_id");
+    // getcat_id=getIntent().getStringExtra("cat_id");
+     getcat_id=session_management.getCat_id();
+     if(getcat_id.isEmpty() || getcat_id.equals("") || getcat_id.equals("null"))
+     {
+         filter_cat_id=session_management.getFilter_id();
+         min=getIntent().getStringExtra("min");
+         max=getIntent().getStringExtra("max");
+         makeFilterProductRequest(filter_cat_id,min,max);
+
+     }
+     else
+     {
+         makeGetProductRequest(getcat_id);
+
+     }
+        //filter_cat_id=getIntent().getStringExtra("filter_cat_id");
+
      title=getIntent().getStringExtra("title");
         if (ConnectivityReceiver.isConnected()) {
             //Shop by Catogary
             // makeGetSliderCategoryRequest(id);
             // Toast.makeText(getActivity(),"a"+getcat_id,Toast.LENGTH_LONG).show();
-           // makeGetCategoryRequest(getcat_id);
-            makeGetProductRequest(getcat_id);
+
+
             //Deal Of The Day Products
             //      makedealIconProductRequest(get_deal_id);
             //Top Sale Products
@@ -101,6 +121,79 @@ CustomTextView txt_filter,txt_sort;
         }
 
     }
+
+    private void makeFilterProductRequest(String filter_cat_id, String min, String max) {
+        ProgressDialog.show();
+        String tag_json_obj = "json_product_req";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("cat_id", filter_cat_id);
+        params.put("min_price", min);
+        params.put("max_price", max);
+
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                Url.GET_PRODUCT_URL, params, new com.android.volley.Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("rett" +
+                        "", response.toString());
+                ProgressDialog.dismiss();
+                try {
+
+                    Boolean status = response.getBoolean("responce");
+
+                    if (status) {
+
+                        ///         Toast.makeText(getActivity(),""+response.getString("data"),Toast.LENGTH_LONG).show();
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<Product_model>>() {
+                        }.getType();
+                        product_modelList = gson.fromJson(response.getString("data"), listType);
+                        adapter_product = new Product_adapter(product_modelList, ActivityCategoryProduct.this);
+
+                        recyclerView.setAdapter(adapter_product);
+                        adapter_product.notifyDataSetChanged();
+
+                        if (product_modelList.isEmpty()) {
+
+
+                            recyclerView.setVisibility( View.GONE );
+
+
+                            Toast.makeText(ActivityCategoryProduct.this, getResources().getString(R.string.no_rcord_found), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                } catch (JSONException e) {
+
+                    //   e.printStackTrace();
+                    String ex=e.getMessage();
+
+
+
+
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Module module=new Module(ActivityCategoryProduct.this);
+                String msg=module.VolleyErrorMessage(error);
+                Toast.makeText(ActivityCategoryProduct.this, ""+msg, Toast.LENGTH_SHORT).show();
+//                VolleyLog.d(TAG, "Error: " + error.getMessage());
+//                //loadingBar.dismiss();
+//                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+//                    loadingBar.dismiss();
+//                    Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
+//                }
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+
     private void initComponent() {
 
 
@@ -137,6 +230,7 @@ CustomTextView txt_filter,txt_sort;
     }
     private void makeDescendingProductRequest(String cat_id) {
         String tag_json_obj = "json_product_desc_req";
+        Toast.makeText(ActivityCategoryProduct.this,"cat_id:-  "+cat_id+"\nfilter_id:-- "+filter_cat_id,Toast.LENGTH_LONG).show();
         Map<String, String> params = new HashMap<String, String>();
         params.put("cat_id", cat_id);
         ProgressDialog.show();
@@ -189,6 +283,7 @@ CustomTextView txt_filter,txt_sort;
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
     }
     private void makeAscendingProductRequest(String cat_id) {
+        Toast.makeText(ActivityCategoryProduct.this,"cat_id:-  "+cat_id+"\nfilter_id:-- "+filter_cat_id,Toast.LENGTH_LONG).show();
         String tag_json_obj = "json_product_asc_req";
         Map<String, String> params = new HashMap<String, String>();
         params.put("cat_id", cat_id);
@@ -244,7 +339,9 @@ CustomTextView txt_filter,txt_sort;
     private void makeNewestProductRequest(String cat_id) {
         String tag_json_obj = "json_product_newest_req";
         Map<String, String> params = new HashMap<String, String>();
-        params.put("cat_id", cat_id);
+
+        Toast.makeText(ActivityCategoryProduct.this,""+cat_id,Toast.LENGTH_LONG).show();
+        params.put("cat_id",cat_id);
         product_modelList.clear();
        ProgressDialog.show();
         CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
@@ -312,8 +409,14 @@ CustomTextView txt_filter,txt_sort;
         int  id=view.getId();
         if(id == R.id.txt_filter)
         {
+
+
+
+
             Intent filter_intent = new Intent(ActivityCategoryProduct.this, ProductFilter.class);
+            filter_intent.putExtra("cat_id",getcat_id);
             startActivity(filter_intent);
+            finish();
         }
         else if(id == R.id.ly_back)
         {
@@ -326,7 +429,10 @@ CustomTextView txt_filter,txt_sort;
         }
         else if (id == R.id.txt_sort) {
 
+           String c_id="";
             final ArrayList <String>  sort_List = new ArrayList<>(  );
+
+
             sort_List.add( "Price Low - High" );
             sort_List.add("Price High - Low");
             sort_List.add("Newest First");
@@ -342,27 +448,30 @@ CustomTextView txt_filter,txt_sort;
 
             final AlertDialog ddlg=builder.create();
             ddlg.show();
-            l1.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+
+            final String finalC_id = c_id;
+            l1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     ddlg.dismiss();
                     String item = sort_List.get( i ).toString();
-                    //final String cat_id = getArguments().getString("cat_id");
-                    final String cat_id = getcat_id;
-
-                    if (item.equals( "Price Low - High" ))
+          if (item.equals( "Price Low - High" ))
                     {
+
                         ddlg.dismiss();
+
+
+
                       //  Toast.makeText(activity,"l-h"+cat_id,Toast.LENGTH_LONG).show();
-                        makeAscendingProductRequest( cat_id );
+                        makeAscendingProductRequest(getcat_id);
 
                     }
                     else if(item.equals( "Price High - Low" ))
                     {
                         //  Toast.makeText( getActivity(), "category id :" +cat_id, Toast.LENGTH_SHORT ).show();
                         ddlg.dismiss();
-                     //   Toast.makeText(activity,"h-l",Toast.LENGTH_LONG).show();
-                      makeDescendingProductRequest(cat_id);
+
+                      makeDescendingProductRequest(getcat_id);
 
 
 
@@ -370,8 +479,8 @@ CustomTextView txt_filter,txt_sort;
                     else if(item.equals( "Newest First" ))
                     {
                         ddlg.dismiss();
-                       // Toast.makeText(activity,"new",Toast.LENGTH_LONG).show();
-                       makeNewestProductRequest( cat_id );
+
+                       makeNewestProductRequest(getcat_id);
 
                     }
                     else if (item.equals( "Trending" ))

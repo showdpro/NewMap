@@ -198,4 +198,26 @@ public class Session_management {
 
         return prefs3.getString(KEY_ID, null);
     }
+
+    public void setCat_id(String id)
+    {
+        editor2.putString(CAT_ID,id);
+        editor2.commit();
+    }
+
+    public String getCat_id()
+    {
+        return prefs2.getString(CAT_ID,null);
+    }
+
+    public void setFilter_id(String id)
+    {
+        editor2.putString(FILTER_ID,id);
+        editor2.commit();
+    }
+
+    public String getFilter_id()
+    {
+        return prefs2.getString(FILTER_ID,null);
+    }
 }

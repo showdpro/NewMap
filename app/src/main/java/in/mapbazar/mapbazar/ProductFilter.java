@@ -1,6 +1,7 @@
 package in.mapbazar.mapbazar;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +15,21 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import in.mapbazar.mapbazar.Adapter.BrandAdapter;
 import in.mapbazar.mapbazar.Adapter.ColorAdapter;
+import in.mapbazar.mapbazar.Adapter.Product_adapter;
 import in.mapbazar.mapbazar.Adapter.SizeAdapter;
 import in.mapbazar.mapbazar.Adapter.TagsAdapter;
 import in.mapbazar.mapbazar.Model.FilterProduct.FilterBrand;
@@ -28,20 +38,27 @@ import in.mapbazar.mapbazar.Model.FilterProduct.FilterData;
 import in.mapbazar.mapbazar.Model.FilterProduct.FilterSize;
 import in.mapbazar.mapbazar.Model.FilterProduct.FilterTag;
 
+import in.mapbazar.mapbazar.Model.Product_model;
+import in.mapbazar.mapbazar.Modules.Module;
 import in.mapbazar.mapbazar.R;
 
 import in.mapbazar.mapbazar.Utili.Common;
+import in.mapbazar.mapbazar.Utili.Url;
 import in.mapbazar.mapbazar.View.CustomTextView;
 import in.mapbazar.mapbazar.connection.API;
 import in.mapbazar.mapbazar.connection.RestAdapter;
 
 
+import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import in.mapbazar.mapbazar.util.CustomVolleyJsonRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -149,6 +166,7 @@ public class ProductFilter extends AppCompatActivity implements View.OnClickList
 
     Dialog ProgressDialog;
     String Categoryid, uid, ismenu;
+    String cat_id="";
 
     boolean iscall = true;
 
@@ -157,7 +175,7 @@ public class ProductFilter extends AppCompatActivity implements View.OnClickList
     BrandAdapter brand_adapter;
     SizeAdapter size_adapter;
     ColorAdapter color_adapter;
-
+    double minprice = 0, maxprice = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,18 +186,38 @@ public class ProductFilter extends AppCompatActivity implements View.OnClickList
 //        Categoryid = sPref.getString("Categoryid", "");
 //        uid = sPref.getString("uid", "");
 
-//        initdata();
+        initComponents();
+
+        setRange(cat_id);
+        price_rangeview.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue, Number maxValue) {
+
+                txt_selectminvalue.setText(String.valueOf(minValue));
+                txt_selectmaxvalue.setText(String.valueOf(maxValue));
+
+            }
+        });
+      //  initdata();
+    }
+
+    private void initComponents() {
+        ProgressDialog = new Dialog(ProductFilter.this, android.R.style.Theme_Translucent_NoTitleBar);
+        ProgressDialog.setContentView(R.layout.progressbar);
+        ProgressDialog.setCancelable(false);
+        txt_clearall.setOnClickListener(this);
+        txt_filter.setOnClickListener(this);
+
+        cat_id=getIntent().getStringExtra("cat_id");
     }
 
     private void initdata() {
 
-        ProgressDialog = new Dialog(ProductFilter.this, android.R.style.Theme_Translucent_NoTitleBar);
-        ProgressDialog.setContentView(R.layout.progressbar);
-        ProgressDialog.setCancelable(false);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ProductFilter.this);
-        recycle_filter.setLayoutManager(mLayoutManager);
-        recycle_filter.setHasFixedSize(true);
+
+//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ProductFilter.this);
+//        recycle_filter.setLayoutManager(mLayoutManager);
+//        recycle_filter.setHasFixedSize(true);
 
         setupSearchView();
 
@@ -452,12 +490,15 @@ public class ProductFilter extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.txt_filter:
 
-                setFilterData();
-                Common.filterData.setIsfilter(true);
-                SharedPreferences.Editor hsid2 = sPref.edit();
-                hsid2.putInt("ProductFilter", 1);
-                hsid2.commit();
+                String min_p=txt_selectminvalue.getText().toString();
+                String max_p=txt_selectmaxvalue.getText().toString();
+                Intent filter_intent = new Intent(ProductFilter.this, ActivityCategoryProduct.class);
+                filter_intent.putExtra("filter_cat_id",cat_id);
+                filter_intent.putExtra("min",min_p);
+                filter_intent.putExtra("max",max_p);
+                startActivity(filter_intent);
                 finish();
+
                 break;
             case R.id.layout_tag:
                 setupSearchView();
@@ -1105,7 +1146,7 @@ public class ProductFilter extends AppCompatActivity implements View.OnClickList
 
         if (Common.filterData.isIsfilter()) {
 
-            double minprice = 0, maxprice = 0;
+
             if (!Common.filterData.getMinimum_price().equals(""))
                 minprice = Double.parseDouble("" + Common.filterData.getMinimum_price());
 
@@ -1324,5 +1365,82 @@ public class ProductFilter extends AppCompatActivity implements View.OnClickList
             Common.filterData.setEnd_price(txt_selectmaxvalue.getText().toString());
         }
     }
+
+
+    public void setRange(String cat_id)
+    {
+        ProgressDialog.show();
+        String json_tag="json_max_tag";
+        HashMap<String,String> map=new HashMap<>();
+        map.put("cat_id",cat_id);
+        Toast.makeText(ProductFilter.this,""+cat_id,Toast.LENGTH_LONG).show();
+        CustomVolleyJsonRequest customVolleyJsonRequest=new CustomVolleyJsonRequest(Request.Method.POST, Url.GET_MAX_MIN, map, new com.android.volley.Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try
+                {
+                    ProgressDialog.dismiss();
+                    boolean responce=response.getBoolean("responce");
+                    if(responce)
+                    {
+                        JSONObject object=response.getJSONObject("data");
+                        maxprice=Double.parseDouble(object.getString("max"));
+                        minprice=Double.parseDouble(object.getString("min"));
+                        txt_selectminvalue.setText(String.valueOf(minprice));
+                        txt_selectmaxvalue.setText(String.valueOf(maxprice));
+                        txt_minvalue.setText(String.valueOf(minprice));
+                        txt_maxvalue.setText(String.valueOf(maxprice));
+
+                        float low = (float) minprice;
+                        float high = (float) maxprice;
+                        int min,max;
+                        if(minprice==0 && maxprice==0) {
+                            min = (int) minprice;
+                            max = (int) maxprice;
+                        }
+                        else
+                        {
+                            min = (int) minprice;
+                            max = (int) maxprice;
+                        }
+
+                        price_rangeview.setMinValue(low);
+                        price_rangeview.setMaxValue(high);
+                        price_rangeview.setMinStartValue(min);
+                        price_rangeview.setMaxStartValue(max);
+                        price_rangeview.apply();
+
+
+                        Toast.makeText(ProductFilter.this,"max:-- "+maxprice+"\n min:-- "+minprice,Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                         JSONObject object=response.getJSONObject("data");
+                        Toast.makeText(ProductFilter.this,""+object.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ProgressDialog.dismiss();
+                    Toast.makeText(ProductFilter.this,""+ex.getMessage(),Toast.LENGTH_LONG).show();
+
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ProgressDialog.dismiss();
+                Module module=new Module(ProductFilter.this);
+                String msg=module.VolleyErrorMessage(error);
+                Toast.makeText(ProductFilter.this,""+error.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(customVolleyJsonRequest,json_tag);
+
+    }
+
+
 
 }

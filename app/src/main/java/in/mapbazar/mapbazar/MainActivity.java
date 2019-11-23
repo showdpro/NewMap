@@ -346,6 +346,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Common.Activity = this;
+        session_management=new Session_management(MainActivity.this);
         db_cart=new DatabaseCartHandler( MainActivity.this );
         sPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         initToolbar();

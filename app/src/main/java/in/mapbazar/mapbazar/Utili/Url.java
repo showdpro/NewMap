@@ -26,6 +26,8 @@ public class Url {
     public static final String KEY_HOUSE = "house_no";
     public static final String KEY_DATE = "date";
     public static final String KEY_TIME = "time";
+    public static final String CAT_ID = "cat_id";
+    public static final String FILTER_ID = "filter_id";
 
     //Store Selection
 
@@ -160,6 +162,7 @@ public class Url {
     public static String GET_PINCODES = BASE_URL + "index.php/api/get_pincode";
     public static String GUEST_LOGIN = BASE_URL + "index.php/api/guest_login";
     public static String WALLET_ORDER = BASE_URL + "index.php/api/send_order_with_wallet";
+    public static String GET_MAX_MIN = BASE_URL + "index.php/api/get_min_max";
 
 
 }
