@@ -766,7 +766,7 @@ public class Deal_OfDay_Adapter extends RecyclerView.Adapter<Deal_OfDay_Adapter.
             }
         } );
         if (language.contains("english")) {
-            holder.product_nmae.setText(mList.getProduct_name());
+            holder.product_nmae.setText(mList.getProduct_name() +"/n" +mList.getProduct_name_arb());
         }
         else {
             holder.product_nmae.setText(mList.getProduct_name());

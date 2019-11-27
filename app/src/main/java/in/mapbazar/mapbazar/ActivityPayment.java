@@ -214,7 +214,7 @@ public class ActivityPayment extends AppCompatActivity {
                    }
                    else
                    {
-                       Toast.makeText(ActivityPayment.this,"No enough wallet amount to order",Toast.LENGTH_LONG).show();
+                       Toast.makeText(ActivityPayment.this,"Insufficient wallet amount to order",Toast.LENGTH_LONG).show();
                    }
                }
                else  if (image_status.getVisibility() == View.GONE && image_wallet.getVisibility() == View.GONE) {

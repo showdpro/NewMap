@@ -66,8 +66,17 @@ Dialog ProgressDialog ;
                     et_phone.setError(" please enter phone number");
                     et_phone.requestFocus();
                 }
-
+                else if (phone_number.length()<10)
+                {
+                    et_phone.setError(" invalid phone number, enter 10 digit no.");
+                    et_phone.requestFocus();
+                }
                 else if (phone_number.startsWith( "+" ))
+                {
+                    et_phone.setError(" invalid phone number");
+                    et_phone.requestFocus();
+                }
+                else if (phone_number.startsWith("0"))
                 {
                     et_phone.setError(" invalid phone number");
                     et_phone.requestFocus();

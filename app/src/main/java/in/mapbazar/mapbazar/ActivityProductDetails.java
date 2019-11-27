@@ -149,8 +149,15 @@ else
 
             status=1;
 
+            int rew = Integer.parseInt( rewards );
+            if (rew>0) {
+                details_product_rewards.setText(rewards);
+            }
+            else
+            {
+                details_product_rewards.setVisibility( View.GONE );
+            }
 
-            details_product_rewards.setText( rewards );
             product_rate.setVisibility(View.VISIBLE);
             //  Toast.makeText(getActivity(),""+atr,Toast.LENGTH_LONG).show();
             product_rate.setText(unit_value+unit);
@@ -204,8 +211,14 @@ else
                 dialog_txtVar.setText(attribute_value+"@"+attribute_name+"@"+attribute_mrp);
                 dialog_unit_type.setText("\u20B9"+attribute_value+"/"+attribute_name);
                 //  holder.txtTotal.setText("\u20B9"+String.valueOf(list_atr_value.get(0).toString()));
-
-                details_product_rewards.setText( attribute_reward );
+                int rew = Integer.parseInt( attribute_reward );
+                if (rew>0) {
+                    details_product_rewards.setText( attribute_reward );
+                }
+                else
+                {
+                    details_product_rewards.setVisibility( View.GONE );
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -286,7 +299,14 @@ else
 
                         details_product_price.setText("\u20B9"+attribute_value.toString());
                         details_product_mrp.setText("\u20B9"+attribute_mrp.toString());
-                        details_product_rewards.setText( attribute_reward );
+                        int r =Integer.parseInt( attribute_reward );
+                      if (r>0) {
+                          details_product_rewards.setText( attribute_reward );
+                      }
+                      else
+                      {
+                          details_product_rewards.setVisibility( View.GONE );
+                      }
                         String pr=String.valueOf(attribute_value);
                         String mr=String.valueOf(attribute_mrp);
                         int atr_dis=getDiscount(pr,mr);
@@ -507,6 +527,7 @@ else
              p_id=p_map.get("product_id");
              images=p_map.get("product_images");
              name=p_map.get("product_name");
+          //   name_hindi=p_map.get( "product_name_arb" );
              desc=p_map.get("product_description");
              in_stock=p_map.get("in_stock");
              stock=p_map.get("stock");

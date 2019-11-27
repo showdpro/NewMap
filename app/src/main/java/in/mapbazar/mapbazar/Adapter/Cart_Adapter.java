@@ -104,7 +104,14 @@ final HashMap<String, String> map = list.get(position);
         price = Double.parseDouble(map.get("unit_price"));
         holder.tv_subcat_weight.setText("Weight : "+map.get("unit"));
         holder.tv_total.setText("" + price * items);
-         holder.tv_reward.setText("" +map.get( "rewards" ));
+       int reward = Integer.parseInt( map.get( "rewards" ) );
+        if ( reward>0) {
+                holder.tv_reward.setText( "" + map.get( "rewards" ) );
+        }
+        else
+        {
+                holder.tv_reward.setVisibility(View.GONE);
+        }
         // holder.btnQty.setNumber(String.valueOf(items));
 
 
